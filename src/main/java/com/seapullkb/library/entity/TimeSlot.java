@@ -21,6 +21,7 @@ public enum TimeSlot {
     public String getLabel() { return label; }
     public String getRange() { return start + "—" + end; }
     public LocalDateTime startsOn(LocalDate date) { return date.atTime(start); }
+    public LocalDateTime checkinOpensOn(LocalDate date) { return startsOn(date).minusMinutes(15); }
     public LocalDateTime normalDeadline(LocalDate date) { return startsOn(date).plusMinutes(15); }
     public LocalDateTime endsOn(LocalDate date) { return date.atTime(end); }
     public static TimeSlot fromCode(int code) {

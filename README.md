@@ -1,8 +1,8 @@
 # 高校图书馆座位预约与签到管理系统
 
-基于 Spring Boot 的毕业设计，采用 Thymeleaf 单体架构。当前已完成 M1–M3（T01–T12）：工程、四表初始化、注册登录、角色权限、空间维护、座位预约、我的预约和提前取消。
+基于 Spring Boot 的毕业设计，采用 Thymeleaf 单体架构。当前已完成 M1–M4（T01–T17）：工程、四表初始化、注册登录、角色权限、空间维护、座位预约、个人记录、取消、签到、签退和定时到期处理。
 
-**签到、签退、定时释放和统计尚未实现**，页面明确标注后续开放的功能。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)。
+下一阶段为管理员预约管理、超管用户维护和统计。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)。
 
 ## 技术与目录
 
@@ -13,11 +13,11 @@
 
 ```text
 src/main/java/com/seapullkb/library/
-  config/       初始化、业务时钟
+  config/       初始化、业务时钟、定时任务
   entity/       实体与角色
   mapper/       MyBatis-Plus 数据访问
   security/     认证及接口权限
-  service/      账号及初始化业务
+  service/      账号、空间、预约事务及状态流转
   web/          表单、控制器、页面公共数据
 src/main/resources/
   db/schema.sql 四表结构、索引、外键与检查约束
@@ -111,7 +111,7 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 ```
 
 随后可用 `java -jar target/library-seat-reservation-system-0.1.0-SNAPSHOT.jar` 启动，仍需先导出数据库和初始账号变量。
-测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md) 和 [M3测试说明](docs/testing-m3.md)。
+当前完整验证为94项，0失败、0错误、0跳过。测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md)、[M3测试说明](docs/testing-m3.md) 和 [M4测试说明](docs/testing-m4.md)。
 
 ## 当前权限
 
@@ -127,6 +127,8 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 | `/student/reservations` | 本人的预约记录、状态筛选及分页 |
 | `POST /student/rooms/{roomId}/seats/{seatId}/reservations` | 学生预约，必须有CSRF |
 | `POST /student/reservations/{id}/cancel` | 本人提前取消，必须有CSRF |
+| `POST /student/reservations/{id}/checkin` | 本人签到，必须有CSRF |
+| `POST /student/reservations/{id}/checkout` | 本人签退，必须有CSRF |
 
 普通注册只创建学生，忽略客户端提交的角色、启用状态和ID。禁用账号不能登录；注销必须携带CSRF令牌并使Session失效。
 
@@ -146,14 +148,23 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 - 学生与座位在同日期时段都不允许重复有效占用；PENDING未过期、USING及COMPLETED均阻止再次预约。用户ID、初始状态和签到截止由后端生成，不接受前端指定。
 - 事务按学生→阅览室→座位→预约记录取锁，READ_COMMITTED下重新校验；与空间停用/删除操作协调。仅对MySQL死锁1213完整回滚后最多尝试三次，不重试业务冲突。
 - 创建成功时可将目标座位的旧超时PENDING条件更新为EXPIRED，保留原历史；其他座位的过期记录按时间认定无效，不跨座位批量修改。
-- “我的预约”仅查询本人，支持五状态筛选和每页20条。已过截止的PENDING按EXPIRED显示和筛选，查询不会写入状态。
+- “我的预约”仅查询本人，支持五状态筛选和每页20条。已过截止的PENDING按EXPIRED、已到时段结束的USING按COMPLETED显示和筛选，查询不会写入状态；签到、签退时间展示数据库已保存的实际值。
 - 只允许在时段开始前取消尚未签到的有效预约；取消记录保留操作者、原因和时间，重复取消不再次变更。取消后同日期时段可重新预约。
-- **本阶段尚无签到、签退按钮或自动扫描任务**。虽然已记录补约截止并按时间判断过期，完整签到及补约闭环仍需M4。
+
+## 签到、签退和到期处理
+
+- 在“我的预约”操作。普通预约从时段开始前15分钟至开始后15分钟可签到，截止时刻有效；超过普通截止才创建的补约，可在预约后10分钟内签到。后端取锁后读取服务器时间，不接收客户端签到时间。
+- 超过截止的未签到记录转为EXPIRED并保留释放时间；座位重新开放，原学生也可重新预约。即使扫描尚未运行，直接签到也会提交过期状态后提示失败。
+- 仅已签到的USING可主动签退，转为COMPLETED并保存实际签退时间。提前签退后，学生和座位在原日期时段继续占用；重复点击不会重写时间。
+- 使用中记录到时段结束自动完成，签退时间记为该时段结束时刻；任务延迟或重启不会把补处理时刻当成实际签退时间，也不会覆盖已主动签退的记录。
+- 默认启动后立即补处理，再由Spring定时任务每次执行完等待60秒扫描。每批最多读取200个ID，每条在独立事务中重新取锁和判断；单条失败记日志并在下轮重试，其他记录继续处理。
+- 配置位于 `application.yml` 的 `app.reservation-scheduler`：`enabled`、`interval-ms`、`initial-delay-ms`。业务测试关闭后台调度避免干扰，独立集成测试启用并验证真正的Spring定时回调。
+- 网页签到仅记录线上操作，不验证学生真实到馆；当前未引入二维码、定位或硬件。
 
 ## 云环境与后续开发
 
 在当前云环境先执行 `bash /workspace/.cloud-setup/install.sh`，再在每个终端 `source /workspace/.cloud-setup/activate.sh`，以启用Java 17、Maven、代理及证书信任；这些是环境专用配置，不是Windows必需的项目文件。
 
-下一阶段为T13–T17：签到、签退、超时自动释放、补约闭环及到期自动完成。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
+下一阶段为T18–T20：管理员预约查询和违规取消、超管用户维护、统计及图表。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
 
 参考项目调查见 [docs/references.md](docs/references.md)。当前代码独立实现，没有复制未获授权的第三方项目源码。

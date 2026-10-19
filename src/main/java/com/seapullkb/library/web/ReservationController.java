@@ -3,6 +3,8 @@ package com.seapullkb.library.web;
 import com.seapullkb.library.entity.ReservationStatus;
 import com.seapullkb.library.service.ReservationConflictException;
 import com.seapullkb.library.service.ReservationService;
+import com.seapullkb.library.service.ReservationLifecycleService;
+import com.seapullkb.library.service.LifecycleResult;
 import jakarta.validation.Valid;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -18,8 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ReservationController {
     private final ReservationService reservations;
     private final Clock clock;
-    public ReservationController(ReservationService reservations, Clock clock) {
-        this.reservations = reservations; this.clock = clock;
+    private final ReservationLifecycleService lifecycle;
+    public ReservationController(ReservationService reservations, Clock clock, ReservationLifecycleService lifecycle) {
+        this.reservations = reservations; this.clock = clock; this.lifecycle = lifecycle;
     }
 
     @PostMapping("/rooms/{roomId}/seats/{seatId}/reservations")
@@ -53,6 +56,29 @@ public class ReservationController {
         try {
             boolean changed = reservations.cancel(authentication.getName(), id);
             redirect.addFlashAttribute("notice", changed ? "预约已取消，座位已重新开放。" : "该预约已取消，无需重复操作。");
+        } catch (ReservationConflictException ex) { redirect.addFlashAttribute("error", ex.getMessage()); }
+        return "redirect:/student/reservations";
+    }
+
+    @PostMapping("/reservations/{id}/checkin")
+    public String checkIn(@PathVariable Long id, Authentication authentication, RedirectAttributes redirect) {
+        try {
+            LifecycleResult result = lifecycle.checkIn(authentication.getName(), id);
+            redirect.addFlashAttribute("notice", result == LifecycleResult.CHECKED_IN ? "签到成功，祝你学习顺利。" : "你已签到，无需重复操作。");
+        } catch (ReservationConflictException ex) { redirect.addFlashAttribute("error", ex.getMessage()); }
+        return "redirect:/student/reservations";
+    }
+
+    @PostMapping("/reservations/{id}/checkout")
+    public String checkOut(@PathVariable Long id, Authentication authentication, RedirectAttributes redirect) {
+        try {
+            LifecycleResult result = lifecycle.checkOut(authentication.getName(), id);
+            String message = switch (result) {
+                case CHECKED_OUT -> "签退成功。本座位及你的当前日期时段仍保留使用记录，不再开放重复预约。";
+                case AUTO_COMPLETED -> "时段已结束，预约已自动完成。";
+                default -> "预约已完成，无需重复签退。";
+            };
+            redirect.addFlashAttribute("notice", message);
         } catch (ReservationConflictException ex) { redirect.addFlashAttribute("error", ex.getMessage()); }
         return "redirect:/student/reservations";
     }

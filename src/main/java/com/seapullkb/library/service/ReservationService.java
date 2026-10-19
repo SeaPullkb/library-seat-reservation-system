@@ -11,18 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ReservationService {
-    private final UserMapper users;
-    private final ReadingRoomMapper rooms;
-    private final SeatMapper seats;
+    private final ReservationLocks locks;
     private final ReservationMapper reservations;
     private final AccountService accounts;
     private final ReservationRules rules;
     private final Clock clock;
     private final ReservationTransactions transactions;
-    public ReservationService(UserMapper users, ReadingRoomMapper rooms, SeatMapper seats,
-                               ReservationMapper reservations, AccountService accounts, ReservationRules rules, Clock clock,
+    public ReservationService(ReservationLocks locks, ReservationMapper reservations, AccountService accounts, ReservationRules rules, Clock clock,
                                ReservationTransactions transactions) {
-        this.users = users; this.rooms = rooms; this.seats = seats; this.reservations = reservations;
+        this.locks = locks; this.reservations = reservations;
         this.accounts = accounts; this.rules = rules; this.clock = clock;
         this.transactions = transactions;
     }
@@ -34,9 +31,9 @@ public class ReservationService {
     private Long createInTransaction(String username, Long roomId, Long seatId, LocalDate date, int slotCode) {
         // All writers use user -> room -> seat -> reservation order. Read committed
         // ensures conflict checks see the preceding transaction after waiting for its locks.
-        UserAccount user = requireStudent(users.lockByUsername(username));
-        ReadingRoom room = lockRoom(roomId);
-        Seat seat = lockSeat(roomId, seatId);
+        UserAccount user = locks.student(username);
+        ReadingRoom room = locks.room(roomId);
+        Seat seat = locks.seat(roomId, seatId);
         LocalDateTime now = LocalDateTime.now(clock);
         TimeSlot slot = TimeSlot.fromCode(slotCode);
         rules.requireOpen(date, slot, now);
@@ -61,14 +58,9 @@ public class ReservationService {
     }
 
     private boolean cancelInTransaction(String username, Long reservationId) {
-        UserAccount user = requireStudent(users.lockByUsername(username));
-        Reservation reference = reservations.findOwned(reservationId, user.getId());
-        if (reference == null) throw new ResourceNotFoundException("预约记录不存在。");
-        Seat referenceSeat = seats.selectById(reference.getSeatId());
-        if (referenceSeat == null) throw new ResourceNotFoundException("预约关联座位不存在。");
-        lockRoom(referenceSeat.getRoomId()); lockSeat(referenceSeat.getRoomId(), referenceSeat.getId());
-        Reservation reservation = reservations.lockOwned(reservationId, user.getId());
-        if (reservation == null) throw new ResourceNotFoundException("预约记录不存在。");
+        var locked = locks.owned(username, reservationId);
+        UserAccount user = locked.user();
+        Reservation reservation = locked.reservation();
         if (reservation.getStatus().equals("CANCELLED")) return false;
         LocalDateTime now = LocalDateTime.now(clock);
         if (!reservation.getStatus().equals("PENDING") || reservation.getCheckinAt() != null
@@ -100,15 +92,5 @@ public class ReservationService {
         if (user == null || user.getStatus() != 1 || !user.getRole().equals(Role.STUDENT.name()))
             throw new AccessDeniedException("仅启用的学生账号可以操作自己的预约。");
         return user;
-    }
-    private ReadingRoom lockRoom(Long roomId) {
-        ReadingRoom room = rooms.lockById(roomId);
-        if (room == null) throw new ResourceNotFoundException("阅览室不存在。");
-        return room;
-    }
-    private Seat lockSeat(Long roomId, Long seatId) {
-        Seat seat = seats.lockById(roomId, seatId);
-        if (seat == null) throw new ResourceNotFoundException("该阅览室中没有此座位。");
-        return seat;
     }
 }

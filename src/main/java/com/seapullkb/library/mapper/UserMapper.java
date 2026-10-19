@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper extends BaseMapper<UserAccount> {
     @Select("SELECT * FROM `user` WHERE username = #{username} FOR UPDATE")
     UserAccount lockByUsername(String username);
+    @Select("SELECT * FROM `user` WHERE id = #{id} FOR UPDATE")
+    UserAccount lockById(Long id);
 }

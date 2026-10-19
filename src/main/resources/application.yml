@@ -28,3 +28,7 @@ mybatis-plus:
     banner: false
 app:
   bootstrap-admin-password: ${APP_BOOTSTRAP_ADMIN_PASSWORD:}
+  reservation-scheduler:
+    enabled: true
+    interval-ms: 60000
+    initial-delay-ms: 60000

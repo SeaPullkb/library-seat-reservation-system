@@ -12,7 +12,7 @@
     <div class="col-12"><div class="form-check"><input id="availableOnly" name="availableOnly" value="true" type="checkbox" class="form-check-input" th:checked="${availableOnly}"><label for="availableOnly" class="form-check-label">只看空闲座位</label></div></div>
   </form>
   <div th:if="${closedReason}" th:text="${closedReason}" class="alert alert-info" role="status"></div>
-  <p class="text-secondary small">可预约今天及未来6天；仅在距时段结束至少30分钟时开放预约。普通签到截止为时段开始后15分钟，超过该时间新预约须在10分钟内签到。签到和签退操作将在下一阶段开放。</p>
+  <p class="text-secondary small">可预约今天及未来6天；仅在距时段结束至少30分钟时开放预约。普通签到截止为时段开始后15分钟，超过该时间新预约须在10分钟内签到。预约成功后请前往“我的预约”签到。</p>
   <div class="d-flex flex-wrap gap-3 small mb-4" aria-label="座位状态图例"><span>□ 空闲</span><span>■ 已占用</span><span>◆ 我的预约</span><span>× 已停用</span></div>
   <p th:if="${seats.isEmpty()}" class="surface p-5 text-center text-secondary" th:text="${availableOnly} ? '所选日期时段暂无空闲座位，请尝试其他时段。' : '此阅览室暂未配置座位。'"></p>
   <ul class="seat-grid list-unstyled" aria-label="座位状态">
