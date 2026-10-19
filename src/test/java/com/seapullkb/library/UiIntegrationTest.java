@@ -125,4 +125,21 @@ class UiIntegrationTest {
                 .andExpect(content().string(containsString("非实际位置图")));
     }
 
+    @Test void pendingCardRemainsVisibleWhenHistoryFilterAndPaginationExcludeIt() throws Exception {
+        Long id=reservations.create("student",room,seat,DAY,1);
+        for(int i=0;i<25;i++) jdbc.update("INSERT INTO reserve_record(user_id,seat_id,reserve_date,time_slot,status,checkin_deadline) SELECT user_id,seat_id,reserve_date,time_slot,'CANCELLED',checkin_deadline FROM reserve_record WHERE id=?",id);
+        mvc.perform(get("/student/reservations").param("status","CANCELLED").param("page","1").with(user("student").roles("STUDENT")))
+                .andExpect(status().isOk()).andExpect(model().attribute("activeReservations",hasSize(1)))
+                .andExpect(content().string(containsString("data-active-reservation=\""+id+"\"")))
+                .andExpect(content().string(containsString("立即签到"))).andExpect(content().string(containsString("创建预约")));
+    }
+    @Test void recordCardActionsFollowEffectiveStatusAndActualCheckinWindow() throws Exception {
+        clock.at(DAY.atTime(7,30));reservations.create("student",room,seat,DAY,1);
+        mvc.perform(get("/student/reservations").with(user("student").roles("STUDENT"))).andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("立即签到")))).andExpect(content().string(containsString("尚未到签到时间")));
+        clock.at(DAY.atTime(8,15,1));
+        mvc.perform(get("/student/reservations").with(user("student").roles("STUDENT"))).andExpect(status().isOk())
+                .andExpect(model().attribute("activeReservations",hasSize(0))).andExpect(content().string(containsString("超时释放")));
+    }
+
 }
