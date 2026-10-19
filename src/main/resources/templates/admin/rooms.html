@@ -8,10 +8,12 @@
   <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div>
   <div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></div>
   <p class="text-secondary small">停用阅览室会对学生隐藏该空间，但保留座位及预约历史；请先处理未结束的有效预约。</p>
+<div class="metrics" aria-label="空间维护汇总"><section class="surface metric"><span class="metric-label">阅览室总数</span><strong class="metric-value" th:text="${spaceSummary['total']}"></strong></section><section class="surface metric"><span class="metric-label">启用阅览室</span><strong class="metric-value" th:text="${spaceSummary['enabled']}"></strong></section><section class="surface metric"><span class="metric-label">停用阅览室</span><strong class="metric-value" th:text="${spaceSummary['disabled']}"></strong></section><section class="surface metric"><span class="metric-label">启用座位总数</span><strong class="metric-value" th:text="${spaceSummary['capacity']}"></strong></section></div>
+<form th:action="@{/admin/rooms}" method="get" class="surface filter-bar"><div><label for="q" class="form-label">名称或位置</label><input id="q" name="q" th:value="${q}" class="form-control" maxlength="100" placeholder="输入关键词"></div><div><label for="state" class="form-label">启用状态</label><select id="state" name="state" class="form-select"><option value="">全部状态</option><option value="1" th:selected="${state == 1}">启用</option><option value="0" th:selected="${state == 0}">停用</option></select></div><div class="filter-action d-flex gap-2"><button type="submit" class="btn btn-primary">搜索</button><a class="btn btn-outline-secondary" th:href="@{/admin/rooms}">重置</a></div></form>
   <div class="surface table-responsive">
-    <table class="table align-middle mb-0"><caption class="px-3">共 <span th:text="${rooms.size()}"></span> 个阅览室，容量为启用座位数</caption>
+    <table class="table align-middle mb-0"><caption class="px-3">共 <span th:text="${rooms.size()}"></span> 个匹配阅览室 / 总计 <span th:text="${spaceSummary['total']}"></span> 间，容量为座位自身启用数</caption>
       <thead><tr><th scope="col">阅览室</th><th scope="col">位置</th><th scope="col">启用座位 / 总数</th><th scope="col">状态</th><th scope="col">操作</th></tr></thead>
-      <tbody><tr th:if="${rooms.isEmpty()}"><td colspan="5" class="text-secondary text-center py-5">暂无阅览室，点击“新增阅览室”开始。</td></tr>
+      <tbody><tr th:if="${rooms.isEmpty()}"><td colspan="5" class="text-secondary text-center py-5">暂无匹配的阅览室；可重置筛选，或点击“新增阅览室”开始。</td></tr>
       <tr th:each="room : ${rooms}">
         <th scope="row"><span th:text="${room.name}"></span><p th:if="${room.description}" th:text="${room.description}" class="fw-normal small text-secondary mb-0"></p></th>
         <td th:text="${room.location}"></td><td><span th:text="${room.enabledSeats}"></span> / <span th:text="${room.totalSeats}"></span></td>
@@ -27,9 +29,9 @@
       <form th:action="${editingId == null} ? @{/admin/rooms} : @{/admin/rooms/{id}(id=${editingId})}" th:object="${roomForm}" method="post">
         <div class="modal-body">
           <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert"><ul class="mb-0"><li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li></ul></div>
-          <div class="mb-3"><label for="name" class="form-label">名称（必填）</label><input id="name" th:field="*{name}" class="form-control" maxlength="100" required></div>
-          <div class="mb-3"><label for="location" class="form-label">位置（必填）</label><input id="location" th:field="*{location}" class="form-control" maxlength="200" required></div>
-          <div><label for="description" class="form-label">介绍</label><textarea id="description" th:field="*{description}" class="form-control" maxlength="255" rows="3"></textarea></div>
+          <div class="mb-3"><label for="name" class="form-label">名称（必填）</label><input id="name" th:field="*{name}" class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'" th:attr="aria-invalid=${#fields.hasErrors('name')}" maxlength="100" required></div>
+          <div class="mb-3"><label for="location" class="form-label">位置（必填）</label><input id="location" th:field="*{location}" class="form-control" th:classappend="${#fields.hasErrors('location')} ? 'is-invalid'" th:attr="aria-invalid=${#fields.hasErrors('location')}" maxlength="200" required></div>
+          <div><label for="description" class="form-label">介绍</label><textarea id="description" th:field="*{description}" class="form-control" th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'" th:attr="aria-invalid=${#fields.hasErrors('description')}" maxlength="255" rows="3"></textarea></div>
         </div><div class="modal-footer"><a th:href="@{/admin/rooms}" class="btn btn-outline-secondary">取消</a><button class="btn btn-primary" type="submit">保存</button></div>
       </form>
     </div></div>

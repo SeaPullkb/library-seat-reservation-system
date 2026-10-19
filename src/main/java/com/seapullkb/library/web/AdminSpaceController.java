@@ -3,6 +3,8 @@ package com.seapullkb.library.web;
 import com.seapullkb.library.service.MaintenanceConflictException;
 import com.seapullkb.library.service.SpaceService;
 import com.seapullkb.library.service.AdminAccess;
+import java.util.Locale;
+import java.util.Map;
 import org.springframework.security.core.Authentication;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,8 @@ public class AdminSpaceController {
     public AdminSpaceController(SpaceService spaces,AdminAccess access) { this.spaces = spaces; this.access=access; }
 
     @GetMapping
-    public String rooms(Model model) {
+    public String rooms(Model model, @RequestParam(defaultValue="") String q, @RequestParam(required=false) Integer state) {
+        filters(model,q,state);
         model.addAttribute("roomForm", new RoomForm("", "", ""));
         return roomPage(model, null, false);
     }
@@ -59,7 +62,9 @@ public class AdminSpaceController {
     }
 
     @GetMapping("/{roomId}/seats")
-    public String seats(@PathVariable Long roomId, Model model) {
+    public String seats(@PathVariable Long roomId, Model model, @RequestParam(defaultValue="") String q,
+                        @RequestParam(required=false) Integer state) {
+        filters(model,q,state);
         model.addAttribute("seatForm", new SeatForm(""));
         return seatPage(model, roomId, null, false);
     }
@@ -115,14 +120,38 @@ public class AdminSpaceController {
     }
 
     private String roomPage(Model model, Long editingId, boolean showForm) {
-        model.addAttribute("title", "阅览室管理"); model.addAttribute("rooms", spaces.listRooms(false));
+        var all=spaces.listRooms(false);
+        String q=query(model); Integer state=(Integer)model.getAttribute("state");
+        model.addAttribute("title", "阅览室管理");
+        model.addAttribute("rooms",all.stream().filter(r -> state==null||r.status().equals(state))
+                .filter(r -> (r.name()+" "+r.location()).toLowerCase(Locale.ROOT).contains(q.toLowerCase(Locale.ROOT))).toList());
+        long enabled=all.stream().filter(r -> r.status()==1).count();
+        model.addAttribute("spaceSummary",Map.of("total",(long)all.size(),"enabled",enabled,"disabled",all.size()-enabled,
+                "capacity",all.stream().mapToLong(r -> r.enabledSeats()).sum()));
         model.addAttribute("editingId", editingId); model.addAttribute("showForm", showForm);
         return "admin/rooms";
     }
     private String seatPage(Model model, Long roomId, Long editingId, boolean showForm) {
         model.addAttribute("title", "座位管理"); model.addAttribute("room", spaces.room(roomId, false));
-        model.addAttribute("seats", spaces.listSeats(roomId));
+        var all=spaces.listSeats(roomId);
+        String q=query(model); Integer state=(Integer)model.getAttribute("state");
+        var filtered=all.stream().filter(s -> state==null||s.getStatus().equals(state))
+                .filter(s -> s.getSeatNo().toLowerCase(Locale.ROOT).contains(q.toLowerCase(Locale.ROOT))).toList();
+        model.addAttribute("seats",filtered);
+        long enabled=all.stream().filter(s -> s.getStatus()==1).count();
+        model.addAttribute("spaceSummary",Map.of("total",(long)all.size(),"enabled",enabled,"disabled",all.size()-enabled,
+                "matched",(long)filtered.size()));
         model.addAttribute("editingId", editingId); model.addAttribute("showForm", showForm);
         return "admin/seats";
+    }
+
+    private void filters(Model model,String q,Integer state) {
+        if(q.length()>100 || (state!=null && state!=0 && state!=1)) throw new IllegalArgumentException("搜索条件无效。");
+        model.addAttribute("q",q.strip()); model.addAttribute("state",state);
+    }
+    private String query(Model model) {
+        String q=(String)model.getAttribute("q");
+        if(q==null) { q="";model.addAttribute("q",q); }
+        return q;
     }
 }

@@ -169,4 +169,14 @@ class UiIntegrationTest {
         mvc.perform(get("/admin").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isForbidden());
     }
 
+    @Test void spaceFiltersAreServerSideAndSummaryDescribesUnfilteredData() throws Exception {
+        jdbc.update("UPDATE seat SET status=0 WHERE room_id=? AND seat_no='A03'",room);
+        mvc.perform(get("/admin/rooms/"+room+"/seats").param("q","a03").param("state","0").with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(model().attribute("seats",hasSize(1)))
+                .andExpect(model().attribute("spaceSummary",java.util.Map.of("total",20L,"enabled",19L,"disabled",1L,"matched",1L)));
+        mvc.perform(get("/admin/rooms").param("q","不存在").with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(model().attribute("rooms",hasSize(0))).andExpect(content().string(containsString("暂无匹配")));
+        mvc.perform(get("/admin/rooms").param("state","7").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isBadRequest());
+    }
+
 }
