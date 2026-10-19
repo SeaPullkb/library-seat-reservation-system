@@ -1,14 +1,14 @@
 # 高校图书馆座位预约与签到管理系统
 
-基于 Spring Boot 的毕业设计，采用 Thymeleaf 单体架构。当前已完成 M1–M4（T01–T17）：工程、四表初始化、注册登录、角色权限、空间维护、座位预约、个人记录、取消、签到、签退和定时到期处理。
+基于 Spring Boot 的毕业设计，采用 Thymeleaf 单体架构。当前已完成 M1–M5（T01–T20）：账号与权限、空间维护、预约签到完整流程、管理员预约管理、超管用户维护和统计图表。
 
-下一阶段为管理员预约管理、超管用户维护和统计。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)。
+下一阶段完善个人中心、全业务页面和安全检查。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)。
 
 ## 技术与目录
 
 - Java 17、Maven 3.9.11（附 Windows / Linux Maven Wrapper，发行包固定 SHA-256）。
 - Spring Boot 3.5.16、MyBatis-Plus Boot 3 Starter 3.5.17、MySQL 8.0。
-- Thymeleaf、Bootstrap 5.3.8（随应用打包，无需访问CDN）、Spring Security + Session、BCrypt。
+- Thymeleaf、Bootstrap 5.3.8、ECharts 5.6.0（前端资源随应用打包，无需访问CDN）、Spring Security + Session、BCrypt。
 - 业务时间统一使用 `Asia/Shanghai` 的 `Clock`，数据库连接时区一致。
 
 ```text
@@ -111,7 +111,7 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 ```
 
 随后可用 `java -jar target/library-seat-reservation-system-0.1.0-SNAPSHOT.jar` 启动，仍需先导出数据库和初始账号变量。
-当前完整验证为94项，0失败、0错误、0跳过。测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md)、[M3测试说明](docs/testing-m3.md) 和 [M4测试说明](docs/testing-m4.md)。
+当前完整验证为126项，0失败、0错误、0跳过。测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md)、[M3测试说明](docs/testing-m3.md)、[M4测试说明](docs/testing-m4.md) 和 [M5测试说明](docs/testing-m5.md)。
 
 ## 当前权限
 
@@ -121,8 +121,11 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 | `/` | 登录后按角色跳转 |
 | `/student` 及子路径 | STUDENT |
 | `/admin` 及子路径 | LIBRARIAN 或 SUPER_ADMIN |
-| `/admin/users` 及子路径 | SUPER_ADMIN（当前仅权限入口，完整管理为T19） |
+| `/admin/users` 及子路径 | SUPER_ADMIN，查询与维护用户、新增管理员 |
 | `/admin/rooms`、`/admin/rooms/{id}/seats` | 管理员及超管的阅览室、座位维护 |
+| `/admin/reservations` | 管理员及超管，预约查询、筛选与分页 |
+| `POST /admin/reservations/{id}/cancel` | 管理员及超管取消未签到违规预约，必须有原因和CSRF |
+| `/admin/statistics` | 管理员及超管，使用统计与图表 |
 | `/student/rooms`、`/student/rooms/{id}/seats` | 学生阅览室列表、日期时段座位查询与预约 |
 | `/student/reservations` | 本人的预约记录、状态筛选及分页 |
 | `POST /student/rooms/{roomId}/seats/{seatId}/reservations` | 学生预约，必须有CSRF |
@@ -161,10 +164,18 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 - 配置位于 `application.yml` 的 `app.reservation-scheduler`：`enabled`、`interval-ms`、`initial-delay-ms`。业务测试关闭后台调度避免干扰，独立集成测试启用并验证真正的Spring定时回调。
 - 网页签到仅记录线上操作，不验证学生真实到馆；当前未引入二维码、定位或硬件。
 
+## 后台预约、用户与统计
+
+- 管理首页进入“管理预约”，可组合账号/姓名关键词、阅览室、使用日期、时段与五种状态查询，每页20条。有效未签到预约可在弹窗填写原因后违规取消，记录保留操作人、原因和时间；重复提交不覆盖首次记录。
+- 超管进入“用户管理”，查询账号、姓名、角色及状态；维护姓名、班级和手机号，新增图书馆管理员，另行调整角色、启禁用或重置密码。账号名不可修改，不提供删除用户操作。
+- 禁用或调整角色前先处理该用户的PENDING/USING预约；已过期但尚未由调度落库的记录也须先释放。不能禁用自己或修改自身角色，保留至少一个启用超管。账号变更不删除预约历史。
+- 管理员初始/重置密码为12–64字符且UTF-8不超过72字节，页面不回显。密码、角色或状态变化后旧登录会话失效；重新登录使用新权限。项目按单实例部署，会话登记及账号管理串行保护均在当前JVM内。
+- “查看数据统计”展示所选使用日期的预约人数、次数、签到率和已执行释放次数，以及截至今天的7天人数趋势、所选日期时段的各阅览室预约率。零分母显示“—”；图表附明细表，精确定义见需求基线。统计来自实际数据库，不自动生成演示预约。
+
 ## 云环境与后续开发
 
 在当前云环境先执行 `bash /workspace/.cloud-setup/install.sh`，再在每个终端 `source /workspace/.cloud-setup/activate.sh`，以启用Java 17、Maven、代理及证书信任；这些是环境专用配置，不是Windows必需的项目文件。
 
-下一阶段为T18–T20：管理员预约查询和违规取消、超管用户维护、统计及图表。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
+下一阶段为T21–T22：个人中心、全业务页面交互和安全完善。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
 
 参考项目调查见 [docs/references.md](docs/references.md)。当前代码独立实现，没有复制未获授权的第三方项目源码。

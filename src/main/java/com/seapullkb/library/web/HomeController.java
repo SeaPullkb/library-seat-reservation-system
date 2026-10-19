@@ -34,12 +34,6 @@ public class HomeController {
         return "admin/home";
     }
 
-    @GetMapping("/admin/users")
-    public String userManagementEntry(Model model) {
-        model.addAttribute("title", "用户管理");
-        return "admin/users";
-    }
-
     @GetMapping("/forbidden")
     public String forbidden() { return "error/403"; }
 }

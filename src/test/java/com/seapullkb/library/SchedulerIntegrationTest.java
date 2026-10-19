@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.scheduling.config.FixedDelayTask;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -25,6 +26,7 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest(properties = {"app.reservation-scheduler.enabled=true", "app.reservation-scheduler.interval-ms=100", "app.reservation-scheduler.initial-delay-ms=2000"})
 @ActiveProfiles("test")
 @Testcontainers
+@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
 @Import(SchedulerIntegrationTest.TimeConfiguration.class)
 class SchedulerIntegrationTest {
     @Container

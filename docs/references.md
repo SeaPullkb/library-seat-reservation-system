@@ -11,3 +11,5 @@
 若以后复用代码，需要先确认明确的授权、保留要求的许可声明，并逐项核对本项目的四表和固定时段规则。
 
 Maven Wrapper脚本由Apache Maven Wrapper Plugin 3.3.4官方生成，保留脚本原有版权头；其Apache 2.0许可与NOTICE副本见 [licenses/](licenses/)。这不为本项目自有业务代码另行指定许可证。
+
+M5图表使用Apache ECharts 5.6.0，通过Maven的`org.webjars.npm:echarts`引入官方发行资源（Apache 2.0），不从参考项目复制图表代码。资源随应用打包并本地提供，许可证元数据由依赖发行包保留。
