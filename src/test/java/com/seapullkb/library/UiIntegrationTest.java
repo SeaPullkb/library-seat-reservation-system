@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(UiIntegrationTest.TimeConfiguration.class)
 class UiIntegrationTest {
     static final LocalDate DAY=LocalDate.of(2030,5,8);
-    @Container static final MySQLContainer<?> MYSQL=new MySQLContainer<>("mysql:8.0").withDatabaseName("ui_test");
+    @Container static final MySQLContainer<?> MYSQL=new MySQLContainer<>("mysql:8.0").withDatabaseName("library_demo_test");
     @DynamicPropertySource static void database(DynamicPropertyRegistry p) {
         p.add("spring.datasource.url",MYSQL::getJdbcUrl);p.add("spring.datasource.username",MYSQL::getUsername);p.add("spring.datasource.password",MYSQL::getPassword);
     }
@@ -49,6 +49,8 @@ class UiIntegrationTest {
     @Autowired AccountService accounts;
     @Autowired AdminReservationService adminReservations;
     @Autowired MutableClock clock;
+    @Autowired org.springframework.security.crypto.password.PasswordEncoder passwords;
+    @Autowired javax.sql.DataSource dataSource;
     Long room,seat;
     @BeforeEach void seed() {
         jdbc.update("DELETE FROM reserve_record");jdbc.update("DELETE FROM seat");jdbc.update("DELETE FROM reading_room");jdbc.update("DELETE FROM `user`");
@@ -194,6 +196,37 @@ class UiIntegrationTest {
         mvc.perform(get("/admin/statistics").param("date",DAY.toString()).with(user("librarian").roles("LIBRARIAN")))
                 .andExpect(status().isOk()).andExpect(model().attribute("trendEmpty",true)).andExpect(model().attribute("roomDataEmpty",true))
                 .andExpect(content().string(containsString("所选使用日期没有预约记录"))).andExpect(content().string(containsString("统计口径与数据说明")));
+    }
+
+    @Test void demoDatasetUsesFreshIsolatedDatabaseAndItsClockForAllStates() {
+        jdbc.update("DELETE FROM reserve_record");jdbc.update("DELETE FROM seat");jdbc.update("DELETE FROM reading_room");jdbc.update("DELETE FROM `user`");
+        clock.at(DAY.atTime(9,5));var env=new org.springframework.mock.env.MockEnvironment();env.setActiveProfiles("dev","demo");
+        var demo=new DemoDataset(jdbc,initial,passwords,clock,env);demo.seed("Demo-only-password-123!");
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM reading_room",Long.class)).isEqualTo(4);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM seat",Long.class)).isEqualTo(114);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM `user`",Long.class)).isEqualTo(27);
+        assertThat(jdbc.queryForList("SELECT DISTINCT status FROM reserve_record",String.class)).containsExactlyInAnyOrder("PENDING","USING","COMPLETED","CANCELLED","EXPIRED");
+        var c=dashboards.catalog(DAY,1);assertThat(c.rooms()).hasSize(3);assertThat(c.getEnabledSeats()).isEqualTo(87);assertThat(c.getAvailableSeats()).isEqualTo(80);
+        var d=dashboards.admin("librarian");assertThat(d.metrics().usingSeats()).isEqualTo(2);assertThat(d.metrics().pending()).isEqualTo(3);assertThat(d.metrics().todayExpired()).isEqualTo(2);
+        assertThat(dashboards.student("student",DAY,1).active()).hasSize(2);
+        String hash=accounts.findByUsername("student").getPassword();
+        assertThatThrownBy(()->demo.seed("Do-not-reset-password-123!")).isInstanceOf(IllegalStateException.class);
+        assertThat(accounts.findByUsername("student").getPassword()).isEqualTo(hash);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()",Long.class)).isEqualTo(4);
+    }
+    @Test void demoSeedRejectsExistingAccountsBeforeModifyingAnyData() {
+        var env=new org.springframework.mock.env.MockEnvironment();env.setActiveProfiles("dev","demo");
+        String hash=accounts.findByUsername("admin").getPassword();
+        assertThatThrownBy(()->new DemoDataset(jdbc,initial,passwords,clock,env).seed("Do-not-reset-password-123!")).isInstanceOf(IllegalStateException.class);
+        assertThat(accounts.findByUsername("admin").getPassword()).isEqualTo(hash);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM `user`",Long.class)).isEqualTo(3);
+    }
+
+    @Test void demoClockUsesActualCatalogAndExplicitSimulationTime() throws Exception {
+        var env=new org.springframework.mock.env.MockEnvironment();env.setActiveProfiles("dev","demo");
+        env.withProperty("app.demo-date",DAY.toString()).withProperty("app.demo-time","09:11:01");
+        var fixed=new com.seapullkb.library.config.DemoConfiguration().demoClock(dataSource,env);
+        assertThat(LocalDateTime.now(fixed)).isEqualTo(DAY.atTime(9,11,1));assertThat(fixed.getZone().getId()).isEqualTo("Asia/Shanghai");
     }
 
 }

@@ -8,7 +8,7 @@ AI/agent 接手入口：[仓库导航](AGENT_NAVIGATION.md)（文件职责与功
 
 ## 页面截图与交付材料
 
-[查看全部18张实际截图](docs/screenshots/README.md)，包含13个主要页面和手机布局；截图使用隔离测试数据与受控业务时钟，不代表真实运营数据。
+[查看V1.1全部54张实际截图](docs/screenshots/README.md)，包含13个主要页面和手机布局；截图使用隔离测试数据与受控业务时钟，不代表真实运营数据。
 
 - [最终验收与145项测试](docs/acceptance.md)，[逐用例结果](docs/test-results.json)。
 - [Windows部署手册](docs/deployment-windows.md)及`scripts/dev.ps1`准备、测试、启动、就绪检查。
@@ -207,3 +207,5 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 ## V1.1 升级
 
 以 `feat/final-delivery` 为基线，在 `feat/ui-polish` 逐项完成页面和工作台升级，进度及验收见 [V1.1 升级记录](docs/ui-v1.1.md)。
+
+[V1.1 独立答辩演示](docs/demo-v1.1.md)：`python scripts/demo.py serve` 新建隔离库，包含4间阅览室、114个座位、27个账号和多状态预约；支持停止后向前推进演示时钟，不覆盖正常库或既有密码。

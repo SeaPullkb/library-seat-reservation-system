@@ -1,0 +1,44 @@
+{
+  "clock": "isolated demo",
+  "phases": [
+    {
+      "time": "09:05",
+      "using": 2,
+      "pending": 3,
+      "expired": 2
+    },
+    {
+      "time": "09:11",
+      "using": 2,
+      "pending": 0,
+      "expired": 5
+    },
+    {
+      "time": "09:21",
+      "using": 3,
+      "pending": 1,
+      "expired": 5
+    },
+    {
+      "time": "09:21:01",
+      "using": 3,
+      "pending": 0,
+      "expired": 6
+    },
+    {
+      "time": "12:00",
+      "using": 0,
+      "pending": 0,
+      "expired": 6
+    }
+  ],
+  "checks": [
+    "normal expiry",
+    "released seat rebooking",
+    "10-minute deadline",
+    "exact deadline inclusive sign-in",
+    "one-second-late expiry",
+    "second rebooking",
+    "period-end auto completion with exact checkout timestamp"
+  ]
+}

@@ -1,4 +1,5 @@
 :root { --library-blue:#235bea; --library-ink:#182b49; --library-muted:#5c6b80; --library-line:#e2e8f1; --library-canvas:#f3f6fb; --library-radius:14px; --bs-primary:#235bea; --bs-secondary-color:#5c6b80; --bs-border-color:#e2e8f1; }
+.demo-banner { background:#fff5df; color:#785311; font-size:.78rem; padding:.45rem 0; border-top:1px solid #f0e1be; }
 body { background:var(--library-canvas); color:var(--library-ink); font:15px/1.65 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif; }
 a { color:#1d50cd; text-underline-offset:3px; }
 h1,h2,h3,dd { overflow-wrap:anywhere; } h1,h2,h3 { font-weight:700; letter-spacing:-.025em; }

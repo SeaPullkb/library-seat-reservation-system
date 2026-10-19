@@ -204,7 +204,7 @@ Windows使用`mvnw.cmd`；启动与环境导出细节按README。只改导航或
 | [docs/testing.md](docs/testing.md)、[M2](docs/testing-m2.md)、[M3](docs/testing-m3.md)、[M4](docs/testing-m4.md)、[M5](docs/testing-m5.md)、[M6](docs/testing-m6.md) | 历史阶段的真实测试、发现与修复；较早阶段的“未实现”描述是历史记录。 |
 | [docs/design.md](docs/design.md)、[docs/diagrams/](docs/diagrams) | 架构、ER和状态图；.dot是可编辑源，.svg是导出图。 |
 | [docs/data-dictionary.md](docs/data-dictionary.md) | 四表字段、约束、索引及时间精度。 |
-| [docs/screenshots/README.md](docs/screenshots/README.md) | 18张实际截图索引；PNG为原图，manifest.json是尺寸及校验值。 |
+| [docs/screenshots/README.md](docs/screenshots/README.md) | V1.1的54张真实桌面/手机截图；manifest.json记录平台、时钟、运行jar及PNG校验值。 |
 | [docs/deployment-windows.md](docs/deployment-windows.md) | Windows准备、启动、排错及待填写实机验收表。 |
 | [docs/defense.md](docs/defense.md) | 论文技术素材、演示步骤、答辩问题与系统边界。 |
 | [docs/references.md](docs/references.md)、[docs/licenses/](docs/licenses) | 相近项目调查、依赖/Wrapper授权说明及许可证副本。 |
@@ -227,3 +227,11 @@ Windows使用`mvnw.cmd`；启动与环境导出细节按README。只改导航或
 - `UiIntegrationTest`：V1.1 首页/余座的真实 MySQL、时钟与权限回归，后续任务继续扩展。
 - `AdminDashboardMetrics` / `RoomLiveUsage`：管理首页实时指标与空间使用 DTO；与历史整时段预约率区分。
 - `DashboardService.admin`：重新校验管理员，查询最近预约、当前签到窗口待办和真实空间使用。
+
+- `config/DemoConfiguration`：仅 dev,demo 和真实独立库允许的固定演示时钟。
+- `config/DemoSeedRunner` / `service/DemoDataset`：显式开关、空库校验、事务内生成答辩夹具，不覆盖账号。
+- `scripts/demo.py`：新建、启动、恢复、显式移除独立演示库；私有配置与运行 jar 仅存 `.local/demos/`。
+- `application-demo.yml` / `PageAdvice` / 全局导航：演示日期配置及清晰的独立样本标识。
+- `DemoGuardTest` / `UiIntegrationTest`：演示 profile、真实库名、空库保护及数据场景验证。
+- `scripts/validation/demo-browser.py`：新演示库的真实页面/表单/分页/签到签退与54张桌面手机截图验收。
+- `scripts/validation/demo-clock.py`：独立打包应用跨5个模拟时刻的释放、补约、截止边界和自动完成验收。

@@ -28,6 +28,7 @@
     <th:block th:if="${adminUser}"><a th:href="@{/admin/rooms}" class="nav-shortcut">阅览室与座位</a><a th:href="@{/admin/reservations}" class="nav-shortcut">预约管理</a><a th:href="@{/admin/statistics}" class="nav-shortcut">数据统计</a></th:block>
     <a th:if="${superAdminUser}" th:href="@{/admin/users}" class="nav-shortcut">用户管理</a>
   </nav>
+  <div th:if="${demoEnvironment}" class="demo-banner"><div class="container">毕业答辩演示 · 独立样本数据 · 业务时间 <span th:text="${#temporals.format(businessNow,'yyyy-MM-dd HH:mm:ss')}"></span>（固定）</div></div>
 </header>
 <footer th:fragment="footer" class="container py-4 text-secondary small border-top mt-5">
   高校图书馆座位预约与签到管理系统 · V1.1
