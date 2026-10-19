@@ -1,0 +1,133 @@
+{
+  "capturedOn": "2026-10-19",
+  "validationBusinessClock": "2030-05-08 (external validation only)",
+  "data": "synthetic isolated database, removed after capture",
+  "screens": [
+    {
+      "file": "01-login.png",
+      "page": "登录",
+      "width": 1280,
+      "height": 900,
+      "sha256": "8f113aa7fae6601566d1de3d8dd3948728f8be41511eb4480ec4f7c004fca7d0"
+    },
+    {
+      "file": "02-register.png",
+      "page": "学生注册",
+      "width": 1280,
+      "height": 1017,
+      "sha256": "20f785521c6772ecda90315efe5d4bc90380356e84d7ad02bc5cc08921b3ddde"
+    },
+    {
+      "file": "03-student-home.png",
+      "page": "学生首页",
+      "width": 1280,
+      "height": 903,
+      "sha256": "39024622798ab7b8bf60086504d82d5347a44b8d6cac78a63b189537c9210dea"
+    },
+    {
+      "file": "04-profile.png",
+      "page": "个人中心",
+      "width": 1280,
+      "height": 944,
+      "sha256": "eb563daab551697dbbf498865ffcbfc4bf3cf48d2e0c3e0483e46dfc82d1e4ad"
+    },
+    {
+      "file": "05-rooms.png",
+      "page": "阅览室列表",
+      "width": 1280,
+      "height": 900,
+      "sha256": "b22e0b83461eceac833ace6bb50c8f8158578f88e7e7348ee4dc48e9f1990a06"
+    },
+    {
+      "file": "06-seats.png",
+      "page": "座位预约",
+      "width": 1280,
+      "height": 1190,
+      "sha256": "3ab2ed5c7d4e191f3de2faa325604bd3ca07a442fa2f0eba9f524aafe2679b12"
+    },
+    {
+      "file": "07-my-reservations.png",
+      "page": "我的预约（使用中）",
+      "width": 1280,
+      "height": 900,
+      "sha256": "1d43eeaefbde5c502aa964dbab8462b851326d13b681aafb0782a4d1d9a92939"
+    },
+    {
+      "file": "08-admin-home.png",
+      "page": "管理首页",
+      "width": 1280,
+      "height": 900,
+      "sha256": "38621f7fc37e2c9917d69198408c26d273683479059104a13aed6a38f2ec1d6d"
+    },
+    {
+      "file": "09-admin-rooms.png",
+      "page": "阅览室管理",
+      "width": 1280,
+      "height": 900,
+      "sha256": "2fa3624ef10403da6828f9cbebb3f10063b3f976361174cd2e93ccfd73ef196d"
+    },
+    {
+      "file": "10-admin-seats.png",
+      "page": "座位管理",
+      "width": 1280,
+      "height": 1887,
+      "sha256": "2304c2d323b6a4d10b97e2cccc27d578930cc45ea244359da93b890a1d0fdcce"
+    },
+    {
+      "file": "11-admin-reservations.png",
+      "page": "预约管理及审计",
+      "width": 1280,
+      "height": 1207,
+      "sha256": "511ad96b3e521d928897c431043a27c8b2aaaac1884816c63af13af480937008"
+    },
+    {
+      "file": "12-statistics.png",
+      "page": "统计",
+      "width": 1280,
+      "height": 2410,
+      "sha256": "63c711a1ed831e8b0a03cb90ad1f7fa6d051b54013f08722ec02388b03cd2260"
+    },
+    {
+      "file": "13-users.png",
+      "page": "用户管理",
+      "width": 1280,
+      "height": 1070,
+      "sha256": "538cb1ee4ec24ed072a572c119b3beaec84dfe7d10a58ca59db59ebe9b96bb43"
+    },
+    {
+      "file": "14-profile-mobile.png",
+      "page": "手机个人中心",
+      "width": 390,
+      "height": 1426,
+      "sha256": "3c9d8e64c2d9f03aa914f165e64d3c525e19f3092da1da9e2aaedbffe33d6643"
+    },
+    {
+      "file": "15-seats-mobile.png",
+      "page": "手机选座",
+      "width": 390,
+      "height": 1895,
+      "sha256": "8ef03a8ee8db111ae8dbbdd03015b704917e86cd3a59a300b24a359fcc7e0f81"
+    },
+    {
+      "file": "16-statistics-mobile.png",
+      "page": "手机统计",
+      "width": 390,
+      "height": 2727,
+      "sha256": "5ad3a2b3df3b9cb4b30ab2511d928360437701c06be23bd3b4f8ffb2da7e7396"
+    },
+    {
+      "file": "17-forbidden.png",
+      "page": "403权限提示",
+      "width": 1280,
+      "height": 900,
+      "sha256": "cd6d68f9eafa6a441d657457a77dc61412d17680478af78d5b5a7b54236a4ad1"
+    },
+    {
+      "file": "18-user-maintenance.png",
+      "page": "用户维护",
+      "width": 1280,
+      "height": 1221,
+      "sha256": "60857a0a2b4741a9677f8069477d8b4bb4474c77d7397b0970f0a381eca615e9"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+digraph Architecture {graph [fontname="Noto Sans CJK SC",bgcolor="white",pad="0.3",nodesep="0.45",ranksep="0.6"]; node [fontname="Noto Sans CJK SC",shape=box,style="rounded,filled",fillcolor="#f1f6fa",color="#245c7f",margin="0.15"]; edge [fontname="Noto Sans CJK SC",color="#476b7f",fontsize=10];
+rankdir=TB;
+browser [label="浏览器 / 三种角色\nThymeleaf + Bootstrap + ECharts"];
+security [label="Spring Security\nSession / CSRF / 账号状态与密码指纹"];
+controller [label="Controller\n表单校验 / 服务端身份 / 页面与反馈"];
+service [label="Service\n规则校验 / READ_COMMITTED事务\n用户→阅览室→座位→预约取锁\n完整事务死锁重试"];
+mapper [label="MyBatis-Plus / 参数化SQL\n条件更新 / 冲突与统计查询"];
+db [shape=cylinder,label="MySQL 8 / 四张核心表\n外键保留历史 / 索引"];
+clock [label="Clock / Asia/Shanghai"];
+schedule [label="单实例 @Scheduled\n启动补处理 / 执行后等待60秒\n每批200 ID / 每条独立事务"];
+browser -> security -> controller -> service -> mapper -> db;
+clock -> service [style=dashed];schedule -> service;
+}

@@ -2,7 +2,28 @@
 
 基于 Spring Boot 的毕业设计，采用 Thymeleaf 单体架构。当前已完成 M1–M6（T01–T22）：账号与权限、空间维护、预约签到完整流程、管理员预约管理、超管用户维护和统计图表。
 
-个人中心、13个主要页面和安全检查已完成，正在整理最终交付材料。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)。
+个人中心、13个主要页面、安全检查、完整测试和交付材料已完成；当前25/26项，唯一待验收为Windows实机部署。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)，交付范围和未运行检查见 [最终验收](docs/acceptance.md)。
+
+## 页面截图与交付材料
+
+[查看全部18张实际截图](docs/screenshots/README.md)，包含13个主要页面和手机布局；截图使用隔离测试数据与受控业务时钟，不代表真实运营数据。
+
+- [最终验收与145项测试](docs/acceptance.md)，[逐用例结果](docs/test-results.json)。
+- [Windows部署手册](docs/deployment-windows.md)及`scripts/dev.ps1`准备、测试、启动、就绪检查。
+- [架构/ER/状态图](docs/design.md)、[数据字典](docs/data-dictionary.md)、[论文与答辩素材](docs/defense.md)。
+- 生成不含本地密码的源码交付包：`python3 scripts/package-delivery.py --output /path/outside-checkout/library-seat-source.zip`。
+
+Windows启动助手（完整JDK 17及Docker Desktop已安装）：
+
+```powershell
+.\scripts\dev.ps1 -Action Setup
+.\scripts\dev.ps1 -Action Verify
+.\scripts\dev.ps1 -Action Start
+# 另一个终端执行
+.\scripts\dev.ps1 -Action Check
+```
+
+当前仅在Linux验证PowerShell可移植辅助逻辑，Windows Wrapper、Docker Desktop和实际启动未运行；T25未勾选。GitHub Actions配置Linux全量集成测试和Windows构建检查，本轮没有远端执行结果。
 
 ## 技术与目录
 
@@ -111,7 +132,7 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 ```
 
 随后可用 `java -jar target/library-seat-reservation-system-0.1.0-SNAPSHOT.jar` 启动，仍需先导出数据库和初始账号变量。
-当前完整验证为144项，0失败、0错误、0跳过。测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md)、[M3测试说明](docs/testing-m3.md)、[M4测试说明](docs/testing-m4.md)、[M5测试说明](docs/testing-m5.md) 和 [M6测试说明](docs/testing-m6.md)。
+当前完整验证为145项，0失败、0错误、0跳过。测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md)、[M3测试说明](docs/testing-m3.md)、[M4测试说明](docs/testing-m4.md)、[M5测试说明](docs/testing-m5.md) 和 [M6测试说明](docs/testing-m6.md)。
 
 ## 当前权限
 
@@ -177,6 +198,6 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 
 在当前云环境先执行 `bash /workspace/.cloud-setup/install.sh`，再在每个终端 `source /workspace/.cloud-setup/activate.sh`，以启用Java 17、Maven、代理及证书信任；这些是环境专用配置，不是Windows必需的项目文件。
 
-剩余交付工作为T23–T26：完整验收、Windows实机部署及毕业设计材料。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
+应用功能与交付材料已完成；Windows实机部署T25仍待实际Windows环境验证。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
 
 参考项目调查见 [docs/references.md](docs/references.md)。当前代码独立实现，没有复制未获授权的第三方项目源码。

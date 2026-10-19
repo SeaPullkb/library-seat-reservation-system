@@ -1,0 +1,813 @@
+{
+  "recordedAt": "2026-10-19T14:21:11.168709+08:00",
+  "applicationCommit": "193603977f5a2deb90776bbefaef6ad0d66a585f",
+  "command": "./mvnw -B -ntp verify",
+  "platform": "Linux / Java 17 / MySQL 8 via Testcontainers",
+  "tests": 145,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "classes": [
+    {
+      "name": "com.seapullkb.library.AdminIntegrationTest",
+      "tests": "32",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "29.036"
+    },
+    {
+      "name": "com.seapullkb.library.DeliveryIntegrationTest",
+      "tests": "19",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "19.989"
+    },
+    {
+      "name": "com.seapullkb.library.FoundationIntegrationTest",
+      "tests": "22",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "22.105"
+    },
+    {
+      "name": "com.seapullkb.library.LifecycleIntegrationTest",
+      "tests": "23",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "22.795"
+    },
+    {
+      "name": "com.seapullkb.library.ReservationIntegrationTest",
+      "tests": "25",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "23.691"
+    },
+    {
+      "name": "com.seapullkb.library.ReservationMaintenanceTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.47"
+    },
+    {
+      "name": "com.seapullkb.library.ReservationRulesTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.008"
+    },
+    {
+      "name": "com.seapullkb.library.SchedulerIntegrationTest",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "18.097"
+    },
+    {
+      "name": "com.seapullkb.library.SpaceIntegrationTest",
+      "tests": "17",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "18.624"
+    }
+  ],
+  "cases": [
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "adminSearchFiltersLiteralKeywordAndEffectiveStatusWithoutWriting",
+      "seconds": "0.715"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "disableRacingBookingCannotLeaveActiveBookingOnDisabledUser",
+      "seconds": "0.374"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "selfDisableAndSelfDemotionCannotRemoveLastEnabledSuperAdmin",
+      "seconds": "0.356"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "serviceRechecksDisabledAndDowngradedOperators",
+      "seconds": "0.344"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "adminCancellationExpiresOverdueBeforeReportingConflict",
+      "seconds": "0.375"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "usedOrExpiredRecordsCannotBeAdminCancelled(String)[1]",
+      "seconds": "0.365"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "usedOrExpiredRecordsCannotBeAdminCancelled(String)[2]",
+      "seconds": "0.332"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "usedOrExpiredRecordsCannotBeAdminCancelled(String)[3]",
+      "seconds": "0.36"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "stablePaginationHasNoDuplicatesAndRetainsIsoDate",
+      "seconds": "0.429"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "profileEditsCannotChangeRoleUsernamePasswordOrStatus",
+      "seconds": "0.344"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "invalidResetKeepsHashAndDoesNotReturnPassword",
+      "seconds": "0.352"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "administrativeRoutesEnforceRoleAndCsrf",
+      "seconds": "0.35"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "duplicateAndInvalidAdministratorFormsPreserveExistingAccountAndDoNotEchoInput",
+      "seconds": "0.424"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "statisticsUseCorrectDistinctCountsDeadlineDenominatorAndAllStates",
+      "seconds": "0.336"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "userFilteringAndPaginationExcludePasswordField",
+      "seconds": "0.394"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "adminMayCancelAfterStartBeforeDeadlineAndKeepsFirstAuditOnRepeat",
+      "seconds": "0.358"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "invalidParametersAndUnknownUsersReturnControlledErrors",
+      "seconds": "0.397"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "roleChangeAndDisableExpireRealSessionsAndNewLoginUsesNewRole",
+      "seconds": "0.725"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "adminCancelRacingCheckinHasOneWinnerAndNeverCancelsUsing",
+      "seconds": "0.359"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "adminCancelAtDeadlineIsValidButRacingLateExpiryDoesNotInventCancellation",
+      "seconds": "0.373"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "statisticsPageSerializesChartsSafelyAndServesEchartsLocally",
+      "seconds": "0.376"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "duplicateConcurrentAdminCancellationsKeepOneAuditedMutation",
+      "seconds": "0.331"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "outOfBandRoleChangeStillRejectsStaleSession",
+      "seconds": "0.38"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "invalidReasonCannotMutateOrBeUsedToInjectHtml",
+      "seconds": "0.335"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "statisticsDoNotDependOnSweepForOccupancyAndKeepPersistedExpiryCount",
+      "seconds": "0.344"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "historicalDisabledSeatsCanExceedHundredPercentAndZeroCapacityIsUndefined",
+      "seconds": "0.334"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "trendFillsSevenCalendarDaysAcrossMonthAndNoDenominatorIsNull",
+      "seconds": "0.327"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "passwordResetRevokesAllOldSessionsAndOldPasswordStopsWorking",
+      "seconds": "0.767"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "pendingAndUsingReservationsBlockDisableAndRoleChangeUntilResolved",
+      "seconds": "0.359"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "roleChangeRacingBookingCannotStrandStudentReservation",
+      "seconds": "0.334"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "simultaneousSuperAdminMutationsPreserveAnEnabledSuperAdmin",
+      "seconds": "0.319"
+    },
+    {
+      "class": "com.seapullkb.library.AdminIntegrationTest",
+      "name": "createsOnlyEnabledLibrarianAndNeverEchoesPasswords",
+      "seconds": "0.464"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "profileReadsOwnPublicFieldsAndIgnoresForgedIdentityAndPrivileges",
+      "seconds": "0.451"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "profileRequiresStudentAndCsrfAndAllMutationRoutesRejectMissingCsrf",
+      "seconds": "0.271"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "unsupportedMysqlDatesReturnSafeBadRequest(String)[1]",
+      "seconds": "0.251"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "unsupportedMysqlDatesReturnSafeBadRequest(String)[2]",
+      "seconds": "0.238"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "simultaneousPasswordUpdatesAlwaysRevalidateCurrentHash",
+      "seconds": "0.522"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "invalidProfileDoesNotMutateAndDisplayEscapesText(String)[1]",
+      "seconds": "0.238"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "invalidProfileDoesNotMutateAndDisplayEscapesText(String)[2]",
+      "seconds": "0.25"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "erasedPrincipalStillDetectsPasswordChangeEvenWhenLoginRegisteredAfterRevocation",
+      "seconds": "0.46"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "unexpectedFailureReturnsSafePageWithoutSqlOrSensitiveExceptionMessage",
+      "seconds": "0.226"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "selfPasswordChangeVerifiesOldPasswordInvalidatesAllSessionsAndKeepsHistory",
+      "seconds": "0.797"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "pagesHaveStrictScriptsSecurityHeadersAndSafeChartData",
+      "seconds": "0.313"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "protectedSpaceWriteRechecksRoleUnderUserLock",
+      "seconds": "0.242"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "missingParametersUnknownPathsAndWrongMethodHaveSafeErrors",
+      "seconds": "0.262"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "registrationToProfileBookingCheckinCheckoutAndStatisticsIsOneCompleteWorkflow",
+      "seconds": "0.477"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[1]",
+      "seconds": "0.323"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[2]",
+      "seconds": "0.393"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[3]",
+      "seconds": "0.264"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[4]",
+      "seconds": "0.264"
+    },
+    {
+      "class": "com.seapullkb.library.DeliveryIntegrationTest",
+      "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[5]",
+      "seconds": "0.248"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "disabledUserAndWrongPasswordCannotLogin",
+      "seconds": "0.487"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "unicodePasswordBeyondBcryptLimitReturnsValidationError",
+      "seconds": "0.292"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "registrationAlwaysCreatesEnabledStudentAndHashesPassword",
+      "seconds": "0.485"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "productionBootstrapCreatesOnlySuperAdminAndRequiresPassword",
+      "seconds": "0.341"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "userControlledDisplayNamesAreHtmlEscaped",
+      "seconds": "0.307"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "logoutInvalidatesSessionAndNeedsCsrf",
+      "seconds": "0.423"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "schemaAndSeedCanBeRepeatedWithoutResettingPasswordsOrDuplicatingSeats",
+      "seconds": "0.299"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "fourTablesAndShanghaiBusinessClock",
+      "seconds": "0.294"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "realLoginRoutesAllThreeRolesToTheirRenderedHome(String, String, String)[1]",
+      "seconds": "0.388"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "realLoginRoutesAllThreeRolesToTheirRenderedHome(String, String, String)[2]",
+      "seconds": "0.381"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "realLoginRoutesAllThreeRolesToTheirRenderedHome(String, String, String)[3]",
+      "seconds": "0.551"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[1]",
+      "seconds": "0.288"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[2]",
+      "seconds": "0.29"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[3]",
+      "seconds": "0.269"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[4]",
+      "seconds": "0.27"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "studentAndLibrarianCannotEnterSuperAdminPages",
+      "seconds": "0.492"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "loginRegistrationAndLocalBootstrapAssetsAreAccessible",
+      "seconds": "0.32"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "expiredAndNewReservationsCanCoexistAndHistoricalReferencesCannotBeDeleted",
+      "seconds": "0.31"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "duplicateUsernameIsRejectedWithoutChangingExistingAccount",
+      "seconds": "0.321"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "missingCsrfIsRejectedBeforeRegistrationOrLogin",
+      "seconds": "0.246"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "concurrentRegistrationsOfSameUsernameHaveExactlyOneWinner",
+      "seconds": "0.326"
+    },
+    {
+      "class": "com.seapullkb.library.FoundationIntegrationTest",
+      "name": "uniqueSeatNumbersAreScopedToReadingRoomAndForeignKeysProtectHistory",
+      "seconds": "0.235"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "onlyOwnerCanUseLifecycleEndpointsAndTimestampsComeFromServer",
+      "seconds": "0.379"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "checkoutRacingAutomaticCompletionPreservesExactEndAndSingleCompletion",
+      "seconds": "0.351"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "disabledUsersCannotCheckinButAutomaticCleanupStillWorks",
+      "seconds": "0.57"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "sweepHandlesMoreThanOnePageAndBothKindsOfDueRecords",
+      "seconds": "2.012"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "earlyCheckoutLocksBothSeatAndStudentForWholeSlotAndDoesNotRewriteOnRepeat",
+      "seconds": "0.388"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "staleExpirationAndCompletionWritesCannotOverwriteCurrentStates",
+      "seconds": "0.332"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "futureReservationCannotCheckinTodayOrCheckoutBeforeCheckin",
+      "seconds": "0.317"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "checkinAtDeadlineSucceedsButOneSecondLaterReleasesAndRejectsEvenWithoutSweep",
+      "seconds": "0.32"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "overdueOriginalCanBeRebookedCheckedInAndCheckedOutWithoutExtendingEnd",
+      "seconds": "0.346"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "terminalRecordsCannotReturnToUsing(String)[1]",
+      "seconds": "0.32"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "terminalRecordsCannotReturnToUsing(String)[2]",
+      "seconds": "0.329"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "terminalRecordsCannotReturnToUsing(String)[3]",
+      "seconds": "0.307"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "ownPageShowsEligibleActionsAndActualTimesAndDoesNotMutateOnGet",
+      "seconds": "0.348"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "lateCheckoutWithoutSchedulerCompletesAtSlotEndInsteadOfRequestTime",
+      "seconds": "0.335"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "duplicateConcurrentCheckinsAndCheckoutsEachChangeStateOnlyOnce",
+      "seconds": "0.339"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "checkinRacingCancellationHasExactlyOneLegalWinner",
+      "seconds": "0.338"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "forcedDisabledResourceCannotBeCheckedInAndDoesNotBlockExpiration",
+      "seconds": "0.333"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "checkinRacingExpirationHonorsDeadlineAndNeverOverwritesSuccessfulCheckin(int)[1]",
+      "seconds": "0.327"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "checkinRacingExpirationHonorsDeadlineAndNeverOverwritesSuccessfulCheckin(int)[2]",
+      "seconds": "0.323"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "lateRebookingGetsExactlyTenMinutesAndMayExpireAgain",
+      "seconds": "0.324"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "sweepDoesNotExpireAtDeadlineButExpiresImmediatelyAfterAndIsRepeatable",
+      "seconds": "0.318"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "checkinRequestAfterEndAlsoCommitsAutomaticCompletion",
+      "seconds": "0.344"
+    },
+    {
+      "class": "com.seapullkb.library.LifecycleIntegrationTest",
+      "name": "normalCheckinOpensExactlyFifteenMinutesBeforeStartAndIsIdempotent",
+      "seconds": "0.338"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "stalePendingIsReleasedInSuccessfulBookingTransactionAndNewDeadlineIsTenMinutes",
+      "seconds": "1.026"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "bookingUsesLoggedInIdentityAndIgnoresClientStatusAndDeadline",
+      "seconds": "0.465"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "sevenDaysAndIndependentSlotsCanAllBeBooked",
+      "seconds": "0.47"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "gridCanFilterFreeSeatsAndSuppressBookingAfterCutoffOrExistingStudentBooking",
+      "seconds": "0.761"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "expiredCrossRoomHistoryRetriesRolledBackTransactionAndBothBookingsSucceed",
+      "seconds": "0.536"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "bookingAndMaintenanceCannotLeavePendingBookingOnDisabledResource(boolean)[1]",
+      "seconds": "0.334"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "bookingAndMaintenanceCannotLeavePendingBookingOnDisabledResource(boolean)[2]",
+      "seconds": "0.342"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "concurrentStudentsCompetingForSameSeatHaveExactlyOneWinner",
+      "seconds": "0.362"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "ownListFiltersPaginatesAndDisplaysTimeExpiredStatusWithoutWritingOnGet",
+      "seconds": "0.432"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "effectiveReservationsAndCompletedUsageBlockBothSeatAndStudent(String)[1]",
+      "seconds": "0.327"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "effectiveReservationsAndCompletedUsageBlockBothSeatAndStudent(String)[2]",
+      "seconds": "0.333"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "effectiveReservationsAndCompletedUsageBlockBothSeatAndStudent(String)[3]",
+      "seconds": "0.32"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "duplicateClicksCreateOnlyOneRecord",
+      "seconds": "0.327"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "studentWithExpiredBookingMayBookDifferentRoomWithoutLockingOldSeat",
+      "seconds": "0.343"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "cancellationBeforeStartKeepsAuditFieldsAndRepeatedCancellationIsIdempotent",
+      "seconds": "0.344"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "bookingAndCancelNeedCsrfAndStudentRoleAndBadParametersDoNotWrite",
+      "seconds": "0.395"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "foreignReservationCannotBeCancelledOrIncludedBySpoofedUserId",
+      "seconds": "0.334"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "cancellationRacingNewBookingPreservesCancelledHistoryAndAtMostOneOccupant",
+      "seconds": "0.331"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "bookingAndDeletionCannotLeaveDanglingReservation",
+      "seconds": "0.365"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "disabledRoomSeatOrAccountAndChangedRoleCannotCreateBooking",
+      "seconds": "0.33"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "cannotCancelAtStartOrAfterStartOrAfterCheckin",
+      "seconds": "0.324"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "cancelledAndExpiredHistoryDoNotBlockNewBooking",
+      "seconds": "0.321"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "concurrentSameStudentBookingDifferentRoomsHasExactlyOneWinner",
+      "seconds": "0.352"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "conflictRedirectKeepsSelectedDateSlotAndOwnCancellationWorksThroughHttp",
+      "seconds": "0.376"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationIntegrationTest",
+      "name": "boundaryThirtyMinutesBeforeEndAllowsBookingAndOneSecondLaterBlocksIt",
+      "seconds": "0.337"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationMaintenanceTest",
+      "name": "failedRecordDoesNotPreventAnotherRecordFromBeingProcessed",
+      "seconds": "0.467"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationRulesTest",
+      "name": "onlySevenNaturalDaysAreAllowedIncludingAcrossMonthBoundary",
+      "seconds": "0.001"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationRulesTest",
+      "name": "exactlyThirtyMinutesBeforeEndIsAllowedButLaterIsRejected(TimeSlot)[1]",
+      "seconds": "0.001"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationRulesTest",
+      "name": "exactlyThirtyMinutesBeforeEndIsAllowedButLaterIsRejected(TimeSlot)[2]",
+      "seconds": "0.0"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationRulesTest",
+      "name": "exactlyThirtyMinutesBeforeEndIsAllowedButLaterIsRejected(TimeSlot)[3]",
+      "seconds": "0.0"
+    },
+    {
+      "class": "com.seapullkb.library.ReservationRulesTest",
+      "name": "ordinaryDeadlineAndLateBookingTenMinuteDeadlineAreDifferent",
+      "seconds": "0.001"
+    },
+    {
+      "class": "com.seapullkb.library.SchedulerIntegrationTest",
+      "name": "startupCatchupAndRealScheduledExecutionUseTheSameStateTransitions",
+      "seconds": "2.068"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "concurrentSeatCreationInSameRoomHasOneWinner",
+      "seconds": "0.274"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "roomAndSeatNamesAreHtmlEscaped",
+      "seconds": "0.284"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "seatNumbersAreUniqueWithinRoomIncludingAfterTrimmingAndRename",
+      "seconds": "0.288"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "pagesAndEditModalsRenderAndStudentCannotSeeDisabledRoom",
+      "seconds": "0.324"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "historicalSeatCanBeRenamedButNeverDeleted",
+      "seconds": "0.265"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "badDatesSlotsMissingRoomsAndWrongRoomSeatIdsReturnUsefulErrors",
+      "seconds": "0.276"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "unreferencedSeatCanBeCreatedRenamedEnabledDisabledAndDeletedThroughHttp",
+      "seconds": "0.263"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "studentCapacityUsesEnabledSeatsAndDoesNotStoreDuplicateCapacity",
+      "seconds": "0.234"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "currentAndFutureEffectiveBookingsBlockSeatAndWholeRoomDisable(String)[1]",
+      "seconds": "0.256"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "currentAndFutureEffectiveBookingsBlockSeatAndWholeRoomDisable(String)[2]",
+      "seconds": "0.245"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "oldExpiredAndReplacementPendingRenderAsOneSeatWithoutDoubleCounting",
+      "seconds": "0.23"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "gridUsesSelectedDateAndSlotAndAllFiveReservationStates",
+      "seconds": "0.267"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "overduePendingAndFinishedSlotsDoNotBlockMaintenanceButKeepHistory",
+      "seconds": "0.242"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "deadlineInstantIsStillEffectiveButPastSlotsDoNotBlock",
+      "seconds": "0.241"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "invalidRoomAndSeatFormsKeepInputAndDisplayValidationInModal",
+      "seconds": "0.267"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "studentsCannotWriteAdminResourcesAndCsrfIsRequired",
+      "seconds": "0.247"
+    },
+    {
+      "class": "com.seapullkb.library.SpaceIntegrationTest",
+      "name": "adminCanCreateEditAndDisableRoomThroughValidatedForms",
+      "seconds": "0.25"
+    }
+  ],
+  "windowsDeployment": "not executed",
+  "remoteCI": "not executed"
+}
