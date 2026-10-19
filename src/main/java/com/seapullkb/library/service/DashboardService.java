@@ -14,8 +14,9 @@ public class DashboardService {
     private final ReservationService reservations;
     private final ReservationRules rules;
     private final Clock clock;
-    public DashboardService(DashboardMapper mapper, ReservationService reservations, ReservationRules rules, Clock clock) {
-        this.mapper=mapper; this.reservations=reservations; this.rules=rules; this.clock=clock;
+    private final AdminAccess access;
+    public DashboardService(DashboardMapper mapper, ReservationService reservations, ReservationRules rules, Clock clock, AdminAccess access) {
+        this.mapper=mapper; this.reservations=reservations; this.rules=rules; this.clock=clock; this.access=access;
     }
 
     @Transactional(readOnly=true)
@@ -23,6 +24,13 @@ public class DashboardService {
         // Live database role validation occurs even when there are no reservations.
         var active=reservations.active(username);
         return new StudentDashboard(catalog(date,slot),active);
+    }
+
+    @Transactional(readOnly=true)
+    public AdminDashboard admin(String username) {
+        access.require(username,false);
+        LocalDateTime now=LocalDateTime.now(clock);
+        return new AdminDashboard(now,mapper.metrics(now),mapper.recent(now),mapper.attention(now),mapper.liveRooms(now));
     }
 
     @Transactional(readOnly=true)
@@ -51,4 +59,6 @@ public class DashboardService {
     public record StudentDashboard(Catalog catalog,List<ReservationSummary> active) {
         public ReservationSummary getNext() { return active.isEmpty()?null:active.get(0); }
     }
+    public record AdminDashboard(LocalDateTime at, AdminDashboardMetrics metrics, List<AdminReservationRow> recent,
+                                 List<AdminReservationRow> attention, List<RoomLiveUsage> rooms) { }
 }

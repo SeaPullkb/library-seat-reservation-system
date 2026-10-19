@@ -46,6 +46,7 @@ public class HomeController {
     @GetMapping("/admin")
     public String adminHome(Authentication authentication, Model model) {
         model.addAttribute("account", accounts.findByUsername(authentication.getName()));
+        model.addAttribute("dashboard",dashboards.admin(authentication.getName()));
         model.addAttribute("superAdmin", authentication.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_SUPER_ADMIN")));
         model.addAttribute("title", "管理首页");

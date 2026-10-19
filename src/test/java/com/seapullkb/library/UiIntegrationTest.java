@@ -142,4 +142,31 @@ class UiIntegrationTest {
                 .andExpect(model().attribute("activeReservations",hasSize(0))).andExpect(content().string(containsString("超时释放")));
     }
 
+    @Test void adminDashboardSeparatesLiveUseFromFutureAndHistoricalOccupancy() {
+        clock.at(DAY.atTime(7,30));Long id=reservations.create("student",room,seat,DAY,1);
+        var d=dashboards.admin("librarian");assertThat(d.metrics().todayStudents()).isEqualTo(1);assertThat(d.metrics().pending()).isZero();
+        clock.at(DAY.atTime(7,45));assertThat(dashboards.admin("librarian").metrics().pending()).isEqualTo(1);
+        lifecycle.checkIn("student",id);d=dashboards.admin("librarian");assertThat(d.metrics().usingSeats()).isEqualTo(1);
+        assertThat(d.rooms().get(0).usingSeats()).isEqualTo(1);assertThat(d.attention()).isEmpty();
+        reservations.create("student",room,seat,DAY.plusDays(1),1);
+        clock.at(DAY.atTime(8,0));lifecycle.checkOut("student",id);d=dashboards.admin("librarian");
+        assertThat(d.metrics().usingSeats()).isZero();assertThat(d.metrics().pending()).isZero();
+        assertThat(dashboards.catalog(DAY,1).getAvailableSeats()).isEqualTo(19);
+    }
+    @Test void adminMetricsCountActualReleaseDateAndReadsDoNotPerformCleanup() {
+        Long id=reservations.create("student",room,seat,DAY,1);clock.at(DAY.atTime(8,15,1));
+        var d=dashboards.admin("librarian");assertThat(d.metrics().pending()).isZero();assertThat(d.metrics().todayExpired()).isZero();
+        assertThat(d.recent().get(0).status()).isEqualTo("EXPIRED");
+        jdbc.update("UPDATE reserve_record SET status='EXPIRED',reserve_date=?,released_at=? WHERE id=?",DAY.minusDays(1),DAY.atTime(8,16),id);
+        clock.at(DAY.atTime(8,16));d=dashboards.admin("librarian");assertThat(d.metrics().todayExpired()).isEqualTo(1);assertThat(d.metrics().todayStudents()).isZero();
+        clock.at(DAY.plusDays(1).atTime(8,0));assertThat(dashboards.admin("librarian").metrics().todayExpired()).isZero();
+    }
+    @Test void adminDashboardHasRealZeroStateAndRechecksDatabaseRole() throws Exception {
+        mvc.perform(get("/admin").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isOk())
+                .andExpect(content().string(containsString("暂无预约记录"))).andExpect(content().string(containsString("data-admin-metric=\"using\">0")));
+        jdbc.update("UPDATE `user` SET role='STUDENT' WHERE username='librarian'");
+        assertThatThrownBy(()->dashboards.admin("librarian")).isInstanceOf(AccessDeniedException.class);
+        mvc.perform(get("/admin").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isForbidden());
+    }
+
 }

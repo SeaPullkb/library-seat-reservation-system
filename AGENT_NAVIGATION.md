@@ -225,3 +225,5 @@ Windows使用`mvnw.cmd`；启动与环境导出细节按README。只改导航或
 - `ReservationMapper.active` / `ReservationService.active`：不受历史分页影响的本人有效待办。
 - `templates/fragments/reservation.html`：共享预约卡片、实际状态允许的操作及规则提示。
 - `UiIntegrationTest`：V1.1 首页/余座的真实 MySQL、时钟与权限回归，后续任务继续扩展。
+- `AdminDashboardMetrics` / `RoomLiveUsage`：管理首页实时指标与空间使用 DTO；与历史整时段预约率区分。
+- `DashboardService.admin`：重新校验管理员，查询最近预约、当前签到窗口待办和真实空间使用。
