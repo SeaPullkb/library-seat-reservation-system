@@ -15,7 +15,7 @@ a { color: #245c7f; }
 @media (max-width: 991px) { .auth-container { padding-top: 2.5rem; padding-bottom: 2rem; } }
 .table th, .table td { padding: 1rem; }
 .seat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 1rem; }
-.seat-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; min-height: 100px; border: 2px solid; border-radius: .8rem; }
+.seat-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; min-height: 100px; border: 2px solid; border-radius: .8rem; padding: .75rem .5rem; overflow-wrap: anywhere; }
 .seat-free { color: #245538; border-color: #82b894; background: #f1faf4; }
 .seat-occupied { color: #6a4c22; border-color: #c9ab77; background: #faf5e9; }
 .seat-mine { color: #214b75; border-color: #7b9fc8; background: #edf4fd; }

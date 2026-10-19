@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-/** Read-only guards for maintenance; reservation writes are implemented in M3. */
+/** Read-only guards for maintenance, coordinated with reservation writes by room/seat locks. */
 public interface ReservationGuardMapper {
     @Select("""
             SELECT COUNT(*) FROM reserve_record r JOIN seat s ON s.id = r.seat_id

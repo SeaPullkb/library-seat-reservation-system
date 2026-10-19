@@ -246,7 +246,7 @@ class SpaceIntegrationTest {
                 .andExpect(status().isOk()).andExpect(content().string(containsString("第一阅览室")));
         mvc.perform(get("/student/rooms/" + roomId + "/seats").with(user("student").roles("STUDENT")))
                 .andExpect(status().isOk()).andExpect(content().string(containsString("A01")))
-                .andExpect(content().string(containsString("预约功能将在下一阶段开放")));
+                .andExpect(content().string(containsString("预约座位A01")));
         spaces.setRoomEnabled(roomId, false);
         mvc.perform(get("/student/rooms").with(user("student").roles("STUDENT")))
                 .andExpect(status().isOk()).andExpect(content().string(not(containsString("第一阅览室"))));

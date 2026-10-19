@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body><header th:replace="~{fragments/layout :: navigation}"></header>
+<main class="container py-5">
+  <div class="d-flex justify-content-between gap-3"><a th:href="@{/student}" class="small">返回学生首页</a><a th:href="@{/student/rooms}" class="small">继续选座</a></div>
+  <p class="eyebrow mt-4">安排你的自习时间</p><h1 class="h2 mb-4">我的预约</h1>
+  <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div><div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></div>
+  <form th:action="@{/student/reservations}" method="get" class="d-flex align-items-end gap-3 mb-4"><div><label for="status" class="form-label">预约状态</label><select id="status" name="status" class="form-select"><option value="">全部状态</option><option th:each="state : ${statuses}" th:value="${state}" th:text="${state.label}" th:selected="${state == selectedStatus}"></option></select></div><button class="btn btn-outline-primary" type="submit">筛选</button></form>
+  <p class="text-secondary small">仅可在时段开始前取消尚未签到的有效预约。超时记录按实际截止时间显示；签到、签退及自动释放任务将在下一阶段开放。</p>
+  <div class="surface table-responsive"><table class="table align-middle mb-0"><caption class="px-3">共 <span th:text="${reservations.total}"></span> 条预约记录</caption><thead><tr><th scope="col">阅览室 / 座位</th><th scope="col">日期 / 时段</th><th scope="col">状态</th><th scope="col">签到截止</th><th scope="col">操作</th></tr></thead>
+    <tbody><tr th:if="${reservations.records.isEmpty()}"><td colspan="5" class="text-center text-secondary py-5">暂无符合条件的预约，去选择一个座位吧。</td></tr>
+      <tr th:each="record : ${reservations.records}" th:attr="data-reservation-id=${record.id}">
+        <th scope="row"><span th:text="${record.roomName}"></span><p class="fw-normal small text-secondary mb-0" th:text="${record.seatNo}"></p></th>
+        <td><span th:text="${record.reserveDate}"></span><p class="small text-secondary mb-0" th:text="${record.slotLabel}"></p></td>
+        <td><span class="badge text-bg-light" th:text="${record.statusLabel}"></span><p th:if="${record.cancelReason}" th:text="${record.cancelReason}" class="small text-secondary mb-0"></p></td>
+        <td th:text="${#temporals.format(record.checkinDeadline,'MM-dd HH:mm:ss')}"></td>
+        <td><form th:if="${record.canCancel(now)}" th:action="@{/student/reservations/{id}/cancel(id=${record.id})}" method="post" data-confirm="确认取消该预约？取消后座位将重新开放。"><button class="btn btn-sm btn-outline-danger" type="submit" th:aria-label="'取消预约' + ${record.id}">取消预约</button></form><span th:unless="${record.canCancel(now)}" class="text-secondary small">—</span></td>
+      </tr>
+    </tbody></table></div>
+  <nav th:if="${reservations.pages > 1}" class="d-flex align-items-center gap-3 mt-4" aria-label="预约记录分页"><a th:if="${reservations.page > 0}" th:href="@{/student/reservations(status=${selectedStatus},page=${reservations.page - 1})}" class="btn btn-outline-secondary btn-sm">上一页</a><span class="small text-secondary">第 <span th:text="${reservations.page + 1}"></span> / <span th:text="${reservations.pages}"></span> 页</span><a th:if="${reservations.hasNext()}" th:href="@{/student/reservations(status=${selectedStatus},page=${reservations.page + 1})}" class="btn btn-outline-secondary btn-sm">下一页</a></nav>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body>
+</html>

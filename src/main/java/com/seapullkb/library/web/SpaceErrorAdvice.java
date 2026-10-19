@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
 
-@ControllerAdvice(assignableTypes = {AdminSpaceController.class, StudentSpaceController.class})
+@ControllerAdvice(assignableTypes = {AdminSpaceController.class, StudentSpaceController.class, ReservationController.class})
 public class SpaceErrorAdvice {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ModelAndView notFound(ResourceNotFoundException ex) {

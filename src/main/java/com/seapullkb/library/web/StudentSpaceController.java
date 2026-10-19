@@ -1,10 +1,12 @@
 package com.seapullkb.library.web;
 
 import com.seapullkb.library.entity.TimeSlot;
-import com.seapullkb.library.service.AccountService;
+import com.seapullkb.library.service.ReservationRules;
+import com.seapullkb.library.service.ReservationService;
 import com.seapullkb.library.service.SpaceService;
 import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.stream.IntStream;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -16,10 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/student/rooms")
 public class StudentSpaceController {
     private final SpaceService spaces;
-    private final AccountService accounts;
+    private final ReservationService reservations;
+    private final ReservationRules rules;
     private final Clock clock;
-    public StudentSpaceController(SpaceService spaces, AccountService accounts, Clock clock) {
-        this.spaces = spaces; this.accounts = accounts; this.clock = clock;
+    public StudentSpaceController(SpaceService spaces, ReservationService reservations, ReservationRules rules, Clock clock) {
+        this.spaces = spaces; this.reservations = reservations; this.rules = rules; this.clock = clock;
     }
     @GetMapping
     public String rooms(Model model) {
@@ -30,13 +33,22 @@ public class StudentSpaceController {
     public String seats(@PathVariable Long id,
                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                          @RequestParam(defaultValue = "1") int slot,
+                         @RequestParam(defaultValue = "false") boolean availableOnly,
                          Authentication authentication, Model model) {
         LocalDate today = LocalDate.now(clock);
         LocalDate selected = date == null ? today : date;
-        model.addAttribute("title", "座位浏览"); model.addAttribute("room", spaces.room(id, true));
-        model.addAttribute("seats", spaces.studentGrid(id, selected, slot, accounts.findByUsername(authentication.getName()).getId()));
+        Long userId = reservations.studentId(authentication.getName());
+        var grid = spaces.studentGrid(id, selected, slot, userId);
+        model.addAttribute("title", "座位预约"); model.addAttribute("room", spaces.room(id, true));
+        model.addAttribute("seats", availableOnly ? grid.stream().filter(seat -> seat.availability().equals("FREE")).toList() : grid);
+        model.addAttribute("availableOnly", availableOnly);
+        boolean open = rules.isOpen(selected, TimeSlot.fromCode(slot), LocalDateTime.now(clock));
+        boolean conflict = reservations.hasStudentConflict(userId, selected, slot);
+        model.addAttribute("bookingOpen", open && !conflict);
+        model.addAttribute("closedReason", !open ? "该时段已停止预约：距结束不足30分钟。" : conflict ? "你在此日期时段已有预约或使用记录，请先查看我的预约。" : null);
         model.addAttribute("dates", IntStream.range(0, 7).mapToObj(today::plusDays).toList());
         model.addAttribute("date", selected); model.addAttribute("slot", slot); model.addAttribute("slots", TimeSlot.values());
+        model.addAttribute("selectedSlot", TimeSlot.fromCode(slot));
         return "student/seats";
     }
 }
