@@ -45,6 +45,11 @@ public class StudentSpaceController {
         LocalDate selected = date == null ? today : date;
         Long userId = reservations.studentId(authentication.getName());
         var grid = spaces.studentGrid(id, selected, slot, userId);
+        model.addAttribute("seatCounts", java.util.Map.of(
+                "FREE",grid.stream().filter(s -> s.availability().equals("FREE")).count(),
+                "OCCUPIED",grid.stream().filter(s -> s.availability().equals("OCCUPIED")).count(),
+                "MINE",grid.stream().filter(s -> s.availability().equals("MINE")).count(),
+                "DISABLED",grid.stream().filter(s -> s.availability().equals("DISABLED")).count()));
         model.addAttribute("title", "座位预约"); model.addAttribute("room", spaces.room(id, true));
         model.addAttribute("seats", availableOnly ? grid.stream().filter(seat -> seat.availability().equals("FREE")).toList() : grid);
         model.addAttribute("availableOnly", availableOnly);

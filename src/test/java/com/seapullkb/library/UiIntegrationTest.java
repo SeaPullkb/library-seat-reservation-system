@@ -115,4 +115,14 @@ class UiIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test void seatCountsDescribeWholeGridEvenWhenOnlyFreeSeatsAreDisplayed() throws Exception {
+        reservations.create("student",room,seat,DAY,1);
+        jdbc.update("UPDATE seat SET status=0 WHERE room_id=? AND seat_no='A03'",room);
+        jdbc.update("INSERT INTO reserve_record(user_id,seat_id,reserve_date,time_slot,status,checkin_deadline) SELECT (SELECT id FROM `user` WHERE username='librarian'),id,?,1,'PENDING',? FROM seat WHERE room_id=? AND seat_no='A02'",DAY,DAY.atTime(8,15),room);
+        mvc.perform(get("/student/rooms/"+room+"/seats").param("date",DAY.toString()).param("slot","1").param("availableOnly","true").with(user("student").roles("STUDENT")))
+                .andExpect(status().isOk()).andExpect(model().attribute("seatCounts",java.util.Map.of("FREE",17L,"MINE",1L,"OCCUPIED",1L,"DISABLED",1L)))
+                .andExpect(model().attribute("seats",hasSize(17))).andExpect(content().string(containsString("确认预约")))
+                .andExpect(content().string(containsString("非实际位置图")));
+    }
+
 }
