@@ -11,7 +11,7 @@
 5. [docs/ui-v1.1.md](docs/ui-v1.1.md)：V1.1 增量 UI 任务、验证与交付进度。
 6. 按下表找到Controller→Service→Mapper，再查看对应模板和测试。
 
-截至2026-10-19，应用功能及交付材料完成，任务25/26；唯一未勾选的是T25真实Windows部署验收。最近完整验证为145项通过、0失败/错误/跳过，见[结果记录](docs/test-results.json)；这是已有运行证据，不表示阅读本导航时重新执行过。
+V1.1应用代码已完成UI-00～UI-10，全量169项测试通过；45张完整流程和54张独立演示桌面/手机检查、五时刻生命周期验证通过。UI-11的Windows实机结果与PR合并仍待完成，见[当前验收](docs/acceptance-v1.1.md)。V1.0的145项结果及25/26进度属于历史基线，不代表当前测试总数。
 
 ## 根目录与工具
 
@@ -235,3 +235,14 @@ Windows使用`mvnw.cmd`；启动与环境导出细节按README。只改导航或
 - `DemoGuardTest` / `UiIntegrationTest`：演示 profile、真实库名、空库保护及数据场景验证。
 - `scripts/validation/demo-browser.py`：新演示库的真实页面/表单/分页/签到签退与54张桌面手机截图验收。
 - `scripts/validation/demo-clock.py`：独立打包应用跨5个模拟时刻的释放、补约、截止边界和自动完成验收。
+
+- `scripts/validation/BrowserHarness.java`：外部 stdin 控制时钟与维护回调，只编译到 `.local`，不进入产品jar。
+- `scripts/validation/browser-regression.py`：可移植全业务回归；支持Compose或本机MySQL，自动清理自身临时库。
+- `scripts/validation/windows-runtime.ps1` / `.github/workflows/ci.yml`：真实Windows原生MySQL8、Wrapper和浏览器/演示验收；执行结果须实际观察。
+- `docs/acceptance-v1.1.md` / `test-results-v1.1.json` / `pull-request-v1.1.md`：当前验收、逐用例结果及待创建PR正文。
+
+## V1.1交付继续点
+
+UI-00～UI-10完成，UI-11本地回归与材料完成。Windows实际结果、草稿PR及合并仍需继续；本环境尝试 `gh pr create` 时 GitHub GraphQL API返回 `Forbidden`，已有环境token无效，移除token后也无已登录账户。Git推送可用，不能将其等同于API授权。
+
+接手时先确认分支和远端SHA，检查Actions中的Linux全量与Windows原生运行结果，记录真实run链接和证据。不要用Windows构建、脚本解析或Windows User-Agent标记部署验收通过。API可用后使用 `docs/pull-request-v1.1.md` 创建/更新PR，Windows及最终验收通过再按 `feat/ui-polish` → `feat/final-delivery` → `main` 两级PR合并；用户已在V1.1计划中授权此交付顺序，不需重复请求一般推送许可。保留原业务锁、权限、四表和已有账号密码。

@@ -17,6 +17,7 @@ REDACTIONS = []
 
 
 def main():
+    demo.configure_stdio()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--output', type=Path, default=ROOT / '.local/demo-clock')

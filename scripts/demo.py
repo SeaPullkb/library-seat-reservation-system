@@ -18,6 +18,13 @@ DEMO_ROOT = ROOT / '.local' / 'demos'
 JAR_NAME = 'library-seat-reservation-system-0.1.0-SNAPSHOT.jar'
 
 
+def configure_stdio():
+    # Windows redirected stdout otherwise may use an ANSI code page for Chinese messages.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, 'reconfigure'):
+            stream.reconfigure(encoding='utf-8')
+
+
 def bindings(path):
     values = {}
     for line in path.read_text(encoding='utf-8-sig').splitlines():
@@ -124,6 +131,7 @@ def build():
 
 
 def main():
+    configure_stdio()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', nargs='?', default='serve', choices=['serve', 'prepare', 'resume', 'remove'])
     parser.add_argument('--manifest', type=Path)

@@ -70,3 +70,5 @@ python scripts/validation/demo-browser.py --manifest 本次输出的manifest路�
 该脚本要求新生成、尚未被操作的样本；检查真实指标、选座预览、签到/签退后的指标变化、用户分页、错误表单、空数据、400/403、脚本/CSP及桌面和手机溢出。它会真实改变这次演示库的学生预约状态，不操作正常库。截图和SHA-256清单写入指定输出目录；密码不会出现在截图或验收输出中。
 
 Windows 实机和远端 CI 结果需单独确认，Linux 的截图不能代替 Windows 验收。
+
+自动验收也可在 `prepare` 后添加 `demo-browser.py --start`，由检查进程负责启动和关闭自己的Java应用，免去单独启动终端；此时不要预先resume。五时刻业务回归为 `python scripts/validation/demo-clock.py --manifest 本次新prepare的manifest路径`，同样会自行启动和关闭应用。

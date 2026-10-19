@@ -12,6 +12,7 @@ import urllib.request
 from playwright.sync_api import sync_playwright, expect
 
 REDACTIONS = []
+OWNED_PROCESS = None
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location('library_demo', ROOT / 'scripts/demo.py')
 demo = importlib.util.module_from_spec(spec)
@@ -19,8 +20,10 @@ spec.loader.exec_module(demo)
 
 
 def main():
+    demo.configure_stdio()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest', type=Path, required=True)
+    parser.add_argument('--start', action='store_true', help='Start and stop only the Java demo process owned by this check.')
     parser.add_argument('--output', type=Path, default=ROOT / '.local/demo-browser')
     args = parser.parse_args()
     manifest, data, private = demo.read_manifest(args.manifest)
@@ -28,6 +31,10 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     url = 'http://127.0.0.1:' + str(data['port'])
     day = data['date']
+    global OWNED_PROCESS
+    if args.start:
+        demo.port_free(data['port'])
+        OWNED_PROCESS = demo.launch(data, private, manifest.parent)
     secret = private['APP_DEMO_PASSWORD']
     REDACTIONS.extend(value for key,value in private.items() if 'PASSWORD' in key and value)
     errors, failures, screenshots = [], [], []
@@ -161,3 +168,5 @@ if __name__ == '__main__':
             message = message.replace(secret, '[redacted]')
         print(type(error).__name__ + ': ' + message[:4000])
         raise SystemExit(1)
+    finally:
+        demo.stop(OWNED_PROCESS)

@@ -81,3 +81,11 @@ schema.sql只创建缺失表，不迁移已有列；当前最终版本仍是四�
 | 证据路径与问题 | 未执行 |
 
 逐项通过[验收表](acceptance.md)后再勾选T25。不能用Linux测试、Windows构建CI或浏览器Windows User-Agent替代该验收。
+
+## V1.1 Windows自动验收入口
+
+GitHub Actions的Windows任务依赖Linux全量测试通过，再使用Windows Wrapper构建。在全新检出目录执行 `scripts/validation/windows-runtime.ps1`：下载版本固定的官方MySQL8.0.44 Windows包，使用独立数据目录、仅本机33306端口和随机应用密码；执行45张完整业务浏览器回归、54张打包演示页面及五时刻释放/补约/自动完成验收。不会使用系统中已有的MySQL服务或数据目录；存在 `.env` 或验收目录时拒绝覆盖。
+
+此入口要求PowerShell7、Java17、Python与Playwright；CI负责准备这些工具。生成的密码仅写入忽略的本地配置，上传物只选择截图、结果和运行日志，不上传配置、MySQL数据或运行jar。结束时关闭自己启动的临时MySQL。
+
+入口配置和Linux脚本解析已检查；当前尚未观察真实Windows任务执行结果。只有Actions任务成功且证据完整，或按上方手册完成Windows人工验收并填表后，才能将Windows门槛标记通过。普通Windows本地启动仍使用 `scripts/dev.ps1`，不要求为了运行系统安装浏览器测试工具。

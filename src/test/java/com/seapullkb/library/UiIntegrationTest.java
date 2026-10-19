@@ -229,4 +229,14 @@ class UiIntegrationTest {
         assertThat(LocalDateTime.now(fixed)).isEqualTo(DAY.atTime(9,11,1));assertThat(fixed.getZone().getId()).isEqualTo("Asia/Shanghai");
     }
 
+    @Test void lateBookingCardStartsItsSignInWindowAtActualCreation() throws Exception {
+        clock.at(DAY.atTime(9,0));reservations.create("student",room,seat,DAY,1);
+        var record=dashboards.student("student",DAY,1).getNext();
+        assertThat(record.getCheckinOpensAt()).isEqualTo(DAY.atTime(9,0));
+        assertThat(record.canCheckIn(DAY.atTime(8,59,59))).isFalse();
+        assertThat(record.canCheckIn(DAY.atTime(9,10))).isTrue();
+        mvc.perform(get("/student").with(user("student").roles("STUDENT"))).andExpect(status().isOk())
+                .andExpect(content().string(containsString("05-08 09:00")));
+    }
+
 }
