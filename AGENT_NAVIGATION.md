@@ -217,3 +217,11 @@ Windows使用`mvnw.cmd`；启动与环境导出细节按README。只改导航或
 - 调整数据库时先核对schema及数据字典，保留历史；需要结构变更时提供显式迁移，不靠删除卷。
 - 本地`.env`、数据库卷、`target/`和云环境的`/workspace/.cloud-setup/`不是业务源码；环境专用缓存或日志不应成为应用运行依赖。
 - 最终同步导航、受影响文档和验证结果；提交/推送遵循AGENTS.md及用户授权。
+
+## V1.1 新增入口
+
+- `DashboardService` / `DashboardMapper`：首页业务数据、日期时段余座汇总；只读查询，不修改预约生命周期。
+- `RoomAvailability`：开放阅览室的时段余座 DTO。
+- `ReservationMapper.active` / `ReservationService.active`：不受历史分页影响的本人有效待办。
+- `templates/fragments/reservation.html`：共享预约卡片、实际状态允许的操作及规则提示。
+- `UiIntegrationTest`：V1.1 首页/余座的真实 MySQL、时钟与权限回归，后续任务继续扩展。
