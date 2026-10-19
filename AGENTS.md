@@ -1,5 +1,7 @@
 # 开发约定
 
+- 先阅读根目录 [AGENT_NAVIGATION.md](AGENT_NAVIGATION.md) 定位目录、业务入口、页面、测试和文档；本文件中的开发约定仍须遵守。
+- 新增、移动或改变文件职责时，同步更新导航，避免后续 agent 按过期路径工作。
 - 本任务已在独立环境中，使用现有检出目录；除非用户要求，不创建 Git worktree。
 - 技术栈固定为 Java 17、Spring Boot 3、MyBatis-Plus Boot 3 Starter、MySQL 8、Thymeleaf、Bootstrap 5、Spring Security + Session。后续图表用 ECharts，定时任务用 @Scheduled。
 - 保持单体服务，不增加 Vue、Redis、JWT、微服务或消息队列。
