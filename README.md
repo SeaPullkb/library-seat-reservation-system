@@ -203,3 +203,7 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 应用功能与交付材料已完成；Windows实机部署T25仍待实际Windows环境验证。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
 
 参考项目调查见 [docs/references.md](docs/references.md)。当前代码独立实现，没有复制未获授权的第三方项目源码。
+
+## V1.1 升级
+
+以 `feat/final-delivery` 为基线，在 `feat/ui-polish` 逐项完成页面和工作台升级，进度及验收见 [V1.1 升级记录](docs/ui-v1.1.md)。

@@ -8,7 +8,8 @@
 2. [README.md](README.md)：如何准备环境、启动应用及查看截图。
 3. [docs/requirements.md](docs/requirements.md)：已确认的业务规则和统计口径。
 4. [docs/tasks.md](docs/tasks.md)、[docs/acceptance.md](docs/acceptance.md)：已完成内容、实际验收及未运行检查。
-5. 按下表找到Controller→Service→Mapper，再查看对应模板和测试。
+5. [docs/ui-v1.1.md](docs/ui-v1.1.md)：V1.1 增量 UI 任务、验证与交付进度。
+6. 按下表找到Controller→Service→Mapper，再查看对应模板和测试。
 
 截至2026-10-19，应用功能及交付材料完成，任务25/26；唯一未勾选的是T25真实Windows部署验收。最近完整验证为145项通过、0失败/错误/跳过，见[结果记录](docs/test-results.json)；这是已有运行证据，不表示阅读本导航时重新执行过。
 

@@ -1,0 +1,24 @@
+{
+  "baseline": "c8a4ee6",
+  "clock": "2030-05-08; external isolated test clock",
+  "screenshots": {
+    "01-login.png": "74bb53405341d0c0fec79f8c14556d235fa3a5017958a8c2beb4711d1ccb49da",
+    "02-register.png": "20f785521c6772ecda90315efe5d4bc90380356e84d7ad02bc5cc08921b3ddde",
+    "03-student-home.png": "39024622798ab7b8bf60086504d82d5347a44b8d6cac78a63b189537c9210dea",
+    "04-profile.png": "eb563daab551697dbbf498865ffcbfc4bf3cf48d2e0c3e0483e46dfc82d1e4ad",
+    "05-rooms.png": "b22e0b83461eceac833ace6bb50c8f8158578f88e7e7348ee4dc48e9f1990a06",
+    "06-seats.png": "3ab2ed5c7d4e191f3de2faa325604bd3ca07a442fa2f0eba9f524aafe2679b12",
+    "07-my-reservations.png": "1d43eeaefbde5c502aa964dbab8462b851326d13b681aafb0782a4d1d9a92939",
+    "08-admin-home.png": "38621f7fc37e2c9917d69198408c26d273683479059104a13aed6a38f2ec1d6d",
+    "09-admin-rooms.png": "2fa3624ef10403da6828f9cbebb3f10063b3f976361174cd2e93ccfd73ef196d",
+    "10-admin-seats.png": "2304c2d323b6a4d10b97e2cccc27d578930cc45ea244359da93b890a1d0fdcce",
+    "11-admin-reservations.png": "511ad96b3e521d928897c431043a27c8b2aaaac1884816c63af13af480937008",
+    "12-statistics.png": "353c1a3978e677a5c874497e76c8bea1172f0923d593dc232b834c9e713818a9",
+    "13-users.png": "538cb1ee4ec24ed072a572c119b3beaec84dfe7d10a58ca59db59ebe9b96bb43",
+    "14-profile-mobile.png": "3c9d8e64c2d9f03aa914f165e64d3c525e19f3092da1da9e2aaedbffe33d6643",
+    "15-seats-mobile.png": "8ef03a8ee8db111ae8dbbdd03015b704917e86cd3a59a300b24a359fcc7e0f81",
+    "16-statistics-mobile.png": "bc99635eceb5304874d50895634bbf9ad904d38363a98640d77a3a59c2154de8",
+    "17-forbidden.png": "cd6d68f9eafa6a441d657457a77dc61412d17680478af78d5b5a7b54236a4ad1",
+    "18-user-maintenance.png": "60857a0a2b4741a9677f8069477d8b4bb4474c77d7397b0970f0a381eca615e9"
+  }
+}
