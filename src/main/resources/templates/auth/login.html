@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('登录')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navigation}"></header>
+<main class="container auth-container">
+  <div class="row align-items-center g-5">
+    <section class="col-lg-6">
+      <p class="eyebrow">校园学习空间</p>
+      <h1 class="display-5 fw-bold mb-4">把专注的时间，<br>留给自己。</h1>
+      <p class="text-secondary fs-5">登录图书馆座位预约系统，开启你的自习计划。</p>
+      <p class="text-secondary small mt-4">学生、图书馆管理员和超级管理员共用此登录入口。</p>
+    </section>
+    <section class="col-lg-5 offset-lg-1">
+      <div class="surface p-4 p-md-5">
+        <h2 class="h4 mb-2">欢迎回来</h2><p class="text-secondary mb-4">使用你的账号和密码登录</p>
+        <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div>
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">账号或密码错误，或账号已被禁用。</div>
+        <div th:if="${param.logout}" class="alert alert-info" role="status">你已安全退出。</div>
+        <form th:action="@{/login}" method="post">
+          <div class="mb-3"><label for="username" class="form-label">账号</label><input id="username" name="username" class="form-control" autocomplete="username" maxlength="50" required autofocus></div>
+          <div class="mb-4"><label for="password" class="form-label">密码</label><input id="password" name="password" class="form-control" type="password" autocomplete="current-password" required></div>
+          <button type="submit" class="btn btn-primary w-100">登录</button>
+        </form>
+        <p class="small text-secondary mt-4 mb-0 text-center">还没有账号？<a th:href="@{/register}">注册学生账号</a></p>
+      </div>
+    </section>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navigation}"></header>
+<main class="container py-5">
+  <p class="eyebrow">学生空间</p><h1 class="h2">你好，<span th:text="${account.realName}">同学</span></h1>
+  <p class="text-secondary">欢迎来到校园图书馆。</p>
+  <section class="surface p-4 mt-4" aria-labelledby="profile-title">
+    <h2 id="profile-title" class="h5 mb-3">我的账号</h2>
+    <dl class="row mb-0"><dt class="col-sm-3">账号</dt><dd class="col-sm-9" th:text="${account.username}"></dd><dt class="col-sm-3">班级</dt><dd class="col-sm-9" th:text="${account.className}"></dd><dt class="col-sm-3">身份</dt><dd class="col-sm-9">学生</dd></dl>
+  </section>
+  <div class="row g-4 mt-1">
+    <section class="col-md-6"><div class="surface p-4 h-100"><span class="badge text-bg-light mb-3">即将开放</span><h2 class="h5">查找阅览室</h2><p class="text-secondary mb-0">阅览室浏览和座位选择功能正在建设中。</p></div></section>
+    <section class="col-md-6"><div class="surface p-4 h-100"><span class="badge text-bg-light mb-3">即将开放</span><h2 class="h5">我的预约</h2><p class="text-secondary mb-0">预约、签到和签退功能将在后续开放。</p></div></section>
+  </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

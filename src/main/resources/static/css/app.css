@@ -1,0 +1,15 @@
+:root { --library-blue: #245c7f; --library-ink: #203b4d; }
+body { background: #f5f7f8; color: var(--library-ink); font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+.site-header { background: #fff; border-bottom: 1px solid #e4e9ed; }
+.brand { display: inline-flex; align-items: center; gap: .65rem; color: var(--library-ink); font-weight: 700; text-decoration: none; }
+.brand-symbol { display: grid; place-items: center; height: 2.2rem; width: 2.2rem; border-radius: .6rem; background: var(--library-blue); color: #fff; }
+.surface { background: #fff; border: 1px solid #e1e8ec; border-radius: 1rem; box-shadow: 0 6px 25px #203b4d05; }
+.auth-container { padding-top: 6rem; padding-bottom: 5rem; }
+.register-panel { max-width: 680px; }
+.eyebrow { font-size: .8rem; letter-spacing: .12em; color: #476b7f; font-weight: 600; margin-bottom: 1rem; }
+.btn-primary { --bs-btn-bg: #245c7f; --bs-btn-border-color: #245c7f; --bs-btn-hover-bg: #1b4763; --bs-btn-hover-border-color: #1b4763; --bs-btn-active-bg: #173d54; }
+.btn-outline-primary { --bs-btn-color: #245c7f; --bs-btn-border-color: #245c7f; --bs-btn-hover-bg: #245c7f; --bs-btn-hover-border-color: #245c7f; }
+a { color: #245c7f; }
+.form-control { min-height: 2.8rem; }
+:focus-visible { outline: 3px solid #d58b18; outline-offset: 3px; }
+@media (max-width: 991px) { .auth-container { padding-top: 2.5rem; padding-bottom: 2rem; } }

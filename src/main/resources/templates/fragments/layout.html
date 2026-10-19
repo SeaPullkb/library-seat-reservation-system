@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(pageTitle)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${pageTitle} + ' · 图书馆座位预约'">图书馆座位预约</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:fragment="navigation" class="site-header">
+  <nav class="container d-flex align-items-center justify-content-between py-3" aria-label="主导航">
+    <a class="brand" th:href="@{/}"><span class="brand-symbol" aria-hidden="true">阅</span>校园图书馆</a>
+    <div class="d-flex align-items-center gap-3">
+      <span class="small text-secondary d-none d-sm-inline">让每一次自习，都有一个好位置</span>
+      <form th:if="${signedIn}" th:action="@{/logout}" method="post">
+        <button class="btn btn-outline-secondary btn-sm" type="submit">退出登录</button>
+      </form>
+      <a th:unless="${signedIn}" th:href="@{/login}" class="btn btn-outline-primary btn-sm">登录</a>
+    </div>
+  </nav>
+</header>
+<footer th:fragment="footer" class="container py-4 text-secondary small border-top mt-5">
+  高校图书馆座位预约与签到管理系统 · 毕业设计 V1.0
+</footer>
+</body>
+</html>
