@@ -56,6 +56,13 @@ class DeliveryIntegrationTest {
     }
     @TestConfiguration static class TimeConfiguration {
         @Bean @Primary MutableClock deliveryClock() {var c=new MutableClock();c.at(DAY.atTime(7,30));return c;}
+        @Bean FailureFixture failureFixture() { return new FailureFixture(); }
+    }
+    @org.springframework.boot.test.context.TestComponent
+    @org.springframework.stereotype.Controller
+    static class FailureFixture {
+        @org.springframework.web.bind.annotation.GetMapping("/test/failure")
+        public String fail() { throw new IllegalStateException("test-sensitive-database-value"); }
     }
     @Autowired MockMvc mvc;
     @Autowired JdbcTemplate jdbc;
@@ -166,6 +173,12 @@ class DeliveryIntegrationTest {
                 .andExpect(status().isOk()).andExpect(content().string(containsString("type=\"application/json\"")))
                 .andExpect(content().string(not(containsString("<script>window"))));
         mvc.perform(get("/student/profile").with(user("student").roles("STUDENT"))).andExpect(content().string(containsString("功能导航"))).andExpect(content().string(containsString("跳至主要内容")));
+    }
+    @Test void unexpectedFailureReturnsSafePageWithoutSqlOrSensitiveExceptionMessage() throws Exception {
+        mvc.perform(get("/test/failure").with(user("student").roles("STUDENT")))
+                .andExpect(status().isInternalServerError()).andExpect(content().string(containsString("系统暂时无法完成操作")))
+                .andExpect(content().string(not(containsString("test-sensitive-database-value"))))
+                .andExpect(content().string(not(containsString("IllegalStateException"))));
     }
     @Test void registrationToProfileBookingCheckinCheckoutAndStatisticsIsOneCompleteWorkflow() throws Exception {
         mvc.perform(post("/register").with(csrf()).param("username","graduate_student").param("password",PASSWORD).param("confirmPassword",PASSWORD)

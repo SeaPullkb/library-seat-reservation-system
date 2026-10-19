@@ -35,10 +35,17 @@ public class SpaceErrorAdvice {
     public ModelAndView denied(AccessDeniedException ex) { return error(HttpStatus.FORBIDDEN,"当前账号无此操作权限，请重新登录或返回首页。"); }
     @ExceptionHandler({MaintenanceConflictException.class,ReservationConflictException.class})
     public ModelAndView conflict(RuntimeException ex) { return error(HttpStatus.CONFLICT,ex.getMessage()); }
+    @ExceptionHandler({org.apache.catalina.connector.ClientAbortException.class,
+            org.springframework.web.context.request.async.AsyncRequestNotUsableException.class})
+    public void disconnected(HttpServletResponse response) {
+        // The client has left. Do not render HTML into a closed binary/async response.
+        LOG.debug("Client disconnected before response delivery completed");
+    }
     @ExceptionHandler(Exception.class)
-    public ModelAndView unexpected(Exception ex) {
+    public ModelAndView unexpected(Exception ex,HttpServletResponse response) {
         // Never log bound request values or SQL text that might contain credentials.
         LOG.error("Unexpected web failure: {}",ex.getClass().getName());
+        if(response.isCommitted()) return null;
         return error(HttpStatus.INTERNAL_SERVER_ERROR,"系统暂时无法完成操作，请稍后重试。");
     }
     private ModelAndView error(HttpStatus status,String message) {
