@@ -4,6 +4,7 @@ import com.seapullkb.library.entity.TimeSlot;
 import com.seapullkb.library.service.ReservationRules;
 import com.seapullkb.library.service.ReservationService;
 import com.seapullkb.library.service.SpaceService;
+import com.seapullkb.library.service.DashboardService;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,12 +22,17 @@ public class StudentSpaceController {
     private final ReservationService reservations;
     private final ReservationRules rules;
     private final Clock clock;
-    public StudentSpaceController(SpaceService spaces, ReservationService reservations, ReservationRules rules, Clock clock) {
-        this.spaces = spaces; this.reservations = reservations; this.rules = rules; this.clock = clock;
+    private final DashboardService dashboards;
+    public StudentSpaceController(SpaceService spaces, ReservationService reservations, ReservationRules rules, Clock clock, DashboardService dashboards) {
+        this.spaces = spaces; this.reservations = reservations; this.rules = rules; this.clock = clock; this.dashboards=dashboards;
     }
     @GetMapping
-    public String rooms(Model model) {
-        model.addAttribute("title", "阅览室"); model.addAttribute("rooms", spaces.listRooms(true));
+    public String rooms(Model model,
+            @RequestParam(required=false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required=false) Integer slot) {
+        var catalog=dashboards.catalog(date,slot);
+        model.addAttribute("title", "阅览室"); model.addAttribute("rooms", catalog.rooms());
+        model.addAttribute("catalog",catalog); model.addAttribute("slots",TimeSlot.values());
         return "student/rooms";
     }
     @GetMapping("/{id}/seats")

@@ -3,11 +3,18 @@
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
 <main id="main-content" tabindex="-1" class="container py-5">
-  <a th:href="@{/student}" class="small">返回学生首页</a><p class="eyebrow mt-4">找到适合你的学习空间</p><h1 class="h2 mb-4">阅览室</h1>
-  <div th:if="${rooms.isEmpty()}" class="surface p-5 text-center text-secondary">暂无开放的阅览室，请稍后再来。</div>
-  <div class="row g-4"><section class="col-md-6 col-lg-4" th:each="room : ${rooms}"><div class="surface p-4 h-100 d-flex flex-column">
-    <p class="eyebrow" th:text="${room.location}"></p><h2 class="h4" th:text="${room.name}"></h2><p class="text-secondary" th:text="${room.description}"></p><p class="mt-auto"><strong th:text="${room.enabledSeats}"></strong> 个启用座位</p>
-    <a th:href="@{/student/rooms/{id}/seats(id=${room.id})}" class="btn btn-outline-primary" th:aria-label="'查看' + ${room.name} + '的座位'">查看座位</a>
-  </div></section></div>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body>
-</html>
+  <div class="page-heading"><div><p class="eyebrow">学习空间 / ROOMS</p><h1>阅览室</h1><p class="text-secondary">先选时间，再找一个适合自己的位置。</p></div><a class="btn btn-outline-primary" th:href="@{/student/reservations}">我的预约 →</a></div>
+  <form th:action="@{/student/rooms}" method="get" class="surface filter-bar"><div><label for="date" class="form-label">使用日期</label><select id="date" name="date" class="form-select"><option th:each="d : ${catalog.dates}" th:value="${d}" th:text="${d}" th:selected="${d.equals(catalog.date)}"></option></select></div><div><label for="slot" class="form-label">使用时段</label><select id="slot" name="slot" class="form-select"><option th:each="s : ${slots}" th:value="${s.code}" th:text="${s.label+' '+s.range}" th:selected="${s == catalog.slot}"></option></select></div><div class="filter-action"><button class="btn btn-primary" type="submit">查询余座</button></div></form>
+  <div class="panel-heading"><h2><span th:text="${rooms.size()}"></span> 间开放阅览室</h2><span class="small text-secondary"><span th:text="${catalog.availableSeats}"></span> 个空闲 / <span th:text="${catalog.enabledSeats}"></span> 个启用座位</span></div>
+  <p th:unless="${catalog.bookingOpen}" class="alert alert-info" role="status">所选时段已停止预约，空闲数仅表示占用情况。请切换日期或时段后预约。</p>
+  <div th:if="${rooms.isEmpty()}" class="surface empty-state"><span class="empty-symbol" aria-hidden="true">⌂</span><h2 class="h5">暂时没有开放的阅览室</h2><p>空间可能尚未配置或已停用，请稍后再来。</p><a th:href="@{/student}" class="btn btn-outline-primary">返回学习工作台</a></div>
+  <div class="row g-3"><section class="col-md-6" th:classappend="${rooms.size() == 1} ? 'col-xl-6' : 'col-xl-4'" th:each="room : ${rooms}"><div class="surface room-card" th:attr="data-room-id=${room.id}">
+    <div class="room-card-top"><span>▤ 学习空间</span><span class="badge text-bg-success">开放中</span></div>
+    <div class="room-card-body"><p class="eyebrow" th:text="${room.location}"></p><h2 th:text="${room.name}"></h2><p class="text-secondary small" th:text="${#strings.isEmpty(room.description)} ? '安静学习，从这里开始。' : ${room.description}"></p>
+      <div class="room-capacity"><span><strong th:text="${room.availableSeats}" data-room-available></strong> 个空闲</span><span><span th:text="${room.enabledSeats}"></span> 个启用座位</span></div>
+      <p th:if="${room.enabledSeats == 0}" class="small text-secondary">暂未配置启用座位</p><p th:if="${room.enabledSeats > 0 && room.availableSeats == 0}" class="small text-secondary">所选时段已满，试试其他时段</p>
+      <a th:href="@{/student/rooms/{id}/seats(id=${room.id},date=${catalog.date},slot=${catalog.slot.code})}" class="btn btn-outline-primary mt-auto" th:aria-label="'查看' + ${room.name} + '的座位'" th:text="${catalog.bookingOpen && room.availableSeats > 0} ? '查看座位 →' : '查看座位状态'"></a>
+    </div>
+  </div></section><aside th:if="${rooms.size() == 1}" class="col-md-6"><section class="surface p-4 h-100"><div class="panel-heading"><h2>从选座到入座</h2></div><ol class="rule-list mb-4"><li>选择日期与时段，查看空闲座位。</li><li>选中座位，核对信息并确认预约。</li><li>前往“我的预约”，在签到窗口内签到。</li></ol><ul th:replace="~{fragments/reservation :: rules}"></ul></section></aside></div>
+  <p class="small text-secondary mt-3">空闲数按所选日期、时段计算；完成签到后的使用记录继续保留原时段占用。停用空间不会展示给学生。</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

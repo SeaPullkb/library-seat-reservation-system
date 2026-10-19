@@ -106,4 +106,13 @@ class UiIntegrationTest {
         mvc.perform(get("/student").param("slot","4").with(user("student").roles("STUDENT"))).andExpect(status().isBadRequest());
         mvc.perform(get("/student").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isForbidden());
     }
+    @Test void roomCatalogPreservesSelectedSlotAndShowsActualFreeSeats() throws Exception {
+        reservations.create("student",room,seat,DAY,1);
+        mvc.perform(get("/student/rooms").param("date",DAY.toString()).param("slot","1").with(user("student").roles("STUDENT")))
+                .andExpect(status().isOk()).andExpect(content().string(containsString(">19</strong>")))
+                .andExpect(content().string(containsString("date=2030-05-08&amp;slot=1")));
+        mvc.perform(get("/student/rooms").param("date",DAY.plusDays(7).toString()).with(user("student").roles("STUDENT")))
+                .andExpect(status().isBadRequest());
+    }
+
 }
