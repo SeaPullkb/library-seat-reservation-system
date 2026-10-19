@@ -13,7 +13,7 @@ public interface AdminReservationMapper {
             + "AND (#{filter.slot} IS NULL OR r.time_slot=#{filter.slot}) AND (#{filter.status} IS NULL OR "
             + ReservationMapper.EFFECTIVE_STATUS + " = #{filter.status}) ";
     @Select("SELECT r.id,u.username,u.real_name,rr.room_name,s.seat_no,r.reserve_date,r.time_slot,"
-            + ReservationMapper.EFFECTIVE_STATUS + " AS status,r.checkin_deadline,r.checkin_at,r.checkout_at,r.cancelled_at,actor.username AS cancelled_by,r.cancel_reason"
+            + ReservationMapper.EFFECTIVE_STATUS + " AS status,r.checkin_deadline,r.checkin_at,r.checkout_at,r.cancelled_at,actor.username AS cancelled_by,r.cancel_reason,r.created_at,r.released_at"
             + JOINS + FILTER + " ORDER BY r.created_at DESC,r.id DESC LIMIT 20 OFFSET #{offset}")
     List<AdminReservationRow> search(@Param("filter") AdminReservationFilter filter, @Param("now") LocalDateTime now, @Param("offset") long offset);
     @Select("SELECT COUNT(*)" + JOINS + FILTER)

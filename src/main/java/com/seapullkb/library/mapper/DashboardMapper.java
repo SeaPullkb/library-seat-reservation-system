@@ -14,7 +14,7 @@ public interface DashboardMapper {
     String CURRENT_PENDING="r.status='PENDING' AND r.checkin_at IS NULL AND r.created_at<=#{now} AND r.checkin_deadline>=#{now} AND "
             + ReservationMapper.SLOT_END + ">#{now} AND TIMESTAMP(r.reserve_date, CASE r.time_slot WHEN 1 THEN '08:00:00' WHEN 2 THEN '14:00:00' ELSE '19:00:00' END) - INTERVAL 15 MINUTE<=#{now}";
     String ADMIN_COLUMNS="r.id,u.username,u.real_name,rr.room_name,s.seat_no,r.reserve_date,r.time_slot,"
-            + ReservationMapper.EFFECTIVE_STATUS + " AS status,r.checkin_deadline,r.checkin_at,r.checkout_at,r.cancelled_at,actor.username AS cancelled_by,r.cancel_reason";
+            + ReservationMapper.EFFECTIVE_STATUS + " AS status,r.checkin_deadline,r.checkin_at,r.checkout_at,r.cancelled_at,actor.username AS cancelled_by,r.cancel_reason,r.created_at,r.released_at";
     @Select("""
             SELECT rr.id, rr.room_name AS name, rr.location, rr.description,
               (SELECT COUNT(*) FROM seat s WHERE s.room_id=rr.id AND s.status=1) AS enabled_seats,

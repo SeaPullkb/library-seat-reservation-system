@@ -47,6 +47,7 @@ class UiIntegrationTest {
     @Autowired ReservationService reservations;
     @Autowired ReservationLifecycleService lifecycle;
     @Autowired AccountService accounts;
+    @Autowired AdminReservationService adminReservations;
     @Autowired MutableClock clock;
     Long room,seat;
     @BeforeEach void seed() {
@@ -177,6 +178,16 @@ class UiIntegrationTest {
         mvc.perform(get("/admin/rooms").param("q","不存在").with(user("librarian").roles("LIBRARIAN")))
                 .andExpect(status().isOk()).andExpect(model().attribute("rooms",hasSize(0))).andExpect(content().string(containsString("暂无匹配")));
         mvc.perform(get("/admin/rooms").param("state","7").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isBadRequest());
+    }
+
+    @Test void adminRecordDetailsExposeStoredTimesWithoutChangingExpiryOnRead() throws Exception {
+        Long id=reservations.create("student",room,seat,DAY,1);clock.at(DAY.atTime(8,15,1));
+        jdbc.update("UPDATE reserve_record SET status='EXPIRED',released_at=? WHERE id=?",LocalDateTime.now(clock),id);
+        var row=adminReservations.search("librarian",new AdminReservationFilter("",null,DAY,null,null),0).records().get(0);
+        assertThat(row.createdAt()).isEqualTo(DAY.atTime(8,0));assertThat(row.releasedAt()).isEqualTo(DAY.atTime(8,15,1));
+        mvc.perform(get("/admin/reservations").param("date",DAY.toString()).with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("2030-05-08 08:15:01")))
+                .andExpect(content().string(containsString("时间详情")));
     }
 
 }
