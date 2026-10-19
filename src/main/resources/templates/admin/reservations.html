@@ -21,7 +21,7 @@
 <tr th:if="${reservations.records.isEmpty()}"><td colspan="7" class="text-center text-secondary py-5">暂无符合条件的预约。</td></tr>
 <tr th:each="r : ${reservations.records}" th:attr="data-reservation-id=${r.id}"><th scope="row"><span th:text="${r.realName}"></span><p th:text="${r.username}" class="fw-normal small text-secondary mb-0"></p></th>
 <td><span th:text="${r.roomName}"></span><p th:text="${r.seatNo}" class="small text-secondary mb-0"></p></td><td><span th:text="${r.reserveDate}"></span><p th:text="${r.slotLabel}" class="small text-secondary mb-0"></p></td>
-<td><span class="badge text-bg-light" th:text="${r.statusLabel}"></span><p th:text="${#temporals.format(r.checkinDeadline,'MM-dd HH:mm:ss')}" class="small text-secondary mb-0"></p></td>
+<td><span class="badge" th:classappend="${'status-' + r.status}" th:text="${r.statusLabel}"></span><p th:text="${#temporals.format(r.checkinDeadline,'MM-dd HH:mm:ss')}" class="small text-secondary mb-0"></p></td>
 <td class="small"><span th:text="${r.checkinAt == null} ? '未签到' : ${#temporals.format(r.checkinAt,'MM-dd HH:mm:ss')}"></span><p class="text-secondary mb-0" th:text="${r.checkoutAt == null} ? '—' : ${#temporals.format(r.checkoutAt,'MM-dd HH:mm:ss')}"></p></td>
 <td class="small text-break"><span th:if="${r.cancelReason}" th:text="${r.cancelReason}"></span><p th:if="${r.cancelledBy}" class="text-secondary mb-0"><span th:text="${r.cancelledBy}"></span> · <span th:text="${#temporals.format(r.cancelledAt,'MM-dd HH:mm:ss')}"></span></p></td>
 <td><button th:if="${r.cancellable}" class="btn btn-sm btn-outline-danger text-nowrap" type="button" data-bs-toggle="modal" th:attr="data-bs-target='#cancel-'+${r.id},aria-label='取消预约'+${r.id}">违规取消</button></td></tr></tbody></table></div>

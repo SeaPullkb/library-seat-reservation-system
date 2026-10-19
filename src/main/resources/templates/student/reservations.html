@@ -13,7 +13,7 @@
       <tr th:each="record : ${reservations.records}" th:attr="data-reservation-id=${record.id}">
         <th scope="row"><span th:text="${record.roomName}"></span><p class="fw-normal small text-secondary mb-0" th:text="${record.seatNo}"></p></th>
         <td><span th:text="${record.reserveDate}"></span><p class="small text-secondary mb-0" th:text="${record.slotLabel}"></p></td>
-        <td><span class="badge text-bg-light" th:text="${record.statusLabel}"></span><span th:if="${record.lateBooking}" class="badge text-bg-info">时段内补约</span><p th:if="${record.cancelReason}" th:text="${record.cancelReason}" class="small text-secondary mb-0"></p></td>
+        <td><span class="badge" th:classappend="${'status-' + record.status}" th:text="${record.statusLabel}"></span><span th:if="${record.lateBooking}" class="badge text-bg-info">时段内补约</span><p th:if="${record.cancelReason}" th:text="${record.cancelReason}" class="small text-secondary mb-0"></p></td>
         <td th:text="${#temporals.format(record.checkinDeadline,'MM-dd HH:mm:ss')}"></td>
         <td class="small"><span th:text="${record.checkinAt == null} ? '未签到' : ${#temporals.format(record.checkinAt,'MM-dd HH:mm:ss')}"></span><p class="text-secondary mb-0" th:text="${record.checkoutAt == null} ? '—' : ${#temporals.format(record.checkoutAt,'MM-dd HH:mm:ss')}"></p></td>
         <td><div class="d-flex flex-wrap gap-2">

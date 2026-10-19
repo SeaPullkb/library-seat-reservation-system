@@ -22,7 +22,7 @@
       <a th:unless="${signedIn}" th:href="@{/login}" class="btn btn-outline-primary btn-sm">登录</a>
     </div>
   </nav>
-  <nav th:if="${signedIn}" class="container d-flex flex-wrap gap-2 pb-3 small" aria-label="功能导航">
+  <nav th:if="${signedIn}" class="workspace-nav container d-flex flex-wrap gap-2 pb-3 small" aria-label="功能导航">
     <a th:href="@{/}" class="nav-shortcut">首页</a>
     <th:block th:if="${studentUser}"><a th:href="@{/student/rooms}" class="nav-shortcut">阅览室与选座</a><a th:href="@{/student/reservations}" class="nav-shortcut">我的预约</a><a th:href="@{/student/profile}" class="nav-shortcut">个人中心</a></th:block>
     <th:block th:if="${adminUser}"><a th:href="@{/admin/rooms}" class="nav-shortcut">阅览室与座位</a><a th:href="@{/admin/reservations}" class="nav-shortcut">预约管理</a><a th:href="@{/admin/statistics}" class="nav-shortcut">数据统计</a></th:block>
@@ -30,7 +30,7 @@
   </nav>
 </header>
 <footer th:fragment="footer" class="container py-4 text-secondary small border-top mt-5">
-  高校图书馆座位预约与签到管理系统 · 毕业设计 V1.0
+  高校图书馆座位预约与签到管理系统 · V1.1
 </footer>
 </body>
 </html>

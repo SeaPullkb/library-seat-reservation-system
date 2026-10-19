@@ -6,7 +6,9 @@ window.addEventListener('pageshow', () => {
 });
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.nav-shortcut').forEach(link => {
-    if (new URL(link.href).pathname === location.pathname) link.setAttribute('aria-current', 'page');
+    const path = new URL(link.href).pathname;
+    const home = path === '/' && ['/student', '/admin'].includes(location.pathname);
+    if (home || (path !== '/' && (path === location.pathname || location.pathname.startsWith(path + '/')))) link.setAttribute('aria-current', 'page');
   });
   document.querySelectorAll('[data-auto-show="true"]').forEach(dialog => bootstrap.Modal.getOrCreateInstance(dialog).show());
   document.querySelectorAll('.modal').forEach(dialog => {
@@ -14,6 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   const error = document.querySelector('.alert-danger[role="alert"]');
   if (error && !error.closest('.modal')) { error.tabIndex = -1; error.focus(); }
+  document.querySelectorAll('.table-responsive').forEach(table => {
+    table.tabIndex = 0;
+    table.setAttribute('role', 'region');
+    table.setAttribute('aria-label', '数据表格，可横向滚动查看');
+  });
   document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', event => {
       if (form.dataset.confirm && !window.confirm(form.dataset.confirm)) { event.preventDefault(); return; }
