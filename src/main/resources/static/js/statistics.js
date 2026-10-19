@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const data = window.libraryStatistics;
+  const data = JSON.parse(document.getElementById("statistics-data").textContent);
+  window.libraryStatistics = data;
   if (!data || !window.echarts) return; // Tables remain usable if scripts cannot load.
   const options = {aria: {enabled: true}, tooltip: {trigger: 'axis', renderMode: 'richText'}, grid: {left: 55, right: 20, top: 30, bottom: 60}};
   const trend = echarts.init(document.getElementById('trend-chart'));

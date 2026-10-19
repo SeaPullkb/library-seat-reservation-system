@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
   <div class="d-flex justify-content-between gap-3"><a th:href="@{/student/rooms}" class="small">返回阅览室列表</a><a th:href="@{/student/reservations}" class="small">我的预约</a></div><p class="eyebrow mt-4" th:text="${room.location}"></p><h1 class="h2" th:text="${room.roomName}"></h1><p class="text-secondary" th:text="${room.description}"></p>
   <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div><div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></div>
   <form th:action="@{/student/rooms/{id}/seats(id=${room.id})}" method="get" class="surface p-4 row g-3 align-items-end mx-0 my-4">

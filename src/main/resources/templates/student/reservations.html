@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
   <div class="d-flex justify-content-between gap-3"><a th:href="@{/student}" class="small">返回学生首页</a><a th:href="@{/student/rooms}" class="small">继续选座</a></div>
   <p class="eyebrow mt-4">安排你的自习时间</p><h1 class="h2 mb-4">我的预约</h1>
   <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div><div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></div>

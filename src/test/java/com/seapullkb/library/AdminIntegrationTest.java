@@ -280,7 +280,7 @@ class AdminIntegrationTest {
     @Test void statisticsPageSerializesChartsSafelyAndServesEchartsLocally() throws Exception {
         jdbc.update("UPDATE reading_room SET room_name=? WHERE id=?","</script><script>alert(1)</script>",room);
         mvc.perform(get("/admin/statistics").with(user("librarian").roles("LIBRARIAN")))
-                .andExpect(status().isOk()).andExpect(content().string(containsString("window.libraryStatistics")))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("statistics-data")))
                 .andExpect(content().string(not(containsString("</script><script>alert(1)</script>"))));
         mvc.perform(get("/webjars/echarts/5.6.0/dist/echarts.min.js")).andExpect(status().isOk());
     }

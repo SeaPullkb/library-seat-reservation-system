@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component;
 public class AdminAccess {
     private final AccountService accounts;
     private final UserMapper users;
-    public AdminAccess(AccountService accounts, UserMapper users) { this.accounts = accounts; this.users = users; }
+    private final ReservationTransactions transactions;
+    public AdminAccess(AccountService accounts, UserMapper users, ReservationTransactions transactions) { this.accounts = accounts; this.users = users; this.transactions=transactions; }
+    public void write(String username,Runnable action) {
+        transactions.execute(() -> { lockActorAndTarget(username,-1L,false);action.run();return null; });
+    }
     public UserAccount require(String username, boolean superOnly) {
         return validate(accounts.findByUsername(username), superOnly);
     }

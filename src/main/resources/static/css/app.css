@@ -20,3 +20,10 @@ a { color: #245c7f; }
 .seat-occupied { color: #6a4c22; border-color: #c9ab77; background: #faf5e9; }
 .seat-mine { color: #214b75; border-color: #7b9fc8; background: #edf4fd; }
 .seat-disabled { color: #586168; border-color: #aeb7bc; background: #e9edef; }
+
+.skip-link { position: absolute; left: .75rem; top: -100px; z-index: 2000; background: #fff; color: #203b4d; padding: .7rem; border: 2px solid #245c7f; }
+.skip-link:focus { top: .75rem; }
+.nav-shortcut { padding: .45rem .7rem; border-radius: .4rem; text-decoration: none; background: #f1f5f7; }
+.nav-shortcut[aria-current="page"] { background: #245c7f; color: #fff; }
+h1, h2, dd { overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

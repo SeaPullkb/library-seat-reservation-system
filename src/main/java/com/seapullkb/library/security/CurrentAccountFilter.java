@@ -18,7 +18,9 @@ public class CurrentAccountFilter extends OncePerRequestFilter {
         var authentication=SecurityContextHolder.getContext().getAuthentication();
         if (authentication!=null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             var account=accounts.findByUsername(authentication.getName());
-            if (account==null || account.getStatus()!=1 || authentication.getAuthorities().stream()
+            if (account==null || account.getStatus()!=1
+                    || (authentication.getPrincipal() instanceof AccountPrincipal principal && !principal.matchesPasswordStamp(account.getPassword()))
+                    || authentication.getAuthorities().stream()
                     .noneMatch(a -> a.getAuthority().equals("ROLE_"+account.getRole()))) {
                 new SecurityContextLogoutHandler().logout(request,response,authentication);
                 response.sendError(HttpServletResponse.SC_FORBIDDEN,"账号状态或权限已变化，请重新登录。");

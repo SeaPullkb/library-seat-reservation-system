@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body>
 <header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
   <p class="eyebrow">图书馆管理</p><h1 class="h2">欢迎，<span th:text="${account.realName}">管理员</span></h1>
   <p class="text-secondary" th:text="${superAdmin} ? '当前身份：超级管理员' : '当前身份：图书馆管理员'"></p>
   <div class="row g-4 mt-2">

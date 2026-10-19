@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
 <a th:href="@{/admin}" class="small">返回管理首页</a>
 
 <div class="my-4"><a th:href="@{/admin/users}" class="small">返回用户列表</a><h1 class="h2 mt-3 text-break">维护用户 <span th:text="${managedUser.username}"></span></h1><p class="text-secondary"><span th:text="${managedUser.roleLabel}"></span> · <span th:text="${managedUser.status == 1} ? '启用' : '禁用'"></span></p></div>

@@ -17,7 +17,7 @@ public class StatisticsService {
     public StatisticsService(StatisticsMapper statistics,AdminAccess access,Clock clock) { this.statistics=statistics;this.access=access;this.clock=clock; }
     @Transactional(readOnly=true)
     public Dashboard dashboard(String actor,LocalDate date,int slot) {
-        access.require(actor,false); TimeSlot.fromCode(slot);
+        access.require(actor,false); TimeSlot.fromCode(slot); QueryDates.requireSupported(date);
         LocalDateTime now=LocalDateTime.now(clock); LocalDate today=now.toLocalDate();
         var byDate=statistics.trend(today.minusDays(6),today).stream().collect(Collectors.toMap(DailyStatistics::date,Function.identity()));
         List<DailyStatistics> trend=new ArrayList<>();

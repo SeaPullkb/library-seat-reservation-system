@@ -11,6 +11,7 @@
 </head>
 <body>
 <header th:fragment="navigation" class="site-header">
+  <a href="#main-content" class="skip-link">跳至主要内容</a>
   <nav class="container d-flex align-items-center justify-content-between py-3" aria-label="主导航">
     <a class="brand" th:href="@{/}"><span class="brand-symbol" aria-hidden="true">阅</span>校园图书馆</a>
     <div class="d-flex align-items-center gap-3">
@@ -20,6 +21,12 @@
       </form>
       <a th:unless="${signedIn}" th:href="@{/login}" class="btn btn-outline-primary btn-sm">登录</a>
     </div>
+  </nav>
+  <nav th:if="${signedIn}" class="container d-flex flex-wrap gap-2 pb-3 small" aria-label="功能导航">
+    <a th:href="@{/}" class="nav-shortcut">首页</a>
+    <th:block th:if="${studentUser}"><a th:href="@{/student/rooms}" class="nav-shortcut">阅览室与选座</a><a th:href="@{/student/reservations}" class="nav-shortcut">我的预约</a><a th:href="@{/student/profile}" class="nav-shortcut">个人中心</a></th:block>
+    <th:block th:if="${adminUser}"><a th:href="@{/admin/rooms}" class="nav-shortcut">阅览室与座位</a><a th:href="@{/admin/reservations}" class="nav-shortcut">预约管理</a><a th:href="@{/admin/statistics}" class="nav-shortcut">数据统计</a></th:block>
+    <a th:if="${superAdminUser}" th:href="@{/admin/users}" class="nav-shortcut">用户管理</a>
   </nav>
 </header>
 <footer th:fragment="footer" class="container py-4 text-secondary small border-top mt-5">

@@ -6,8 +6,6 @@ import com.seapullkb.library.web.*;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +16,9 @@ public class UserAdminService {
     private final AdminAccess access;
     private final ReservationTransactions transactions;
     private final PasswordEncoder passwords;
-    private final SessionRegistry sessions;
+    private final AccountSessions sessions;
     private final Clock clock;
-    public UserAdminService(UserMapper users,AdminAccess access,ReservationTransactions transactions,PasswordEncoder passwords,SessionRegistry sessions,Clock clock) {
+    public UserAdminService(UserMapper users,AdminAccess access,ReservationTransactions transactions,PasswordEncoder passwords,AccountSessions sessions,Clock clock) {
         this.users=users; this.access=access; this.transactions=transactions; this.passwords=passwords; this.sessions=sessions; this.clock=clock;
     }
     @Transactional(readOnly=true)
@@ -91,10 +89,5 @@ public class UserAdminService {
         if(user.getStatus()==1 && user.getRole().equals("SUPER_ADMIN") && (nextRole!=Role.SUPER_ADMIN || nextStatus!=1)
                 && users.enabledSuperAdmins()<=1) throw new MaintenanceConflictException("必须保留至少一个启用的超级管理员。");
     }
-    private void expireSessions(String username) {
-        for(Object principal:sessions.getAllPrincipals()) {
-            if(principal instanceof UserDetails details && details.getUsername().equalsIgnoreCase(username))
-                sessions.getAllSessions(principal,false).forEach(session -> session.expireNow());
-        }
-    }
+    private void expireSessions(String username) { sessions.expire(username); }
 }

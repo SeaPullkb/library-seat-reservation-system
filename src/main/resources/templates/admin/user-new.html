@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
 <a th:href="@{/admin}" class="small">返回管理首页</a>
 
 <section class="surface p-4 p-md-5 mx-auto mt-4 register-panel"><h1 class="h3">新增图书馆管理员</h1><p class="text-secondary">创建后固定为启用的图书馆管理员；角色调整须另行操作。</p>

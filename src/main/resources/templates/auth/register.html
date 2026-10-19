@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/layout :: head('学生注册')}"></head>
 <body>
 <header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
   <section class="surface p-4 p-md-5 mx-auto register-panel">
     <p class="eyebrow">加入校园学习空间</p><h1 class="h3 mb-2">注册学生账号</h1><p class="text-secondary mb-4">填写以下信息，所有项目均为必填。</p>
     <form th:action="@{/register}" th:object="${registrationForm}" method="post">

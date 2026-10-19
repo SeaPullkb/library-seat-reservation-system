@@ -26,8 +26,7 @@ public class SecurityConfig {
         return username -> {
             UserAccount account = accounts.findByUsername(username);
             if (account == null) throw new UsernameNotFoundException("账号或密码错误");
-            return User.withUsername(account.getUsername()).password(account.getPassword())
-                    .roles(account.getRole()).disabled(account.getStatus() != 1).build();
+            return new AccountPrincipal(account);
         };
     }
 
@@ -43,6 +42,9 @@ public class SecurityConfig {
                 .requestMatchers("/admin", "/admin/**").hasAnyRole("LIBRARIAN", "SUPER_ADMIN")
                 .requestMatchers("/student", "/student/**").hasRole("STUDENT")
                 .anyRequest().authenticated())
+            .headers(headers -> headers.contentSecurityPolicy(csp -> csp.policyDirectives(
+                    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"))
+                    .referrerPolicy(referrer -> referrer.policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)))
             .addFilterAfter(new CurrentAccountFilter(accounts), AnonymousAuthenticationFilter.class)
             .sessionManagement(session -> session.maximumSessions(-1).sessionRegistry(sessions).expiredUrl("/login?changed"))
             .formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/", true)

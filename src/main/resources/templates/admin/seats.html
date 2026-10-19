@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
   <a th:href="@{/admin/rooms}" class="small">返回阅览室管理</a>
   <div class="d-flex justify-content-between align-items-center gap-3 my-4"><div><p class="eyebrow mb-2" th:text="${room.location}"></p><h1 class="h2 mb-0"><span th:text="${room.roomName}"></span> · 座位管理</h1></div><button th:if="${editingId == null}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#seatFormDialog">添加座位</button><a th:unless="${editingId == null}" th:href="@{/admin/rooms/{id}/seats(id=${room.id})}" class="btn btn-outline-secondary">返回列表</a></div>
   <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div><div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></div>

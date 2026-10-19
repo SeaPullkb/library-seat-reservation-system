@@ -1,8 +1,8 @@
 # 高校图书馆座位预约与签到管理系统
 
-基于 Spring Boot 的毕业设计，采用 Thymeleaf 单体架构。当前已完成 M1–M5（T01–T20）：账号与权限、空间维护、预约签到完整流程、管理员预约管理、超管用户维护和统计图表。
+基于 Spring Boot 的毕业设计，采用 Thymeleaf 单体架构。当前已完成 M1–M6（T01–T22）：账号与权限、空间维护、预约签到完整流程、管理员预约管理、超管用户维护和统计图表。
 
-下一阶段完善个人中心、全业务页面和安全检查。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)。
+个人中心、13个主要页面和安全检查已完成，正在整理最终交付材料。完整规则见 [需求基线](docs/requirements.md)，进度见 [开发任务表](docs/tasks.md)。
 
 ## 技术与目录
 
@@ -111,7 +111,7 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 ```
 
 随后可用 `java -jar target/library-seat-reservation-system-0.1.0-SNAPSHOT.jar` 启动，仍需先导出数据库和初始账号变量。
-当前完整验证为126项，0失败、0错误、0跳过。测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md)、[M3测试说明](docs/testing-m3.md)、[M4测试说明](docs/testing-m4.md) 和 [M5测试说明](docs/testing-m5.md)。
+当前完整验证为144项，0失败、0错误、0跳过。测试范围和实际结果记录于 [M1测试说明](docs/testing.md)、[M2测试说明](docs/testing-m2.md)、[M3测试说明](docs/testing-m3.md)、[M4测试说明](docs/testing-m4.md)、[M5测试说明](docs/testing-m5.md) 和 [M6测试说明](docs/testing-m6.md)。
 
 ## 当前权限
 
@@ -128,6 +128,7 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 | `/admin/statistics` | 管理员及超管，使用统计与图表 |
 | `/student/rooms`、`/student/rooms/{id}/seats` | 学生阅览室列表、日期时段座位查询与预约 |
 | `/student/reservations` | 本人的预约记录、状态筛选及分页 |
+| `/student/profile` | 本人的资料查询及修改；子路径`/password`验证当前密码后改密并注销旧会话 |
 | `POST /student/rooms/{roomId}/seats/{seatId}/reservations` | 学生预约，必须有CSRF |
 | `POST /student/reservations/{id}/cancel` | 本人提前取消，必须有CSRF |
 | `POST /student/reservations/{id}/checkin` | 本人签到，必须有CSRF |
@@ -176,6 +177,6 @@ Windows 使用 `mvnw.cmd`。测试由 Testcontainers 自动启动独立的真实
 
 在当前云环境先执行 `bash /workspace/.cloud-setup/install.sh`，再在每个终端 `source /workspace/.cloud-setup/activate.sh`，以启用Java 17、Maven、代理及证书信任；这些是环境专用配置，不是Windows必需的项目文件。
 
-下一阶段为T21–T22：个人中心、全业务页面交互和安全完善。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
+剩余交付工作为T23–T26：完整验收、Windows实机部署及毕业设计材料。后续状态写入仍需遵循AGENTS.md的统一取锁顺序和条件更新，避免覆盖最新状态。
 
 参考项目调查见 [docs/references.md](docs/references.md)。当前代码独立实现，没有复制未获授权的第三方项目源码。

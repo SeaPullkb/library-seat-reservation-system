@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
 <a th:href="@{/admin}" class="small">返回管理首页</a>
 
 <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center my-4"><div><p class="eyebrow mb-2">超级管理员</p><h1 class="h2 mb-0">用户管理</h1></div><a th:href="@{/admin/users/new}" class="btn btn-primary">新增图书馆管理员</a></div>

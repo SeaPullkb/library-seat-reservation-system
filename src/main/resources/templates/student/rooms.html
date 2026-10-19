@@ -2,7 +2,7 @@
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head(${title})}"></head>
 <body><header th:replace="~{fragments/layout :: navigation}"></header>
-<main class="container py-5">
+<main id="main-content" tabindex="-1" class="container py-5">
   <a th:href="@{/student}" class="small">返回学生首页</a><p class="eyebrow mt-4">找到适合你的学习空间</p><h1 class="h2 mb-4">阅览室</h1>
   <div th:if="${rooms.isEmpty()}" class="surface p-5 text-center text-secondary">暂无开放的阅览室，请稍后再来。</div>
   <div class="row g-4"><section class="col-md-6 col-lg-4" th:each="room : ${rooms}"><div class="surface p-4 h-100 d-flex flex-column">
