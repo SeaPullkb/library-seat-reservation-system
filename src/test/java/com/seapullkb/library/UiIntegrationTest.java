@@ -190,4 +190,10 @@ class UiIntegrationTest {
                 .andExpect(content().string(containsString("时间详情")));
     }
 
+    @Test void statisticsExplainEmptyDataWithoutInventingRates() throws Exception {
+        mvc.perform(get("/admin/statistics").param("date",DAY.toString()).with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(model().attribute("trendEmpty",true)).andExpect(model().attribute("roomDataEmpty",true))
+                .andExpect(content().string(containsString("所选使用日期没有预约记录"))).andExpect(content().string(containsString("统计口径与数据说明")));
+    }
+
 }

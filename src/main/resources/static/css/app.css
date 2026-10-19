@@ -55,3 +55,7 @@ footer.container { margin-top:1.5rem!important; padding-top:1.25rem!important; p
 .active-reservations .reservation-card { margin-bottom:0!important; }
 summary { cursor:pointer; }
 @media(max-width:767px) { .active-reservations { grid-template-columns:minmax(0,1fr); } }
+
+.statistics-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.25rem; align-items:start; }
+.statistics-grid>section { min-width:0; }
+@media(max-width:991px) { .statistics-grid { grid-template-columns:minmax(0,1fr); } }
