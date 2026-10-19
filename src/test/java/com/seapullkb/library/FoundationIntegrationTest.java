@@ -153,6 +153,7 @@ class FoundationIntegrationTest {
                 .andExpect(content().string(containsString("注册学生账号")));
         mvc.perform(get("/webjars/bootstrap/5.3.8/css/bootstrap.min.css")).andExpect(status().isOk());
         mvc.perform(get("/css/app.css")).andExpect(status().isOk());
+        mvc.perform(get("/js/app.js")).andExpect(status().isOk());
         mvc.perform(get("/student")).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login"));
     }

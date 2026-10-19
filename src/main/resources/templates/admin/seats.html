@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body><header th:replace="~{fragments/layout :: navigation}"></header>
+<main class="container py-5">
+  <a th:href="@{/admin/rooms}" class="small">返回阅览室管理</a>
+  <div class="d-flex justify-content-between align-items-center gap-3 my-4"><div><p class="eyebrow mb-2" th:text="${room.location}"></p><h1 class="h2 mb-0"><span th:text="${room.roomName}"></span> · 座位管理</h1></div><button th:if="${editingId == null}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#seatFormDialog">添加座位</button><a th:unless="${editingId == null}" th:href="@{/admin/rooms/{id}/seats(id=${room.id})}" class="btn btn-outline-secondary">返回列表</a></div>
+  <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div><div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></div>
+  <div th:if="${room.status == 0}" class="alert alert-warning" role="status">此阅览室已停用，学生暂时无法浏览其座位；座位自身启用状态保留。</div>
+  <p class="text-secondary small">有历史预约的座位不能删除，可在处理完有效预约后停用。座位编号修改不会改变历史记录关联。</p>
+  <div class="surface table-responsive"><table class="table align-middle mb-0"><caption class="px-3">共 <span th:text="${seats.size()}"></span> 个座位</caption>
+    <thead><tr><th scope="col">座位编号</th><th scope="col">状态</th><th scope="col">操作</th></tr></thead>
+    <tbody><tr th:if="${seats.isEmpty()}"><td colspan="3" class="text-center text-secondary py-5">还没有座位，点击“添加座位”开始。</td></tr>
+      <tr th:each="seat : ${seats}"><th scope="row" th:text="${seat.seatNo}"></th><td><span class="badge" th:classappend="${seat.status == 1} ? 'text-bg-success' : 'text-bg-secondary'" th:text="${seat.status == 1} ? '启用' : '停用'"></span></td>
+        <td><div class="d-flex gap-2 flex-wrap"><a class="btn btn-sm btn-outline-secondary" th:href="@{/admin/rooms/{roomId}/seats/{id}/edit(roomId=${room.id},id=${seat.id})}" th:aria-label="'编辑座位' + ${seat.seatNo}">编辑编号</a>
+          <form th:action="@{/admin/rooms/{roomId}/seats/{id}/status(roomId=${room.id},id=${seat.id})}" method="post"><input type="hidden" name="enabled" th:value="${seat.status != 1}"><button class="btn btn-sm btn-outline-secondary" type="submit" th:text="${seat.status == 1} ? '停用' : '启用'" th:aria-label="(${seat.status == 1} ? '停用座位' : '启用座位') + ${seat.seatNo}"></button></form>
+          <form th:action="@{/admin/rooms/{roomId}/seats/{id}/delete(roomId=${room.id},id=${seat.id})}" method="post" data-confirm="确认删除此座位？有预约历史的座位不能删除。"><button class="btn btn-sm btn-outline-danger" type="submit" th:aria-label="'删除座位' + ${seat.seatNo}">删除</button></form>
+        </div></td>
+      </tr>
+    </tbody></table>
+  </div>
+  <div class="modal fade" id="seatFormDialog" tabindex="-1" aria-labelledby="seatFormTitle" aria-hidden="true" th:attr="data-auto-show=${showForm}">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 id="seatFormTitle" class="modal-title fs-5" th:text="${editingId == null} ? '添加座位' : '编辑座位编号'"></h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button></div>
+      <form th:action="${editingId == null} ? @{/admin/rooms/{roomId}/seats(roomId=${room.id})} : @{/admin/rooms/{roomId}/seats/{id}(roomId=${room.id},id=${editingId})}" th:object="${seatForm}" method="post">
+        <div class="modal-body"><div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert"><ul class="mb-0"><li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li></ul></div>
+          <label for="seatNo" class="form-label">座位编号（必填）</label><input id="seatNo" th:field="*{seatNo}" class="form-control" maxlength="20" aria-describedby="seat-number-help" required><div id="seat-number-help" class="form-text">同一阅览室内不可重复，例如A01。其他阅览室可使用相同编号。</div>
+        </div><div class="modal-footer"><a th:href="@{/admin/rooms/{id}/seats(id=${room.id})}" class="btn btn-outline-secondary">取消</a><button class="btn btn-primary" type="submit">保存</button></div>
+      </form>
+    </div></div>
+  </div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body>
+</html>

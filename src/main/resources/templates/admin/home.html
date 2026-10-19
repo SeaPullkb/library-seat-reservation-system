@@ -7,7 +7,7 @@
   <p class="eyebrow">图书馆管理</p><h1 class="h2">欢迎，<span th:text="${account.realName}">管理员</span></h1>
   <p class="text-secondary" th:text="${superAdmin} ? '当前身份：超级管理员' : '当前身份：图书馆管理员'"></p>
   <div class="row g-4 mt-2">
-    <section class="col-md-6"><div class="surface p-4 h-100"><h2 class="h5">阅览室与座位</h2><p class="text-secondary mb-0">信息维护功能正在建设中。</p></div></section>
+    <section class="col-md-6"><div class="surface p-4 h-100"><h2 class="h5">阅览室与座位</h2><p class="text-secondary">维护空间信息、座位编号及启用状态。</p><a class="btn btn-outline-primary" th:href="@{/admin/rooms}">管理阅览室与座位</a></div></section>
     <section class="col-md-6"><div class="surface p-4 h-100"><h2 class="h5">预约记录与统计</h2><p class="text-secondary mb-0">预约管理和数据统计将在后续开放。</p></div></section>
     <section th:if="${superAdmin}" class="col-md-6"><div class="surface p-4 h-100"><h2 class="h5">用户管理</h2><p class="text-secondary">仅超级管理员可进入。</p><a class="btn btn-outline-primary" th:href="@{/admin/users}">进入用户管理</a></div></section>
   </div>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body><header th:replace="~{fragments/layout :: navigation}"></header>
+<main class="container py-5">
+  <a th:href="@{/student/rooms}" class="small">返回阅览室列表</a><p class="eyebrow mt-4" th:text="${room.location}"></p><h1 class="h2" th:text="${room.roomName}"></h1><p class="text-secondary" th:text="${room.description}"></p>
+  <form th:action="@{/student/rooms/{id}/seats(id=${room.id})}" method="get" class="surface p-4 row g-3 align-items-end mx-0 my-4">
+    <div class="col-sm-5"><label for="date" class="form-label">日期</label><select id="date" name="date" class="form-select"><option th:each="day : ${dates}" th:value="${day}" th:text="${day}" th:selected="${day.equals(date)}"></option></select></div>
+    <div class="col-sm-5"><label for="slot" class="form-label">时段</label><select id="slot" name="slot" class="form-select"><option th:each="period : ${slots}" th:value="${period.code}" th:text="${period.label + ' ' + period.range}" th:selected="${period.code == slot}"></option></select></div>
+    <div class="col-sm-2"><button class="btn btn-primary w-100" type="submit">查询</button></div>
+  </form>
+  <p class="text-secondary small">当前可浏览座位状态，预约功能将在下一阶段开放。“空闲”表示所选时段无占用，不代表已开放预约。</p>
+  <div class="d-flex flex-wrap gap-3 small mb-4" aria-label="座位状态图例"><span>□ 空闲</span><span>■ 已占用</span><span>◆ 我的预约</span><span>× 已停用</span></div>
+  <p th:if="${seats.isEmpty()}" class="surface p-5 text-center text-secondary">此阅览室暂未配置座位。</p>
+  <ul class="seat-grid list-unstyled" aria-label="座位状态">
+    <li th:each="seat : ${seats}" class="seat-tile" th:classappend="${'seat-' + #strings.toLowerCase(seat.availability)}" th:attr="data-seat-id=${seat.id},data-availability=${seat.availability}">
+      <span class="fw-bold" th:text="${seat.seatNo}"></span><span class="small" th:text="${seat.label}"></span>
+    </li>
+  </ul>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body>
+</html>

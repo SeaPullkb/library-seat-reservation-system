@@ -11,7 +11,7 @@
     <dl class="row mb-0"><dt class="col-sm-3">账号</dt><dd class="col-sm-9" th:text="${account.username}"></dd><dt class="col-sm-3">班级</dt><dd class="col-sm-9" th:text="${account.className}"></dd><dt class="col-sm-3">身份</dt><dd class="col-sm-9">学生</dd></dl>
   </section>
   <div class="row g-4 mt-1">
-    <section class="col-md-6"><div class="surface p-4 h-100"><span class="badge text-bg-light mb-3">即将开放</span><h2 class="h5">查找阅览室</h2><p class="text-secondary mb-0">阅览室浏览和座位选择功能正在建设中。</p></div></section>
+    <section class="col-md-6"><div class="surface p-4 h-100"><h2 class="h5">查找阅览室</h2><p class="text-secondary">浏览开放的阅览室，查看日期和时段的座位状态。</p><a class="btn btn-outline-primary" th:href="@{/student/rooms}">浏览阅览室</a></div></section>
     <section class="col-md-6"><div class="surface p-4 h-100"><span class="badge text-bg-light mb-3">即将开放</span><h2 class="h5">我的预约</h2><p class="text-secondary mb-0">预约、签到和签退功能将在后续开放。</p></div></section>
   </div>
 </main>
