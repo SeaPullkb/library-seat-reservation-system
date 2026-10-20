@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"><body>
+<article th:fragment="card(record,now)" class="surface reservation-card p-4 mb-3" th:attr="data-active-reservation=${record.id}">
+  <div class="panel-heading"><h2><span th:text="${record.roomName}"></span> · <span th:text="${record.seatNo}"></span></h2><span class="badge" th:classappend="${'status-'+record.status}" th:text="${record.statusLabel}"></span></div>
+  <div class="reservation-meta"><span th:text="${record.reserveDate}"></span><strong th:text="${record.slotLabel}"></strong></div>
+  <p class="small text-secondary mt-3 mb-2" th:if="${record.status == 'PENDING'}">签到窗口：<span th:text="${#temporals.format(record.checkinOpensAt,'MM-dd HH:mm')}"></span> 至 <strong th:text="${#temporals.format(record.checkinDeadline,'MM-dd HH:mm:ss')}"></strong>；超时后座位释放。</p>
+  <p class="small text-secondary mt-3 mb-2" th:if="${record.status == 'USING'}">已于 <span th:text="${#temporals.format(record.checkinAt,'MM-dd HH:mm:ss')}"></span> 签到。学习结束后请签退。</p>
+  <div class="d-flex flex-wrap gap-2 mt-3">
+    <form th:if="${record.canCheckIn(now)}" th:action="@{/student/reservations/{id}/checkin(id=${record.id})}" method="post"><button class="btn btn-primary" type="submit" th:aria-label="'签到预约'+${record.id}">立即签到</button></form>
+    <form th:if="${record.canCheckOut(now)}" th:action="@{/student/reservations/{id}/checkout(id=${record.id})}" method="post" data-confirm="确认签退？当前日期时段仍保留使用记录，不能再次预约本时段。"><button class="btn btn-primary" type="submit" th:aria-label="'签退预约'+${record.id}">结束学习并签退</button></form>
+    <form th:if="${record.canCancel(now)}" th:action="@{/student/reservations/{id}/cancel(id=${record.id})}" method="post" data-confirm="确认取消该预约？取消后座位将重新开放。"><button class="btn btn-outline-danger" type="submit" th:aria-label="'取消预约'+${record.id}">取消预约</button></form>
+    <a class="btn btn-outline-primary" th:href="@{/student/reservations}">查看预约记录</a>
+    <span th:if="${record.status == 'PENDING' && now.isBefore(record.checkinOpensAt)}" class="small text-secondary align-self-center"><span th:text="${#temporals.format(record.checkinOpensAt,'MM-dd HH:mm')}"></span> 起可签到 · 尚未到签到时间</span>
+  </div>
+</article>
+<ul th:fragment="rules" class="rule-list"><li>可预约今天及未来 6 天的固定时段。</li><li>普通预约在开始前 15 分钟至开始后 15 分钟签到；时段内补约须在预约后 10 分钟内签到。</li><li>距结束不足 30 分钟停止预约；签到超时释放，已完成记录继续占用原时段。</li><li>仅未开始、未签到的有效预约可取消。网页签到记录线上操作，不验证真实到馆。</li></ul>
+</body></html>

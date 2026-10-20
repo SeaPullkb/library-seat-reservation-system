@@ -11,7 +11,10 @@ public record ReservationSummary(Long id, String roomName, String seatNo, LocalD
                                  LocalDateTime cancelledAt, String cancelReason) {
     public String getStatusLabel() { return ReservationStatus.valueOf(status).getLabel(); }
     public String getSlotLabel() { return TimeSlot.fromCode(timeSlot).getLabel() + " " + TimeSlot.fromCode(timeSlot).getRange(); }
-    public LocalDateTime getCheckinOpensAt() { return TimeSlot.fromCode(timeSlot).checkinOpensOn(reserveDate); }
+    public LocalDateTime getCheckinOpensAt() {
+        LocalDateTime opens=TimeSlot.fromCode(timeSlot).checkinOpensOn(reserveDate);
+        return createdAt.isAfter(opens)?createdAt:opens;
+    }
     public boolean isLateBooking() { return checkinDeadline.isAfter(TimeSlot.fromCode(timeSlot).normalDeadline(reserveDate)); }
     public boolean canCheckIn(LocalDateTime now) {
         return status.equals("PENDING") && checkinAt == null && !now.isBefore(getCheckinOpensAt())

@@ -1,0 +1,1001 @@
+{
+  "version": "V1.1",
+  "baselineCommit": "c8a4ee6",
+  "applicationSourceSha256": "ea5c5ffd85bd71b2641b49aa4937981858bbff8a5f08d81c9c0bf5eee7187e6a",
+  "sourceHashMethod": "sorted src/main relative path + NUL + file bytes",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "java": "17.0.20.1",
+  "maven": "3.9.11",
+  "database": "real MySQL 8 (Testcontainers)",
+  "totals": {
+    "tests": 169,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "integrationTests": 161,
+  "unitOrIsolationTests": 8,
+  "jarSha256": "ce68cc7f83d7173f0ba5ddf5b90936fba5092a29f483540e81afdbebcb8a8b8a",
+  "suites": [
+    {
+      "name": "com.seapullkb.library.AdminIntegrationTest",
+      "timeSeconds": 30.252,
+      "counts": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "adminSearchFiltersLiteralKeywordAndEffectiveStatusWithoutWriting",
+          "seconds": 0.589,
+          "result": "passed"
+        },
+        {
+          "name": "disableRacingBookingCannotLeaveActiveBookingOnDisabledUser",
+          "seconds": 0.364,
+          "result": "passed"
+        },
+        {
+          "name": "selfDisableAndSelfDemotionCannotRemoveLastEnabledSuperAdmin",
+          "seconds": 0.369,
+          "result": "passed"
+        },
+        {
+          "name": "serviceRechecksDisabledAndDowngradedOperators",
+          "seconds": 0.391,
+          "result": "passed"
+        },
+        {
+          "name": "adminCancellationExpiresOverdueBeforeReportingConflict",
+          "seconds": 0.368,
+          "result": "passed"
+        },
+        {
+          "name": "usedOrExpiredRecordsCannotBeAdminCancelled(String)[1]",
+          "seconds": 0.352,
+          "result": "passed"
+        },
+        {
+          "name": "usedOrExpiredRecordsCannotBeAdminCancelled(String)[2]",
+          "seconds": 0.344,
+          "result": "passed"
+        },
+        {
+          "name": "usedOrExpiredRecordsCannotBeAdminCancelled(String)[3]",
+          "seconds": 0.351,
+          "result": "passed"
+        },
+        {
+          "name": "stablePaginationHasNoDuplicatesAndRetainsIsoDate",
+          "seconds": 0.456,
+          "result": "passed"
+        },
+        {
+          "name": "profileEditsCannotChangeRoleUsernamePasswordOrStatus",
+          "seconds": 0.357,
+          "result": "passed"
+        },
+        {
+          "name": "invalidResetKeepsHashAndDoesNotReturnPassword",
+          "seconds": 0.326,
+          "result": "passed"
+        },
+        {
+          "name": "administrativeRoutesEnforceRoleAndCsrf",
+          "seconds": 0.354,
+          "result": "passed"
+        },
+        {
+          "name": "duplicateAndInvalidAdministratorFormsPreserveExistingAccountAndDoNotEchoInput",
+          "seconds": 0.456,
+          "result": "passed"
+        },
+        {
+          "name": "statisticsUseCorrectDistinctCountsDeadlineDenominatorAndAllStates",
+          "seconds": 0.349,
+          "result": "passed"
+        },
+        {
+          "name": "userFilteringAndPaginationExcludePasswordField",
+          "seconds": 0.418,
+          "result": "passed"
+        },
+        {
+          "name": "adminMayCancelAfterStartBeforeDeadlineAndKeepsFirstAuditOnRepeat",
+          "seconds": 0.391,
+          "result": "passed"
+        },
+        {
+          "name": "invalidParametersAndUnknownUsersReturnControlledErrors",
+          "seconds": 0.365,
+          "result": "passed"
+        },
+        {
+          "name": "roleChangeAndDisableExpireRealSessionsAndNewLoginUsesNewRole",
+          "seconds": 0.704,
+          "result": "passed"
+        },
+        {
+          "name": "adminCancelRacingCheckinHasOneWinnerAndNeverCancelsUsing",
+          "seconds": 0.333,
+          "result": "passed"
+        },
+        {
+          "name": "adminCancelAtDeadlineIsValidButRacingLateExpiryDoesNotInventCancellation",
+          "seconds": 0.371,
+          "result": "passed"
+        },
+        {
+          "name": "statisticsPageSerializesChartsSafelyAndServesEchartsLocally",
+          "seconds": 0.357,
+          "result": "passed"
+        },
+        {
+          "name": "duplicateConcurrentAdminCancellationsKeepOneAuditedMutation",
+          "seconds": 0.361,
+          "result": "passed"
+        },
+        {
+          "name": "outOfBandRoleChangeStillRejectsStaleSession",
+          "seconds": 0.376,
+          "result": "passed"
+        },
+        {
+          "name": "invalidReasonCannotMutateOrBeUsedToInjectHtml",
+          "seconds": 0.347,
+          "result": "passed"
+        },
+        {
+          "name": "statisticsDoNotDependOnSweepForOccupancyAndKeepPersistedExpiryCount",
+          "seconds": 0.348,
+          "result": "passed"
+        },
+        {
+          "name": "historicalDisabledSeatsCanExceedHundredPercentAndZeroCapacityIsUndefined",
+          "seconds": 0.339,
+          "result": "passed"
+        },
+        {
+          "name": "trendFillsSevenCalendarDaysAcrossMonthAndNoDenominatorIsNull",
+          "seconds": 0.323,
+          "result": "passed"
+        },
+        {
+          "name": "passwordResetRevokesAllOldSessionsAndOldPasswordStopsWorking",
+          "seconds": 0.767,
+          "result": "passed"
+        },
+        {
+          "name": "pendingAndUsingReservationsBlockDisableAndRoleChangeUntilResolved",
+          "seconds": 0.348,
+          "result": "passed"
+        },
+        {
+          "name": "roleChangeRacingBookingCannotStrandStudentReservation",
+          "seconds": 0.333,
+          "result": "passed"
+        },
+        {
+          "name": "simultaneousSuperAdminMutationsPreserveAnEnabledSuperAdmin",
+          "seconds": 0.315,
+          "result": "passed"
+        },
+        {
+          "name": "createsOnlyEnabledLibrarianAndNeverEchoesPasswords",
+          "seconds": 0.483,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.DeliveryIntegrationTest",
+      "timeSeconds": 27.014,
+      "counts": {
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "profileReadsOwnPublicFieldsAndIgnoresForgedIdentityAndPrivileges",
+          "seconds": 0.509,
+          "result": "passed"
+        },
+        {
+          "name": "profileRequiresStudentAndCsrfAndAllMutationRoutesRejectMissingCsrf",
+          "seconds": 0.27,
+          "result": "passed"
+        },
+        {
+          "name": "unsupportedMysqlDatesReturnSafeBadRequest(String)[1]",
+          "seconds": 0.289,
+          "result": "passed"
+        },
+        {
+          "name": "unsupportedMysqlDatesReturnSafeBadRequest(String)[2]",
+          "seconds": 0.602,
+          "result": "passed"
+        },
+        {
+          "name": "simultaneousPasswordUpdatesAlwaysRevalidateCurrentHash",
+          "seconds": 0.599,
+          "result": "passed"
+        },
+        {
+          "name": "invalidProfileDoesNotMutateAndDisplayEscapesText(String)[1]",
+          "seconds": 0.308,
+          "result": "passed"
+        },
+        {
+          "name": "invalidProfileDoesNotMutateAndDisplayEscapesText(String)[2]",
+          "seconds": 0.339,
+          "result": "passed"
+        },
+        {
+          "name": "erasedPrincipalStillDetectsPasswordChangeEvenWhenLoginRegisteredAfterRevocation",
+          "seconds": 0.592,
+          "result": "passed"
+        },
+        {
+          "name": "unexpectedFailureReturnsSafePageWithoutSqlOrSensitiveExceptionMessage",
+          "seconds": 0.308,
+          "result": "passed"
+        },
+        {
+          "name": "selfPasswordChangeVerifiesOldPasswordInvalidatesAllSessionsAndKeepsHistory",
+          "seconds": 1.111,
+          "result": "passed"
+        },
+        {
+          "name": "pagesHaveStrictScriptsSecurityHeadersAndSafeChartData",
+          "seconds": 0.529,
+          "result": "passed"
+        },
+        {
+          "name": "protectedSpaceWriteRechecksRoleUnderUserLock",
+          "seconds": 0.316,
+          "result": "passed"
+        },
+        {
+          "name": "missingParametersUnknownPathsAndWrongMethodHaveSafeErrors",
+          "seconds": 0.351,
+          "result": "passed"
+        },
+        {
+          "name": "registrationToProfileBookingCheckinCheckoutAndStatisticsIsOneCompleteWorkflow",
+          "seconds": 0.645,
+          "result": "passed"
+        },
+        {
+          "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[1]",
+          "seconds": 0.374,
+          "result": "passed"
+        },
+        {
+          "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[2]",
+          "seconds": 0.465,
+          "result": "passed"
+        },
+        {
+          "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[3]",
+          "seconds": 0.295,
+          "result": "passed"
+        },
+        {
+          "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[4]",
+          "seconds": 0.31,
+          "result": "passed"
+        },
+        {
+          "name": "invalidPasswordChangeDoesNotAlterHashOrEchoAnyPassword(String)[5]",
+          "seconds": 0.388,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.DemoGuardTest",
+      "timeSeconds": 0.002,
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "ordinaryAndProductionProfilesCannotActivateFixtureBehavior",
+          "seconds": 0.001,
+          "result": "passed"
+        },
+        {
+          "name": "onlyExactDevDemoCombinationAndActualIsolatedCatalogAreAllowed",
+          "seconds": 0.001,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.FoundationIntegrationTest",
+      "timeSeconds": 22.308,
+      "counts": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "disabledUserAndWrongPasswordCannotLogin",
+          "seconds": 0.509,
+          "result": "passed"
+        },
+        {
+          "name": "unicodePasswordBeyondBcryptLimitReturnsValidationError",
+          "seconds": 0.297,
+          "result": "passed"
+        },
+        {
+          "name": "registrationAlwaysCreatesEnabledStudentAndHashesPassword",
+          "seconds": 0.476,
+          "result": "passed"
+        },
+        {
+          "name": "productionBootstrapCreatesOnlySuperAdminAndRequiresPassword",
+          "seconds": 0.333,
+          "result": "passed"
+        },
+        {
+          "name": "userControlledDisplayNamesAreHtmlEscaped",
+          "seconds": 0.356,
+          "result": "passed"
+        },
+        {
+          "name": "logoutInvalidatesSessionAndNeedsCsrf",
+          "seconds": 0.341,
+          "result": "passed"
+        },
+        {
+          "name": "schemaAndSeedCanBeRepeatedWithoutResettingPasswordsOrDuplicatingSeats",
+          "seconds": 0.243,
+          "result": "passed"
+        },
+        {
+          "name": "fourTablesAndShanghaiBusinessClock",
+          "seconds": 0.236,
+          "result": "passed"
+        },
+        {
+          "name": "realLoginRoutesAllThreeRolesToTheirRenderedHome(String, String, String)[1]",
+          "seconds": 0.326,
+          "result": "passed"
+        },
+        {
+          "name": "realLoginRoutesAllThreeRolesToTheirRenderedHome(String, String, String)[2]",
+          "seconds": 0.35,
+          "result": "passed"
+        },
+        {
+          "name": "realLoginRoutesAllThreeRolesToTheirRenderedHome(String, String, String)[3]",
+          "seconds": 0.331,
+          "result": "passed"
+        },
+        {
+          "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[1]",
+          "seconds": 0.24,
+          "result": "passed"
+        },
+        {
+          "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[2]",
+          "seconds": 0.243,
+          "result": "passed"
+        },
+        {
+          "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[3]",
+          "seconds": 0.252,
+          "result": "passed"
+        },
+        {
+          "name": "invalidRegistrationDoesNotCreateAnAccount(String, String, String, String)[4]",
+          "seconds": 0.255,
+          "result": "passed"
+        },
+        {
+          "name": "studentAndLibrarianCannotEnterSuperAdminPages",
+          "seconds": 0.546,
+          "result": "passed"
+        },
+        {
+          "name": "loginRegistrationAndLocalBootstrapAssetsAreAccessible",
+          "seconds": 0.282,
+          "result": "passed"
+        },
+        {
+          "name": "expiredAndNewReservationsCanCoexistAndHistoricalReferencesCannotBeDeleted",
+          "seconds": 0.287,
+          "result": "passed"
+        },
+        {
+          "name": "duplicateUsernameIsRejectedWithoutChangingExistingAccount",
+          "seconds": 0.332,
+          "result": "passed"
+        },
+        {
+          "name": "missingCsrfIsRejectedBeforeRegistrationOrLogin",
+          "seconds": 0.235,
+          "result": "passed"
+        },
+        {
+          "name": "concurrentRegistrationsOfSameUsernameHaveExactlyOneWinner",
+          "seconds": 0.313,
+          "result": "passed"
+        },
+        {
+          "name": "uniqueSeatNumbersAreScopedToReadingRoomAndForeignKeysProtectHistory",
+          "seconds": 0.238,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.LifecycleIntegrationTest",
+      "timeSeconds": 27.362,
+      "counts": {
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "onlyOwnerCanUseLifecycleEndpointsAndTimestampsComeFromServer",
+          "seconds": 0.402,
+          "result": "passed"
+        },
+        {
+          "name": "checkoutRacingAutomaticCompletionPreservesExactEndAndSingleCompletion",
+          "seconds": 0.342,
+          "result": "passed"
+        },
+        {
+          "name": "disabledUsersCannotCheckinButAutomaticCleanupStillWorks",
+          "seconds": 0.348,
+          "result": "passed"
+        },
+        {
+          "name": "sweepHandlesMoreThanOnePageAndBothKindsOfDueRecords",
+          "seconds": 2.106,
+          "result": "passed"
+        },
+        {
+          "name": "earlyCheckoutLocksBothSeatAndStudentForWholeSlotAndDoesNotRewriteOnRepeat",
+          "seconds": 0.384,
+          "result": "passed"
+        },
+        {
+          "name": "staleExpirationAndCompletionWritesCannotOverwriteCurrentStates",
+          "seconds": 0.337,
+          "result": "passed"
+        },
+        {
+          "name": "futureReservationCannotCheckinTodayOrCheckoutBeforeCheckin",
+          "seconds": 0.332,
+          "result": "passed"
+        },
+        {
+          "name": "checkinAtDeadlineSucceedsButOneSecondLaterReleasesAndRejectsEvenWithoutSweep",
+          "seconds": 0.328,
+          "result": "passed"
+        },
+        {
+          "name": "overdueOriginalCanBeRebookedCheckedInAndCheckedOutWithoutExtendingEnd",
+          "seconds": 0.333,
+          "result": "passed"
+        },
+        {
+          "name": "terminalRecordsCannotReturnToUsing(String)[1]",
+          "seconds": 0.32,
+          "result": "passed"
+        },
+        {
+          "name": "terminalRecordsCannotReturnToUsing(String)[2]",
+          "seconds": 0.359,
+          "result": "passed"
+        },
+        {
+          "name": "terminalRecordsCannotReturnToUsing(String)[3]",
+          "seconds": 0.46,
+          "result": "passed"
+        },
+        {
+          "name": "ownPageShowsEligibleActionsAndActualTimesAndDoesNotMutateOnGet",
+          "seconds": 0.404,
+          "result": "passed"
+        },
+        {
+          "name": "lateCheckoutWithoutSchedulerCompletesAtSlotEndInsteadOfRequestTime",
+          "seconds": 0.325,
+          "result": "passed"
+        },
+        {
+          "name": "duplicateConcurrentCheckinsAndCheckoutsEachChangeStateOnlyOnce",
+          "seconds": 0.332,
+          "result": "passed"
+        },
+        {
+          "name": "checkinRacingCancellationHasExactlyOneLegalWinner",
+          "seconds": 0.328,
+          "result": "passed"
+        },
+        {
+          "name": "forcedDisabledResourceCannotBeCheckedInAndDoesNotBlockExpiration",
+          "seconds": 0.334,
+          "result": "passed"
+        },
+        {
+          "name": "checkinRacingExpirationHonorsDeadlineAndNeverOverwritesSuccessfulCheckin(int)[1]",
+          "seconds": 0.336,
+          "result": "passed"
+        },
+        {
+          "name": "checkinRacingExpirationHonorsDeadlineAndNeverOverwritesSuccessfulCheckin(int)[2]",
+          "seconds": 0.313,
+          "result": "passed"
+        },
+        {
+          "name": "lateRebookingGetsExactlyTenMinutesAndMayExpireAgain",
+          "seconds": 0.337,
+          "result": "passed"
+        },
+        {
+          "name": "sweepDoesNotExpireAtDeadlineButExpiresImmediatelyAfterAndIsRepeatable",
+          "seconds": 0.308,
+          "result": "passed"
+        },
+        {
+          "name": "checkinRequestAfterEndAlsoCommitsAutomaticCompletion",
+          "seconds": 0.308,
+          "result": "passed"
+        },
+        {
+          "name": "normalCheckinOpensExactlyFifteenMinutesBeforeStartAndIsIdempotent",
+          "seconds": 0.324,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.ReservationIntegrationTest",
+      "timeSeconds": 25.161,
+      "counts": {
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "stalePendingIsReleasedInSuccessfulBookingTransactionAndNewDeadlineIsTenMinutes",
+          "seconds": 1.043,
+          "result": "passed"
+        },
+        {
+          "name": "bookingUsesLoggedInIdentityAndIgnoresClientStatusAndDeadline",
+          "seconds": 0.505,
+          "result": "passed"
+        },
+        {
+          "name": "sevenDaysAndIndependentSlotsCanAllBeBooked",
+          "seconds": 0.485,
+          "result": "passed"
+        },
+        {
+          "name": "gridCanFilterFreeSeatsAndSuppressBookingAfterCutoffOrExistingStudentBooking",
+          "seconds": 0.774,
+          "result": "passed"
+        },
+        {
+          "name": "expiredCrossRoomHistoryRetriesRolledBackTransactionAndBothBookingsSucceed",
+          "seconds": 0.521,
+          "result": "passed"
+        },
+        {
+          "name": "bookingAndMaintenanceCannotLeavePendingBookingOnDisabledResource(boolean)[1]",
+          "seconds": 0.348,
+          "result": "passed"
+        },
+        {
+          "name": "bookingAndMaintenanceCannotLeavePendingBookingOnDisabledResource(boolean)[2]",
+          "seconds": 0.343,
+          "result": "passed"
+        },
+        {
+          "name": "concurrentStudentsCompetingForSameSeatHaveExactlyOneWinner",
+          "seconds": 0.355,
+          "result": "passed"
+        },
+        {
+          "name": "ownListFiltersPaginatesAndDisplaysTimeExpiredStatusWithoutWritingOnGet",
+          "seconds": 0.463,
+          "result": "passed"
+        },
+        {
+          "name": "effectiveReservationsAndCompletedUsageBlockBothSeatAndStudent(String)[1]",
+          "seconds": 0.374,
+          "result": "passed"
+        },
+        {
+          "name": "effectiveReservationsAndCompletedUsageBlockBothSeatAndStudent(String)[2]",
+          "seconds": 0.357,
+          "result": "passed"
+        },
+        {
+          "name": "effectiveReservationsAndCompletedUsageBlockBothSeatAndStudent(String)[3]",
+          "seconds": 0.379,
+          "result": "passed"
+        },
+        {
+          "name": "duplicateClicksCreateOnlyOneRecord",
+          "seconds": 0.425,
+          "result": "passed"
+        },
+        {
+          "name": "studentWithExpiredBookingMayBookDifferentRoomWithoutLockingOldSeat",
+          "seconds": 0.393,
+          "result": "passed"
+        },
+        {
+          "name": "cancellationBeforeStartKeepsAuditFieldsAndRepeatedCancellationIsIdempotent",
+          "seconds": 0.38,
+          "result": "passed"
+        },
+        {
+          "name": "bookingAndCancelNeedCsrfAndStudentRoleAndBadParametersDoNotWrite",
+          "seconds": 0.429,
+          "result": "passed"
+        },
+        {
+          "name": "foreignReservationCannotBeCancelledOrIncludedBySpoofedUserId",
+          "seconds": 0.365,
+          "result": "passed"
+        },
+        {
+          "name": "cancellationRacingNewBookingPreservesCancelledHistoryAndAtMostOneOccupant",
+          "seconds": 0.377,
+          "result": "passed"
+        },
+        {
+          "name": "bookingAndDeletionCannotLeaveDanglingReservation",
+          "seconds": 0.358,
+          "result": "passed"
+        },
+        {
+          "name": "disabledRoomSeatOrAccountAndChangedRoleCannotCreateBooking",
+          "seconds": 0.422,
+          "result": "passed"
+        },
+        {
+          "name": "cannotCancelAtStartOrAfterStartOrAfterCheckin",
+          "seconds": 0.406,
+          "result": "passed"
+        },
+        {
+          "name": "cancelledAndExpiredHistoryDoNotBlockNewBooking",
+          "seconds": 0.6,
+          "result": "passed"
+        },
+        {
+          "name": "concurrentSameStudentBookingDifferentRoomsHasExactlyOneWinner",
+          "seconds": 0.343,
+          "result": "passed"
+        },
+        {
+          "name": "conflictRedirectKeepsSelectedDateSlotAndOwnCancellationWorksThroughHttp",
+          "seconds": 0.391,
+          "result": "passed"
+        },
+        {
+          "name": "boundaryThirtyMinutesBeforeEndAllowsBookingAndOneSecondLaterBlocksIt",
+          "seconds": 0.326,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.ReservationMaintenanceTest",
+      "timeSeconds": 0.463,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "failedRecordDoesNotPreventAnotherRecordFromBeingProcessed",
+          "seconds": 0.46,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.ReservationRulesTest",
+      "timeSeconds": 0.008,
+      "counts": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "onlySevenNaturalDaysAreAllowedIncludingAcrossMonthBoundary",
+          "seconds": 0.002,
+          "result": "passed"
+        },
+        {
+          "name": "exactlyThirtyMinutesBeforeEndIsAllowedButLaterIsRejected(TimeSlot)[1]",
+          "seconds": 0.002,
+          "result": "passed"
+        },
+        {
+          "name": "exactlyThirtyMinutesBeforeEndIsAllowedButLaterIsRejected(TimeSlot)[2]",
+          "seconds": 0.0,
+          "result": "passed"
+        },
+        {
+          "name": "exactlyThirtyMinutesBeforeEndIsAllowedButLaterIsRejected(TimeSlot)[3]",
+          "seconds": 0.0,
+          "result": "passed"
+        },
+        {
+          "name": "ordinaryDeadlineAndLateBookingTenMinuteDeadlineAreDifferent",
+          "seconds": 0.0,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.SchedulerIntegrationTest",
+      "timeSeconds": 18.209,
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "startupCatchupAndRealScheduledExecutionUseTheSameStateTransitions",
+          "seconds": 1.972,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.SpaceIntegrationTest",
+      "timeSeconds": 20.18,
+      "counts": {
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "concurrentSeatCreationInSameRoomHasOneWinner",
+          "seconds": 0.253,
+          "result": "passed"
+        },
+        {
+          "name": "roomAndSeatNamesAreHtmlEscaped",
+          "seconds": 0.269,
+          "result": "passed"
+        },
+        {
+          "name": "seatNumbersAreUniqueWithinRoomIncludingAfterTrimmingAndRename",
+          "seconds": 0.294,
+          "result": "passed"
+        },
+        {
+          "name": "pagesAndEditModalsRenderAndStudentCannotSeeDisabledRoom",
+          "seconds": 0.334,
+          "result": "passed"
+        },
+        {
+          "name": "historicalSeatCanBeRenamedButNeverDeleted",
+          "seconds": 0.245,
+          "result": "passed"
+        },
+        {
+          "name": "badDatesSlotsMissingRoomsAndWrongRoomSeatIdsReturnUsefulErrors",
+          "seconds": 0.268,
+          "result": "passed"
+        },
+        {
+          "name": "unreferencedSeatCanBeCreatedRenamedEnabledDisabledAndDeletedThroughHttp",
+          "seconds": 0.286,
+          "result": "passed"
+        },
+        {
+          "name": "studentCapacityUsesEnabledSeatsAndDoesNotStoreDuplicateCapacity",
+          "seconds": 0.238,
+          "result": "passed"
+        },
+        {
+          "name": "currentAndFutureEffectiveBookingsBlockSeatAndWholeRoomDisable(String)[1]",
+          "seconds": 0.249,
+          "result": "passed"
+        },
+        {
+          "name": "currentAndFutureEffectiveBookingsBlockSeatAndWholeRoomDisable(String)[2]",
+          "seconds": 0.266,
+          "result": "passed"
+        },
+        {
+          "name": "oldExpiredAndReplacementPendingRenderAsOneSeatWithoutDoubleCounting",
+          "seconds": 0.232,
+          "result": "passed"
+        },
+        {
+          "name": "gridUsesSelectedDateAndSlotAndAllFiveReservationStates",
+          "seconds": 0.27,
+          "result": "passed"
+        },
+        {
+          "name": "overduePendingAndFinishedSlotsDoNotBlockMaintenanceButKeepHistory",
+          "seconds": 0.245,
+          "result": "passed"
+        },
+        {
+          "name": "deadlineInstantIsStillEffectiveButPastSlotsDoNotBlock",
+          "seconds": 0.244,
+          "result": "passed"
+        },
+        {
+          "name": "invalidRoomAndSeatFormsKeepInputAndDisplayValidationInModal",
+          "seconds": 0.262,
+          "result": "passed"
+        },
+        {
+          "name": "studentsCannotWriteAdminResourcesAndCsrfIsRequired",
+          "seconds": 0.268,
+          "result": "passed"
+        },
+        {
+          "name": "adminCanCreateEditAndDisableRoomThroughValidatedForms",
+          "seconds": 0.258,
+          "result": "passed"
+        }
+      ]
+    },
+    {
+      "name": "com.seapullkb.library.UiIntegrationTest",
+      "timeSeconds": 23.787,
+      "counts": {
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cases": [
+        {
+          "name": "dashboardRejectsUnsupportedDatesSlotsAndOtherRoles",
+          "seconds": 0.3,
+          "result": "passed"
+        },
+        {
+          "name": "recordCardActionsFollowEffectiveStatusAndActualCheckinWindow",
+          "seconds": 0.274,
+          "result": "passed"
+        },
+        {
+          "name": "disabledRoomsAndSeatsNeverInflateStudentAvailability",
+          "seconds": 0.254,
+          "result": "passed"
+        },
+        {
+          "name": "activeReservationAndCompletedSlotHaveDifferentDashboardMeaning",
+          "seconds": 0.27,
+          "result": "passed"
+        },
+        {
+          "name": "seatCountsDescribeWholeGridEvenWhenOnlyFreeSeatsAreDisplayed",
+          "seconds": 0.274,
+          "result": "passed"
+        },
+        {
+          "name": "statisticsExplainEmptyDataWithoutInventingRates",
+          "seconds": 0.271,
+          "result": "passed"
+        },
+        {
+          "name": "emptyStudentDashboardRendersRealCapacityAndNoFixtureNumbers",
+          "seconds": 0.249,
+          "result": "passed"
+        },
+        {
+          "name": "pendingCardRemainsVisibleWhenHistoryFilterAndPaginationExcludeIt",
+          "seconds": 0.301,
+          "result": "passed"
+        },
+        {
+          "name": "exactDeadlineStillCountsAsPendingAndUnavailable",
+          "seconds": 0.242,
+          "result": "passed"
+        },
+        {
+          "name": "effectiveExpiryDisappearsWithoutReadSideWritesAndFreesCapacity",
+          "seconds": 0.26,
+          "result": "passed"
+        },
+        {
+          "name": "adminDashboardSeparatesLiveUseFromFutureAndHistoricalOccupancy",
+          "seconds": 0.28,
+          "result": "passed"
+        },
+        {
+          "name": "spaceFiltersAreServerSideAndSummaryDescribesUnfilteredData",
+          "seconds": 0.263,
+          "result": "passed"
+        },
+        {
+          "name": "upcomingReservationIsOwnAndActiveListDoesNotDependOnHistoryPagination",
+          "seconds": 0.248,
+          "result": "passed"
+        },
+        {
+          "name": "lateBookingCardStartsItsSignInWindowAtActualCreation",
+          "seconds": 0.265,
+          "result": "passed"
+        },
+        {
+          "name": "roomCatalogPreservesSelectedSlotAndShowsActualFreeSeats",
+          "seconds": 0.26,
+          "result": "passed"
+        },
+        {
+          "name": "adminDashboardHasRealZeroStateAndRechecksDatabaseRole",
+          "seconds": 0.255,
+          "result": "passed"
+        },
+        {
+          "name": "demoSeedRejectsExistingAccountsBeforeModifyingAnyData",
+          "seconds": 0.239,
+          "result": "passed"
+        },
+        {
+          "name": "adminRecordDetailsExposeStoredTimesWithoutChangingExpiryOnRead",
+          "seconds": 0.259,
+          "result": "passed"
+        },
+        {
+          "name": "demoDatasetUsesFreshIsolatedDatabaseAndItsClockForAllStates",
+          "seconds": 2.452,
+          "result": "passed"
+        },
+        {
+          "name": "demoClockUsesActualCatalogAndExplicitSimulationTime",
+          "seconds": 0.277,
+          "result": "passed"
+        },
+        {
+          "name": "defaultSlotAdvancesWithClockAndAfterHoursDefaultsToTomorrow",
+          "seconds": 0.305,
+          "result": "passed"
+        },
+        {
+          "name": "adminMetricsCountActualReleaseDateAndReadsDoNotPerformCleanup",
+          "seconds": 0.268,
+          "result": "passed"
+        }
+      ]
+    }
+  ],
+  "windowsActualRuntime": "pending; no Windows execution observed",
+  "remoteActions": "not observed",
+  "pullRequest": "creation attempted; GitHub GraphQL API returned Forbidden"
+}

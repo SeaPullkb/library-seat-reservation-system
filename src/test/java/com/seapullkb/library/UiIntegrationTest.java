@@ -1,0 +1,242 @@
+package com.seapullkb.library;
+
+import com.seapullkb.library.service.*;
+import java.time.*;
+import java.util.concurrent.atomic.AtomicReference;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.*;
+import org.springframework.context.annotation.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.*;
+import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest @AutoConfigureMockMvc @ActiveProfiles("test") @Testcontainers
+@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+@Import(UiIntegrationTest.TimeConfiguration.class)
+class UiIntegrationTest {
+    static final LocalDate DAY=LocalDate.of(2030,5,8);
+    @Container static final MySQLContainer<?> MYSQL=new MySQLContainer<>("mysql:8.0").withDatabaseName("library_demo_test");
+    @DynamicPropertySource static void database(DynamicPropertyRegistry p) {
+        p.add("spring.datasource.url",MYSQL::getJdbcUrl);p.add("spring.datasource.username",MYSQL::getUsername);p.add("spring.datasource.password",MYSQL::getPassword);
+    }
+    static class MutableClock extends Clock {
+        final AtomicReference<Instant> value=new AtomicReference<>();
+        void at(LocalDateTime time) { value.set(time.atZone(getZone()).toInstant()); }
+        public ZoneId getZone() { return ZoneId.of("Asia/Shanghai"); }
+        public Clock withZone(ZoneId zone) { return Clock.fixed(instant(),zone); }
+        public Instant instant() { return value.get(); }
+    }
+    @TestConfiguration static class TimeConfiguration {
+        @Bean @Primary MutableClock uiClock() { var c=new MutableClock();c.at(DAY.atTime(8,0));return c; }
+    }
+    @Autowired MockMvc mvc;
+    @Autowired JdbcTemplate jdbc;
+    @Autowired InitialDataService initial;
+    @Autowired DashboardService dashboards;
+    @Autowired ReservationService reservations;
+    @Autowired ReservationLifecycleService lifecycle;
+    @Autowired AccountService accounts;
+    @Autowired AdminReservationService adminReservations;
+    @Autowired MutableClock clock;
+    @Autowired org.springframework.security.crypto.password.PasswordEncoder passwords;
+    @Autowired javax.sql.DataSource dataSource;
+    Long room,seat;
+    @BeforeEach void seed() {
+        jdbc.update("DELETE FROM reserve_record");jdbc.update("DELETE FROM seat");jdbc.update("DELETE FROM reading_room");jdbc.update("DELETE FROM `user`");
+        clock.at(DAY.atTime(8,0));initial.initialize(true,"Ui-test-password-123!");
+        room=jdbc.queryForObject("SELECT MIN(id) FROM reading_room",Long.class);seat=jdbc.queryForObject("SELECT MIN(id) FROM seat",Long.class);
+    }
+    @Test void emptyStudentDashboardRendersRealCapacityAndNoFixtureNumbers() throws Exception {
+        var d=dashboards.student("student",DAY,1);
+        assertThat(d.catalog().rooms()).hasSize(1);assertThat(d.catalog().getEnabledSeats()).isEqualTo(20);
+        assertThat(d.catalog().getAvailableSeats()).isEqualTo(20);assertThat(d.getNext()).isNull();
+        mvc.perform(get("/student").with(user("student").roles("STUDENT"))).andExpect(status().isOk())
+                .andExpect(content().string(containsString("还没有待办预约"))).andExpect(content().string(containsString("data-metric=\"available\">20")));
+    }
+    @Test void activeReservationAndCompletedSlotHaveDifferentDashboardMeaning() {
+        Long id=reservations.create("student",room,seat,DAY,1);
+        assertThat(dashboards.student("student",DAY,1).getNext().id()).isEqualTo(id);
+        assertThat(dashboards.catalog(DAY,1).getAvailableSeats()).isEqualTo(19);
+        lifecycle.checkIn("student",id);lifecycle.checkOut("student",id);
+        var d=dashboards.student("student",DAY,1);assertThat(d.active()).isEmpty();
+        assertThat(d.catalog().getAvailableSeats()).isEqualTo(19);
+        assertThat(dashboards.catalog(DAY,2).getAvailableSeats()).isEqualTo(20);
+    }
+    @Test void effectiveExpiryDisappearsWithoutReadSideWritesAndFreesCapacity() {
+        Long id=reservations.create("student",room,seat,DAY,1);clock.at(DAY.atTime(8,15,1));
+        assertThat(dashboards.student("student",DAY,1).active()).isEmpty();
+        assertThat(dashboards.catalog(DAY,1).getAvailableSeats()).isEqualTo(20);
+        assertThat(jdbc.queryForObject("SELECT status FROM reserve_record WHERE id=?",String.class,id)).isEqualTo("PENDING");
+    }
+    @Test void exactDeadlineStillCountsAsPendingAndUnavailable() {
+        reservations.create("student",room,seat,DAY,1);clock.at(DAY.atTime(8,15));
+        var d=dashboards.student("student",DAY,1);assertThat(d.active()).hasSize(1);
+        assertThat(d.getNext().canCheckIn(LocalDateTime.now(clock))).isTrue();assertThat(d.catalog().getAvailableSeats()).isEqualTo(19);
+    }
+    @Test void disabledRoomsAndSeatsNeverInflateStudentAvailability() {
+        jdbc.update("UPDATE seat SET status=0 WHERE id=?",seat);
+        assertThat(dashboards.catalog(DAY,1).getEnabledSeats()).isEqualTo(19);
+        jdbc.update("UPDATE reading_room SET status=0 WHERE id=?",room);
+        assertThat(dashboards.catalog(DAY,1).rooms()).isEmpty();
+        assertThat(dashboards.catalog(DAY,1).getAvailableSeats()).isZero();
+    }
+    @Test void upcomingReservationIsOwnAndActiveListDoesNotDependOnHistoryPagination() {
+        reservations.create("student",room,seat,DAY.plusDays(1),1);
+        jdbc.update("INSERT INTO reserve_record(user_id,seat_id,reserve_date,time_slot,status,checkin_deadline) SELECT user_id,seat_id,reserve_date,time_slot,'CANCELLED',checkin_deadline FROM reserve_record");
+        var d=dashboards.student("student",DAY,1);assertThat(d.active()).hasSize(1);assertThat(d.getNext().reserveDate()).isEqualTo(DAY.plusDays(1));
+        assertThatThrownBy(()->dashboards.student("librarian",DAY,1)).isInstanceOf(AccessDeniedException.class);
+    }
+    @Test void defaultSlotAdvancesWithClockAndAfterHoursDefaultsToTomorrow() {
+        clock.at(DAY.atTime(13,0));assertThat(dashboards.catalog(null,null).slot().getCode()).isEqualTo(2);
+        clock.at(DAY.atTime(21,31));var c=dashboards.catalog(null,null);
+        assertThat(c.date()).isEqualTo(DAY.plusDays(1));assertThat(c.slot().getCode()).isEqualTo(1);
+        assertThat(dashboards.catalog(DAY,3).bookingOpen()).isFalse();
+    }
+    @Test void dashboardRejectsUnsupportedDatesSlotsAndOtherRoles() throws Exception {
+        for(String date:new String[]{DAY.minusDays(1).toString(),DAY.plusDays(7).toString()})
+            mvc.perform(get("/student").param("date",date).with(user("student").roles("STUDENT"))).andExpect(status().isBadRequest());
+        mvc.perform(get("/student").param("slot","4").with(user("student").roles("STUDENT"))).andExpect(status().isBadRequest());
+        mvc.perform(get("/student").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isForbidden());
+    }
+    @Test void roomCatalogPreservesSelectedSlotAndShowsActualFreeSeats() throws Exception {
+        reservations.create("student",room,seat,DAY,1);
+        mvc.perform(get("/student/rooms").param("date",DAY.toString()).param("slot","1").with(user("student").roles("STUDENT")))
+                .andExpect(status().isOk()).andExpect(content().string(containsString(">19</strong>")))
+                .andExpect(content().string(containsString("date=2030-05-08&amp;slot=1")));
+        mvc.perform(get("/student/rooms").param("date",DAY.plusDays(7).toString()).with(user("student").roles("STUDENT")))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test void seatCountsDescribeWholeGridEvenWhenOnlyFreeSeatsAreDisplayed() throws Exception {
+        reservations.create("student",room,seat,DAY,1);
+        jdbc.update("UPDATE seat SET status=0 WHERE room_id=? AND seat_no='A03'",room);
+        jdbc.update("INSERT INTO reserve_record(user_id,seat_id,reserve_date,time_slot,status,checkin_deadline) SELECT (SELECT id FROM `user` WHERE username='librarian'),id,?,1,'PENDING',? FROM seat WHERE room_id=? AND seat_no='A02'",DAY,DAY.atTime(8,15),room);
+        mvc.perform(get("/student/rooms/"+room+"/seats").param("date",DAY.toString()).param("slot","1").param("availableOnly","true").with(user("student").roles("STUDENT")))
+                .andExpect(status().isOk()).andExpect(model().attribute("seatCounts",java.util.Map.of("FREE",17L,"MINE",1L,"OCCUPIED",1L,"DISABLED",1L)))
+                .andExpect(model().attribute("seats",hasSize(17))).andExpect(content().string(containsString("确认预约")))
+                .andExpect(content().string(containsString("非实际位置图")));
+    }
+
+    @Test void pendingCardRemainsVisibleWhenHistoryFilterAndPaginationExcludeIt() throws Exception {
+        Long id=reservations.create("student",room,seat,DAY,1);
+        for(int i=0;i<25;i++) jdbc.update("INSERT INTO reserve_record(user_id,seat_id,reserve_date,time_slot,status,checkin_deadline) SELECT user_id,seat_id,reserve_date,time_slot,'CANCELLED',checkin_deadline FROM reserve_record WHERE id=?",id);
+        mvc.perform(get("/student/reservations").param("status","CANCELLED").param("page","1").with(user("student").roles("STUDENT")))
+                .andExpect(status().isOk()).andExpect(model().attribute("activeReservations",hasSize(1)))
+                .andExpect(content().string(containsString("data-active-reservation=\""+id+"\"")))
+                .andExpect(content().string(containsString("立即签到"))).andExpect(content().string(containsString("创建预约")));
+    }
+    @Test void recordCardActionsFollowEffectiveStatusAndActualCheckinWindow() throws Exception {
+        clock.at(DAY.atTime(7,30));reservations.create("student",room,seat,DAY,1);
+        mvc.perform(get("/student/reservations").with(user("student").roles("STUDENT"))).andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("立即签到")))).andExpect(content().string(containsString("尚未到签到时间")));
+        clock.at(DAY.atTime(8,15,1));
+        mvc.perform(get("/student/reservations").with(user("student").roles("STUDENT"))).andExpect(status().isOk())
+                .andExpect(model().attribute("activeReservations",hasSize(0))).andExpect(content().string(containsString("超时释放")));
+    }
+
+    @Test void adminDashboardSeparatesLiveUseFromFutureAndHistoricalOccupancy() {
+        clock.at(DAY.atTime(7,30));Long id=reservations.create("student",room,seat,DAY,1);
+        var d=dashboards.admin("librarian");assertThat(d.metrics().todayStudents()).isEqualTo(1);assertThat(d.metrics().pending()).isZero();
+        clock.at(DAY.atTime(7,45));assertThat(dashboards.admin("librarian").metrics().pending()).isEqualTo(1);
+        lifecycle.checkIn("student",id);d=dashboards.admin("librarian");assertThat(d.metrics().usingSeats()).isEqualTo(1);
+        assertThat(d.rooms().get(0).usingSeats()).isEqualTo(1);assertThat(d.attention()).isEmpty();
+        reservations.create("student",room,seat,DAY.plusDays(1),1);
+        clock.at(DAY.atTime(8,0));lifecycle.checkOut("student",id);d=dashboards.admin("librarian");
+        assertThat(d.metrics().usingSeats()).isZero();assertThat(d.metrics().pending()).isZero();
+        assertThat(dashboards.catalog(DAY,1).getAvailableSeats()).isEqualTo(19);
+    }
+    @Test void adminMetricsCountActualReleaseDateAndReadsDoNotPerformCleanup() {
+        Long id=reservations.create("student",room,seat,DAY,1);clock.at(DAY.atTime(8,15,1));
+        var d=dashboards.admin("librarian");assertThat(d.metrics().pending()).isZero();assertThat(d.metrics().todayExpired()).isZero();
+        assertThat(d.recent().get(0).status()).isEqualTo("EXPIRED");
+        jdbc.update("UPDATE reserve_record SET status='EXPIRED',reserve_date=?,released_at=? WHERE id=?",DAY.minusDays(1),DAY.atTime(8,16),id);
+        clock.at(DAY.atTime(8,16));d=dashboards.admin("librarian");assertThat(d.metrics().todayExpired()).isEqualTo(1);assertThat(d.metrics().todayStudents()).isZero();
+        clock.at(DAY.plusDays(1).atTime(8,0));assertThat(dashboards.admin("librarian").metrics().todayExpired()).isZero();
+    }
+    @Test void adminDashboardHasRealZeroStateAndRechecksDatabaseRole() throws Exception {
+        mvc.perform(get("/admin").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isOk())
+                .andExpect(content().string(containsString("暂无预约记录"))).andExpect(content().string(containsString("data-admin-metric=\"using\">0")));
+        jdbc.update("UPDATE `user` SET role='STUDENT' WHERE username='librarian'");
+        assertThatThrownBy(()->dashboards.admin("librarian")).isInstanceOf(AccessDeniedException.class);
+        mvc.perform(get("/admin").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isForbidden());
+    }
+
+    @Test void spaceFiltersAreServerSideAndSummaryDescribesUnfilteredData() throws Exception {
+        jdbc.update("UPDATE seat SET status=0 WHERE room_id=? AND seat_no='A03'",room);
+        mvc.perform(get("/admin/rooms/"+room+"/seats").param("q","a03").param("state","0").with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(model().attribute("seats",hasSize(1)))
+                .andExpect(model().attribute("spaceSummary",java.util.Map.of("total",20L,"enabled",19L,"disabled",1L,"matched",1L)));
+        mvc.perform(get("/admin/rooms").param("q","不存在").with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(model().attribute("rooms",hasSize(0))).andExpect(content().string(containsString("暂无匹配")));
+        mvc.perform(get("/admin/rooms").param("state","7").with(user("librarian").roles("LIBRARIAN"))).andExpect(status().isBadRequest());
+    }
+
+    @Test void adminRecordDetailsExposeStoredTimesWithoutChangingExpiryOnRead() throws Exception {
+        Long id=reservations.create("student",room,seat,DAY,1);clock.at(DAY.atTime(8,15,1));
+        jdbc.update("UPDATE reserve_record SET status='EXPIRED',released_at=? WHERE id=?",LocalDateTime.now(clock),id);
+        var row=adminReservations.search("librarian",new AdminReservationFilter("",null,DAY,null,null),0).records().get(0);
+        assertThat(row.createdAt()).isEqualTo(DAY.atTime(8,0));assertThat(row.releasedAt()).isEqualTo(DAY.atTime(8,15,1));
+        mvc.perform(get("/admin/reservations").param("date",DAY.toString()).with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("2030-05-08 08:15:01")))
+                .andExpect(content().string(containsString("时间详情")));
+    }
+
+    @Test void statisticsExplainEmptyDataWithoutInventingRates() throws Exception {
+        mvc.perform(get("/admin/statistics").param("date",DAY.toString()).with(user("librarian").roles("LIBRARIAN")))
+                .andExpect(status().isOk()).andExpect(model().attribute("trendEmpty",true)).andExpect(model().attribute("roomDataEmpty",true))
+                .andExpect(content().string(containsString("所选使用日期没有预约记录"))).andExpect(content().string(containsString("统计口径与数据说明")));
+    }
+
+    @Test void demoDatasetUsesFreshIsolatedDatabaseAndItsClockForAllStates() {
+        jdbc.update("DELETE FROM reserve_record");jdbc.update("DELETE FROM seat");jdbc.update("DELETE FROM reading_room");jdbc.update("DELETE FROM `user`");
+        clock.at(DAY.atTime(9,5));var env=new org.springframework.mock.env.MockEnvironment();env.setActiveProfiles("dev","demo");
+        var demo=new DemoDataset(jdbc,initial,passwords,clock,env);demo.seed("Demo-only-password-123!");
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM reading_room",Long.class)).isEqualTo(4);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM seat",Long.class)).isEqualTo(114);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM `user`",Long.class)).isEqualTo(27);
+        assertThat(jdbc.queryForList("SELECT DISTINCT status FROM reserve_record",String.class)).containsExactlyInAnyOrder("PENDING","USING","COMPLETED","CANCELLED","EXPIRED");
+        var c=dashboards.catalog(DAY,1);assertThat(c.rooms()).hasSize(3);assertThat(c.getEnabledSeats()).isEqualTo(87);assertThat(c.getAvailableSeats()).isEqualTo(80);
+        var d=dashboards.admin("librarian");assertThat(d.metrics().usingSeats()).isEqualTo(2);assertThat(d.metrics().pending()).isEqualTo(3);assertThat(d.metrics().todayExpired()).isEqualTo(2);
+        assertThat(dashboards.student("student",DAY,1).active()).hasSize(2);
+        String hash=accounts.findByUsername("student").getPassword();
+        assertThatThrownBy(()->demo.seed("Do-not-reset-password-123!")).isInstanceOf(IllegalStateException.class);
+        assertThat(accounts.findByUsername("student").getPassword()).isEqualTo(hash);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()",Long.class)).isEqualTo(4);
+    }
+    @Test void demoSeedRejectsExistingAccountsBeforeModifyingAnyData() {
+        var env=new org.springframework.mock.env.MockEnvironment();env.setActiveProfiles("dev","demo");
+        String hash=accounts.findByUsername("admin").getPassword();
+        assertThatThrownBy(()->new DemoDataset(jdbc,initial,passwords,clock,env).seed("Do-not-reset-password-123!")).isInstanceOf(IllegalStateException.class);
+        assertThat(accounts.findByUsername("admin").getPassword()).isEqualTo(hash);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM `user`",Long.class)).isEqualTo(3);
+    }
+
+    @Test void demoClockUsesActualCatalogAndExplicitSimulationTime() throws Exception {
+        var env=new org.springframework.mock.env.MockEnvironment();env.setActiveProfiles("dev","demo");
+        env.withProperty("app.demo-date",DAY.toString()).withProperty("app.demo-time","09:11:01");
+        var fixed=new com.seapullkb.library.config.DemoConfiguration().demoClock(dataSource,env);
+        assertThat(LocalDateTime.now(fixed)).isEqualTo(DAY.atTime(9,11,1));assertThat(fixed.getZone().getId()).isEqualTo("Asia/Shanghai");
+    }
+
+    @Test void lateBookingCardStartsItsSignInWindowAtActualCreation() throws Exception {
+        clock.at(DAY.atTime(9,0));reservations.create("student",room,seat,DAY,1);
+        var record=dashboards.student("student",DAY,1).getNext();
+        assertThat(record.getCheckinOpensAt()).isEqualTo(DAY.atTime(9,0));
+        assertThat(record.canCheckIn(DAY.atTime(8,59,59))).isFalse();
+        assertThat(record.canCheckIn(DAY.atTime(9,10))).isTrue();
+        mvc.perform(get("/student").with(user("student").roles("STUDENT"))).andExpect(status().isOk())
+                .andExpect(content().string(containsString("05-08 09:00")));
+    }
+
+}

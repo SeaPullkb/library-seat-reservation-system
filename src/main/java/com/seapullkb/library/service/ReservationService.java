@@ -79,6 +79,11 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
+    public java.util.List<ReservationSummary> active(String username) {
+        return reservations.active(studentId(username), LocalDateTime.now(clock));
+    }
+
+    @Transactional(readOnly = true)
     public ReservationPage mine(String username, ReservationStatus status, int page) {
         if (page < 0 || page > 1_000_000) throw new IllegalArgumentException("页码无效。");
         Long userId = studentId(username);

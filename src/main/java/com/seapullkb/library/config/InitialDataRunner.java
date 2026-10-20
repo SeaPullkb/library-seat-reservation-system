@@ -9,7 +9,7 @@ import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("!test")
+@Profile("!test & !demo")
 public class InitialDataRunner implements ApplicationRunner {
     private final InitialDataService initialData;
     private final Environment environment;

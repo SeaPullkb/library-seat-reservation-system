@@ -1,5 +1,7 @@
 # M6 页面、个人中心与安全测试
 
+本文件保留V1.0阶段的历史记录；当前V1.1进度和实测结果见 [V1.1验收](acceptance-v1.1.md)。
+
 日期：2026-10-19（Asia/Shanghai）。命令：`./mvnw -B -ntp verify`。
 
 完整结果：**145项，0失败、0错误、0跳过，BUILD SUCCESS**。新增DeliveryIntegrationTest执行19项，使用独立真实MySQL；此前126项业务、权限、调度和并发回归全部通过。

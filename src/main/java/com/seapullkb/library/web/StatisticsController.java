@@ -20,7 +20,10 @@ public class StatisticsController {
     public String statistics(Authentication auth,@RequestParam(required=false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam(defaultValue="1") int slot,Model model) {
         LocalDate selected=date==null?LocalDate.now(clock):date;
-        model.addAttribute("dashboard",statistics.dashboard(auth.getName(),selected,slot));
+        var dashboard=statistics.dashboard(auth.getName(),selected,slot);
+        model.addAttribute("dashboard",dashboard);
+        model.addAttribute("trendEmpty",dashboard.trend().stream().allMatch(d -> d.reservations()==0));
+        model.addAttribute("roomDataEmpty",dashboard.rooms().stream().allMatch(r -> r.occupiedSeats()==0));
         model.addAttribute("date",selected); model.addAttribute("slot",slot); model.addAttribute("slots",TimeSlot.values());
         model.addAttribute("title","数据统计"); return "admin/statistics";
     }

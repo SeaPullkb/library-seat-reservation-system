@@ -4,9 +4,20 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 
 @ControllerAdvice
 public class PageAdvice {
+    private final Environment environment;
+    private final Clock clock;
+    public PageAdvice(Environment environment,Clock clock) { this.environment=environment;this.clock=clock; }
+    @ModelAttribute("demoEnvironment")
+    public boolean demoEnvironment() { return environment.acceptsProfiles(Profiles.of("demo")); }
+    @ModelAttribute("businessNow")
+    public LocalDateTime businessNow() { return LocalDateTime.now(clock); }
     private boolean role(Authentication authentication,String name) {
         return signedIn(authentication) && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_"+name));
     }

@@ -68,6 +68,17 @@ public interface ReservationMapper extends BaseMapper<Reservation> {
     @Select("SELECT COUNT(*) FROM reserve_record r WHERE r.user_id = #{userId} AND (#{status} IS NULL OR " + EFFECTIVE_STATUS + " = #{status})")
     long mineCount(@Param("userId") Long userId, @Param("status") String status, @Param("now") LocalDateTime now);
 
+    @Select("""
+            SELECT r.id, rr.room_name, s.seat_no, r.reserve_date, r.time_slot,
+            """ + EFFECTIVE_STATUS + " AS status, " + """
+              r.checkin_deadline, r.checkin_at, r.checkout_at, r.released_at, r.created_at, r.cancelled_at, r.cancel_reason
+            FROM reserve_record r JOIN seat s ON s.id=r.seat_id JOIN reading_room rr ON rr.id=s.room_id
+            WHERE r.user_id=#{userId} AND
+            """ + EFFECTIVE_STATUS + " IN ('PENDING','USING') " + """
+            ORDER BY (r.status='USING') DESC, r.reserve_date, r.time_slot, r.id
+            """)
+    List<ReservationSummary> active(@Param("userId") Long userId, @Param("now") LocalDateTime now);
+
     @Update("""
             UPDATE reserve_record SET status = 'USING', checkin_at = #{now}, updated_at = #{now}
             WHERE id = #{id} AND user_id = #{userId} AND status = 'PENDING'

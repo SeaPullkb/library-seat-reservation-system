@@ -46,6 +46,7 @@ public class ReservationController {
                         @RequestParam(defaultValue = "0") int page, Authentication authentication, Model model) {
         model.addAttribute("title", "我的预约");
         model.addAttribute("reservations", reservations.mine(authentication.getName(), status, page));
+        model.addAttribute("activeReservations", reservations.active(authentication.getName()));
         model.addAttribute("statuses", ReservationStatus.values()); model.addAttribute("selectedStatus", status);
         model.addAttribute("now", LocalDateTime.now(clock));
         return "student/reservations";

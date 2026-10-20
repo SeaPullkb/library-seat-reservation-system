@@ -8,9 +8,10 @@
 2. [README.md](README.md)：如何准备环境、启动应用及查看截图。
 3. [docs/requirements.md](docs/requirements.md)：已确认的业务规则和统计口径。
 4. [docs/tasks.md](docs/tasks.md)、[docs/acceptance.md](docs/acceptance.md)：已完成内容、实际验收及未运行检查。
-5. 按下表找到Controller→Service→Mapper，再查看对应模板和测试。
+5. [docs/ui-v1.1.md](docs/ui-v1.1.md)：V1.1 增量 UI 任务、验证与交付进度。
+6. 按下表找到Controller→Service→Mapper，再查看对应模板和测试。
 
-截至2026-10-19，应用功能及交付材料完成，任务25/26；唯一未勾选的是T25真实Windows部署验收。最近完整验证为145项通过、0失败/错误/跳过，见[结果记录](docs/test-results.json)；这是已有运行证据，不表示阅读本导航时重新执行过。
+V1.1应用代码已完成UI-00～UI-10，全量169项测试通过；45张完整流程和54张独立演示桌面/手机检查、五时刻生命周期验证通过。UI-11的Windows实机结果与PR合并仍待完成，见[当前验收](docs/acceptance-v1.1.md)。V1.0的145项结果及25/26进度属于历史基线，不代表当前测试总数。
 
 ## 根目录与工具
 
@@ -203,7 +204,7 @@ Windows使用`mvnw.cmd`；启动与环境导出细节按README。只改导航或
 | [docs/testing.md](docs/testing.md)、[M2](docs/testing-m2.md)、[M3](docs/testing-m3.md)、[M4](docs/testing-m4.md)、[M5](docs/testing-m5.md)、[M6](docs/testing-m6.md) | 历史阶段的真实测试、发现与修复；较早阶段的“未实现”描述是历史记录。 |
 | [docs/design.md](docs/design.md)、[docs/diagrams/](docs/diagrams) | 架构、ER和状态图；.dot是可编辑源，.svg是导出图。 |
 | [docs/data-dictionary.md](docs/data-dictionary.md) | 四表字段、约束、索引及时间精度。 |
-| [docs/screenshots/README.md](docs/screenshots/README.md) | 18张实际截图索引；PNG为原图，manifest.json是尺寸及校验值。 |
+| [docs/screenshots/README.md](docs/screenshots/README.md) | V1.1的54张真实桌面/手机截图；manifest.json记录平台、时钟、运行jar及PNG校验值。 |
 | [docs/deployment-windows.md](docs/deployment-windows.md) | Windows准备、启动、排错及待填写实机验收表。 |
 | [docs/defense.md](docs/defense.md) | 论文技术素材、演示步骤、答辩问题与系统边界。 |
 | [docs/references.md](docs/references.md)、[docs/licenses/](docs/licenses) | 相近项目调查、依赖/Wrapper授权说明及许可证副本。 |
@@ -216,3 +217,32 @@ Windows使用`mvnw.cmd`；启动与环境导出细节按README。只改导航或
 - 调整数据库时先核对schema及数据字典，保留历史；需要结构变更时提供显式迁移，不靠删除卷。
 - 本地`.env`、数据库卷、`target/`和云环境的`/workspace/.cloud-setup/`不是业务源码；环境专用缓存或日志不应成为应用运行依赖。
 - 最终同步导航、受影响文档和验证结果；提交/推送遵循AGENTS.md及用户授权。
+
+## V1.1 新增入口
+
+- `DashboardService` / `DashboardMapper`：首页业务数据、日期时段余座汇总；只读查询，不修改预约生命周期。
+- `RoomAvailability`：开放阅览室的时段余座 DTO。
+- `ReservationMapper.active` / `ReservationService.active`：不受历史分页影响的本人有效待办。
+- `templates/fragments/reservation.html`：共享预约卡片、实际状态允许的操作及规则提示。
+- `UiIntegrationTest`：V1.1 首页/余座的真实 MySQL、时钟与权限回归，后续任务继续扩展。
+- `AdminDashboardMetrics` / `RoomLiveUsage`：管理首页实时指标与空间使用 DTO；与历史整时段预约率区分。
+- `DashboardService.admin`：重新校验管理员，查询最近预约、当前签到窗口待办和真实空间使用。
+
+- `config/DemoConfiguration`：仅 dev,demo 和真实独立库允许的固定演示时钟。
+- `config/DemoSeedRunner` / `service/DemoDataset`：显式开关、空库校验、事务内生成答辩夹具，不覆盖账号。
+- `scripts/demo.py`：新建、启动、恢复、显式移除独立演示库；私有配置与运行 jar 仅存 `.local/demos/`。
+- `application-demo.yml` / `PageAdvice` / 全局导航：演示日期配置及清晰的独立样本标识。
+- `DemoGuardTest` / `UiIntegrationTest`：演示 profile、真实库名、空库保护及数据场景验证。
+- `scripts/validation/demo-browser.py`：新演示库的真实页面/表单/分页/签到签退与54张桌面手机截图验收。
+- `scripts/validation/demo-clock.py`：独立打包应用跨5个模拟时刻的释放、补约、截止边界和自动完成验收。
+
+- `scripts/validation/BrowserHarness.java`：外部 stdin 控制时钟与维护回调，只编译到 `.local`，不进入产品jar。
+- `scripts/validation/browser-regression.py`：可移植全业务回归；支持Compose或本机MySQL，自动清理自身临时库。
+- `scripts/validation/windows-runtime.ps1` / `.github/workflows/ci.yml`：真实Windows原生MySQL8、Wrapper和浏览器/演示验收；执行结果须实际观察。
+- `docs/acceptance-v1.1.md` / `test-results-v1.1.json` / `pull-request-v1.1.md`：当前验收、逐用例结果及待创建PR正文。
+
+## V1.1交付继续点
+
+UI-00～UI-10完成，UI-11本地回归与材料完成。Windows实际结果、草稿PR及合并仍需继续；本环境尝试 `gh pr create` 时 GitHub GraphQL API返回 `Forbidden`，已有环境token无效，移除token后也无已登录账户。Git推送可用，不能将其等同于API授权。
+
+接手时先确认分支和远端SHA，检查Actions中的Linux全量与Windows原生运行结果，记录真实run链接和证据。不要用Windows构建、脚本解析或Windows User-Agent标记部署验收通过。API可用后使用 `docs/pull-request-v1.1.md` 创建/更新PR，Windows及最终验收通过再按 `feat/ui-polish` → `feat/final-delivery` → `main` 两级PR合并；用户已在V1.1计划中授权此交付顺序，不需重复请求一般推送许可。保留原业务锁、权限、四表和已有账号密码。
