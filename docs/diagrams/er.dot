@@ -1,0 +1,11 @@
+digraph ER {graph [fontname="Noto Sans CJK SC",bgcolor="white",pad="0.3",nodesep="0.45",ranksep="0.6"]; node [fontname="Noto Sans CJK SC",shape=box,style="rounded,filled",fillcolor="#f1f6fa",color="#245c7f",margin="0.15"]; edge [fontname="Noto Sans CJK SC",color="#476b7f",fontsize=10];
+rankdir=LR;
+user [shape=record,label="{user 用户|id PK\lusername UNIQUE\lpassword BCrypt\lreal_name / class_name / phone\lrole / status / created_at\l}"];
+room [shape=record,label="{reading_room 阅览室|id PK\lroom_name / location\ldescription / status / created_at\l}"];
+seat [shape=record,label="{seat 座位|id PK\lroom_id FK\lseat_no / status / created_at\lUNIQUE(room_id, seat_no)\l}"];
+record [shape=record,label="{reserve_record 预约历史|id PK\luser_id FK / seat_id FK\lreserve_date / time_slot / status\lcheckin_deadline\lcheckin_at / checkout_at / released_at\lcancelled_at / cancelled_by FK NULL\lcancel_reason / created_at / updated_at\l}"];
+room -> seat [label="1 : N  room_id"];
+seat -> record [label="1 : N  seat_id"];
+user -> record [label="1 : N  user_id"];
+user -> record [style=dashed,label="0..1 : N  cancelled_by"];
+}

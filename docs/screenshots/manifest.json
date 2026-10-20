@@ -1,0 +1,176 @@
+{
+  "environment": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "date": "2030-05-08",
+  "clock": "09:05 Asia/Shanghai (isolated demo)",
+  "scenario": "fresh isolated demo -> real check-in/check-out; no production data",
+  "pages": 54,
+  "jsErrors": [],
+  "http500": [],
+  "statistics": {
+    "daily": {
+      "date": "2030-05-08",
+      "reservations": 11,
+      "students": 9,
+      "eligible": 6,
+      "checkedIn": 4,
+      "expired": 2,
+      "checkinRate": 66.67
+    },
+    "rooms": [
+      {
+        "id": 1,
+        "name": "人文阅览室",
+        "status": 1,
+        "enabledSeats": 19,
+        "occupiedSeats": 4,
+        "reservationRate": 21.05
+      },
+      {
+        "id": 2,
+        "name": "理工阅览室",
+        "status": 1,
+        "enabledSeats": 29,
+        "occupiedSeats": 2,
+        "reservationRate": 6.9
+      },
+      {
+        "id": 3,
+        "name": "静思自习室",
+        "status": 1,
+        "enabledSeats": 39,
+        "occupiedSeats": 1,
+        "reservationRate": 2.56
+      },
+      {
+        "id": 4,
+        "name": "设备维护室",
+        "status": 0,
+        "enabledSeats": 23,
+        "occupiedSeats": 0,
+        "reservationRate": 0
+      }
+    ],
+    "trend": [
+      {
+        "date": "2030-05-02",
+        "reservations": 3,
+        "students": 3,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-03",
+        "reservations": 2,
+        "students": 2,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-04",
+        "reservations": 6,
+        "students": 6,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-05",
+        "reservations": 5,
+        "students": 5,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-06",
+        "reservations": 4,
+        "students": 4,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-07",
+        "reservations": 3,
+        "students": 3,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-08",
+        "reservations": 11,
+        "students": 9,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      }
+    ]
+  },
+  "runtimeJarSha256": "ce68cc7f83d7173f0ba5ddf5b90936fba5092a29f483540e81afdbebcb8a8b8a",
+  "screenshots": {
+    "01-login.png": "0fbc9b0219419096765f56999e662c3d6c9f8b9f1cef35399fd1814cefdea08c",
+    "01-login-mobile.png": "4b3eb041a6298ea434b1ba891032f8039468b35617dcd094a8bc52eac8d93153",
+    "02-register.png": "d2251ccb8e7d32f39a28ebdba24277fbbdf0cbbfa816ddef2dc934a74b22c61c",
+    "02-register-mobile.png": "5b10ee3b20d8af3a214e175254a17e222bbfa0394fa891e293eaf50cb13c8a26",
+    "03-student-home.png": "ce559e49494577a8ea9589743d3ad5b2cef4791985a3f54811a9863163bb4caa",
+    "03-student-home-mobile.png": "13140e1f6fa1d6c0a9aa8c7a7c88448f304bef18442237389befd68a5192ea7a",
+    "04-profile.png": "f4a610a3f6b1e179457e3f7148039feea8b1b57fe004d028f29f1c09e3e28967",
+    "04-profile-mobile.png": "0047f9fd02bddfc05df337b8043fae55a6c5f38aea8f032a45bc5a25084b4641",
+    "05-rooms.png": "fae05046ff7dc9443f126b00f79b1c29945e8ad3256ceb51c74a20af9ba36141",
+    "05-rooms-mobile.png": "d75c24c3d47b87dc2f358c6800cb4b1736a125d52d53ac8ceb168c5035809ac5",
+    "26-seats-my-reservation.png": "458f91b7c2b2a0e0e083ad52aac8d1a3ab06b2498187a7309f6234cc9daca521",
+    "26-seats-my-reservation-mobile.png": "0bada6f237176945b8d1e72544e3f24d79ab0fb997062522cc1b49c1b3910e84",
+    "31-empty-reservations.png": "be726ba9f00be476e1d074e33fa18bca0694e791ad0e34e50456e0c87a39260c",
+    "31-empty-reservations-mobile.png": "3b5a2d56567a0afe4feee771ddeff187bcc3675e58af6a92a7b5f63d89a9baee",
+    "06-seats.png": "83981b9ff3c10323d3b55fb49c6e828fcad43171e78dc0b0b44e9d24b9ac1a22",
+    "06-seats-mobile.png": "e7e09946686cbd331ed11f5d9f409ef1b562e5902c1fc6fc031675986d63d217",
+    "24-my-reservations-pending.png": "91f03414cbeec6bc6e25c5c3d9fd9c6ace55c7a8d2d78d63c3b0fb98545c03aa",
+    "24-my-reservations-pending-mobile.png": "76893826f7b760650963b4d3ca6d50551517b128a68273f6695b110f45fe7108",
+    "08-admin-home.png": "b0eca89763b344c2b29a3494223ffc75d8524d2d655909aa2e68d1a5d6592c3b",
+    "08-admin-home-mobile.png": "7ee284fa35bb1383c8d4aa31b6074cf0259a359ffeeeff650644ec133be26bf6",
+    "09-admin-rooms.png": "c7b3637721111db7dc365735648db83176e8ed7ce900d4c4a32ad426a9f6fb2a",
+    "09-admin-rooms-mobile.png": "d5fbeac2a540ddae8bf4d09b018c7e0ed4c93e558eea7177d911c0532380241e",
+    "32-empty-search.png": "31b426b591e38f5196f12a89b485a134aafa22d3e2a99ae4aae37db9340e24d7",
+    "32-empty-search-mobile.png": "8905fc2be34e4715587e100d6aa6675471903e18a0830ef9894d0e8d6c0b9ba4",
+    "10-admin-seats.png": "b4209c4054b76a06dc85df0e6ec88a75f53eba1bda99cd7020e6b2c841e80e36",
+    "10-admin-seats-mobile.png": "1c45d04e361983fd9473589dfd4ce8941ce78ad642e18221530c24c3b34ee4de",
+    "36-seat-validation-error.png": "fb6c3674a4cf1baa9de4f10af5db96b195f786bf3edf4fcdcd7e13f45587e127",
+    "36-seat-validation-error-mobile.png": "08dccb752bae0db6ef2df71788c2081de54a1c76e01a2633c83f2a3db8d5671d",
+    "11-admin-reservations.png": "0d49bcad6888371e16029eb134f98f4e7bf8552cdadcc63b0eb7766c1d005768",
+    "11-admin-reservations-mobile.png": "8d81112e51514e6a007a37b9a1e778272033003ad3f8e316b569f55f227bbe8c",
+    "25-reservation-detail.png": "11749f7ae327da8c8a19b6f09d13cc5ceaf8c484ce14e6ca7685958f265b3b53",
+    "25-reservation-detail-mobile.png": "17807890dd6d5da1ae95ec0e94f058d7b03ead034b7142176053fdb6aff440c0",
+    "12-statistics.png": "a9e0c956426e68c05b6ef456006c49090730d3ff3790022db1a92c8c0196ec9d",
+    "12-statistics-mobile.png": "9f2d44db30b990669faa81534cf2bd54d27f91fe61ce70cb3fb6bd621d5a1353",
+    "30-empty-statistics.png": "20274791dc46fadf70f106cfee982f197046114be81f152e8eee3cc0202d4d37",
+    "30-empty-statistics-mobile.png": "11d42eefe97855a8f05b58f019ce0be0d7ff52296b007da72f2283e9ed0e1391",
+    "13-users.png": "a12297eea21282ad8f734445899d529007ccd0a3477c404d11a0c1556cd9baf8",
+    "13-users-mobile.png": "e12c420365684e6aad42879d80be50066e2d12439c630e0d64bf5cefed5ee7a9",
+    "33-users-page2.png": "77fe7d4ead65fd194aa3a1eb4d228f807337519d2f3f95d89b284e0ea61fb464",
+    "33-users-page2-mobile.png": "6204121da27892d5b47b2d9cc49fdf513b149e10077529c62f639c89409a907a",
+    "18-user-maintenance.png": "fd74e7270e0053ca358dcca8dbeb9dfccd2db233e595de7b90403ac6d1018f63",
+    "18-user-maintenance-mobile.png": "227f1520e23a6d5fd11cf701f9c9617c17b4e2a8739d3db659e49a9045e24b94",
+    "17-forbidden.png": "3b58ed8a86ee40e65ea045dca8a8c2309c1cbc65852c8c3e89bf399c648f72c8",
+    "17-forbidden-mobile.png": "84b5a44d4e4cb9ed20524a542634eb9763378ee3b5fea1eea4eb4fcb6e498342",
+    "34-bad-request.png": "242128b9e099415fedab7f6842503c8e231d68b228f14a616a2f854945d5b70f",
+    "34-bad-request-mobile.png": "8c954303d4d8a5475b178523d2dd61934917a422932362c256f9b8217b89c3dd",
+    "35-login-error.png": "80ef5f000716887eff1e29b8b0998a43bc2774499f421a7872c54fdc3220171f",
+    "35-login-error-mobile.png": "281b8eb73bc9900e7e74341af2d466456bb655bf9b09ce46e0ecf825e36b084e",
+    "07-my-reservations.png": "c71f72874f2d42da433674b6078a88420421557a3770518bba4bf5b989b7abc7",
+    "07-my-reservations-mobile.png": "b5a60985333728fd872982ee78b02a069e976220e34981f468bb9163ae1138bc",
+    "39-admin-after-checkin.png": "c7c4598b578120b1772e6ecd3ff7e6f32feab34e03714b37d8adea91477416fe",
+    "39-admin-after-checkin-mobile.png": "e581d75cbb1ad494be3c78872781fb85deed2584822f2facf6b69c30f18b6cd3",
+    "40-my-reservations-completed.png": "5d88cebab666e4c750475e2389c8666e86b89af63cc15a706d1614d5ba688eb1",
+    "40-my-reservations-completed-mobile.png": "c26738688fa4bd56e00cb3069ebad9b8f4a5b2aa8fd6b2d70e11b6ebb7d45eb7"
+  }
+}

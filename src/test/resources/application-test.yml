@@ -1,0 +1,5 @@
+# Deterministic business tests invoke the real maintenance service explicitly.
+# SchedulerIntegrationTest separately enables and verifies actual @Scheduled execution.
+app:
+  reservation-scheduler:
+    enabled: false

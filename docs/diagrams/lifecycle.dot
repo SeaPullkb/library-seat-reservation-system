@@ -1,0 +1,14 @@
+digraph Lifecycle {graph [fontname="Noto Sans CJK SC",bgcolor="white",pad="0.3",nodesep="0.45",ranksep="0.6"]; node [fontname="Noto Sans CJK SC",shape=box,style="rounded,filled",fillcolor="#f1f6fa",color="#245c7f",margin="0.15"]; edge [fontname="Noto Sans CJK SC",color="#476b7f",fontsize=10];
+rankdir=LR;
+start [shape=point,label=""];
+pending [label="PENDING 待签到\n保存本次签到截止"];
+using [label="USING 使用中\n保存实际签到时间"];
+complete [label="COMPLETED 已完成\n主动签退或时段结束\n继续锁定原日期时段",fillcolor="#e6f4ea"];
+expired [label="EXPIRED 超时释放\n保留历史 / 允许另建补约",fillcolor="#fff2de"];
+cancel [label="CANCELLED 已取消\n保留原因、执行人和时间",fillcolor="#f2f2f2"];
+start -> pending [label="预约事务成功"];
+pending -> using [label="开放窗口内且未过截止"];
+pending -> expired [label="超过截止 / 时段结束\n请求或调度条件更新"];
+pending -> cancel [label="学生开始前取消\n或管理员有效未签到取消"];
+using -> complete [label="主动签退记录当前时间\n到期完成记录时段结束"];
+}

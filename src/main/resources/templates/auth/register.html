@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('学生注册')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navigation}"></header>
+<main id="main-content" tabindex="-1" class="container py-5">
+  <section class="surface p-4 p-md-5 mx-auto register-panel">
+    <p class="eyebrow">加入校园学习空间</p><h1 class="h3 mb-2">注册学生账号</h1><p class="text-secondary mb-4">填写以下信息，所有项目均为必填。</p>
+    <form th:action="@{/register}" th:object="${registrationForm}" method="post">
+      <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert">
+        <p class="mb-1">请检查以下信息：</p><ul class="mb-0"><li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li></ul>
+      </div>
+      <div class="mb-3"><label for="username" class="form-label">账号</label><input id="username" th:field="*{username}" class="form-control" autocomplete="username" pattern="[A-Za-z0-9_]{4,50}" minlength="4" maxlength="50" aria-describedby="username-help" required><div id="username-help" class="form-text">4–50位字母、数字或下划线</div></div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6"><label for="password" class="form-label">密码</label><input id="password" name="password" type="password" class="form-control" autocomplete="new-password" minlength="8" maxlength="64" aria-describedby="password-help" required></div>
+        <div class="col-md-6"><label for="confirmPassword" class="form-label">确认密码</label><input id="confirmPassword" name="confirmPassword" type="password" class="form-control" autocomplete="new-password" required></div>
+        <div id="password-help" class="form-text mt-1">8–64个字符；中文等多字节字符合计不超过72字节</div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-md-6"><label for="realName" class="form-label">姓名</label><input id="realName" th:field="*{realName}" class="form-control" autocomplete="name" maxlength="50" required></div>
+        <div class="col-md-6"><label for="className" class="form-label">班级</label><input id="className" th:field="*{className}" class="form-control" maxlength="100" required></div>
+      </div>
+      <div class="mb-4"><label for="phone" class="form-label">手机号</label><input id="phone" th:field="*{phone}" class="form-control" type="tel" autocomplete="tel" pattern="1[3-9][0-9]{9}" maxlength="11" required></div>
+      <button type="submit" class="btn btn-primary w-100">创建账号</button>
+    </form>
+    <p class="text-center small text-secondary mt-4 mb-0">已有账号？<a th:href="@{/login}">返回登录</a></p>
+  </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

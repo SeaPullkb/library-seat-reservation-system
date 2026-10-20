@@ -1,0 +1,28 @@
+{
+  "roles": [
+    {
+      "role": "student",
+      "login": true,
+      "pages": true,
+      "logout": true
+    },
+    {
+      "role": "librarian",
+      "login": true,
+      "pages": true,
+      "logout": true
+    },
+    {
+      "role": "admin",
+      "login": true,
+      "pages": true,
+      "logout": true
+    }
+  ],
+  "jsErrors": [],
+  "persistentBusinessRowsUnchanged": true,
+  "normalProfile": "dev, actual server clock",
+  "jarSha256": "ce68cc7f83d7173f0ba5ddf5b90936fba5092a29f483540e81afdbebcb8a8b8a",
+  "normalClockDateVerified": true,
+  "demoBannerAbsent": true
+}

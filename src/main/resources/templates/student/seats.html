@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body><header th:replace="~{fragments/layout :: navigation}"></header>
+<main id="main-content" tabindex="-1" class="container py-5">
+  <a th:href="@{/student/rooms(date=${date},slot=${slot})}" class="small">← 返回阅览室列表</a>
+  <div class="page-heading mt-3"><div><p class="eyebrow" th:text="${room.location}"></p><h1 th:text="${room.roomName}"></h1><p class="text-secondary" th:text="${room.description}"></p></div><a class="btn btn-outline-primary" th:href="@{/student/reservations}">我的预约 →</a></div>
+  <div th:if="${notice}" th:text="${notice}" class="alert alert-success" role="status"></div><div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert"></div>
+  <form th:action="@{/student/rooms/{id}/seats(id=${room.id})}" method="get" class="surface filter-bar">
+    <div><label for="date" class="form-label">使用日期</label><select id="date" name="date" class="form-select"><option th:each="day : ${dates}" th:value="${day}" th:text="${day}" th:selected="${day.equals(date)}"></option></select></div>
+    <div><label for="slot" class="form-label">使用时段</label><select id="slot" name="slot" class="form-select"><option th:each="period : ${slots}" th:value="${period.code}" th:text="${period.label + ' ' + period.range}" th:selected="${period.code == slot}"></option></select></div>
+    <div class="filter-action"><div class="form-check mb-2"><input id="availableOnly" name="availableOnly" value="true" type="checkbox" class="form-check-input" th:checked="${availableOnly}"><label for="availableOnly" class="form-check-label small">只看空闲座位</label></div></div><div class="filter-action"><button class="btn btn-primary" type="submit">查询座位</button></div>
+  </form>
+  <div class="metrics" aria-label="当前阅览室时段座位统计"><section class="surface metric"><span class="metric-label">空闲座位</span><strong class="metric-value" th:text="${seatCounts['FREE']}" data-seat-count="FREE"></strong></section><section class="surface metric"><span class="metric-label">已占用</span><strong class="metric-value" th:text="${seatCounts['OCCUPIED']}" data-seat-count="OCCUPIED"></strong></section><section class="surface metric"><span class="metric-label">我的预约 / 使用记录</span><strong class="metric-value" th:text="${seatCounts['MINE']}" data-seat-count="MINE"></strong></section><section class="surface metric"><span class="metric-label">已停用</span><strong class="metric-value" th:text="${seatCounts['DISABLED']}" data-seat-count="DISABLED"></strong></section></div>
+  <div th:if="${closedReason}" th:text="${closedReason}" class="alert alert-info" role="status"></div>
+  <div class="seat-workspace">
+    <section class="surface p-4"><div class="panel-heading"><h2>选择座位</h2><span class="small text-secondary">按编号排列 · 非实际位置图</span></div>
+      <div class="seat-legend mb-3" aria-label="座位状态图例"><span><i class="legend-dot seat-free" aria-hidden="true"></i>空闲</span><span><i class="legend-dot seat-occupied" aria-hidden="true"></i>已占用</span><span><i class="legend-dot seat-mine" aria-hidden="true"></i>我的记录</span><span><i class="legend-dot seat-disabled" aria-hidden="true"></i>已停用</span></div>
+      <p th:if="${seats.isEmpty()}" class="empty-state" th:text="${availableOnly} ? '所选日期时段暂无空闲座位，请尝试其他时段。' : '此阅览室暂未配置座位。'"></p>
+      <ul class="seat-grid list-unstyled" aria-label="座位状态"><li th:each="seat : ${seats}" class="seat-tile" th:classappend="${'seat-' + #strings.toLowerCase(seat.availability)}" th:attr="data-seat-id=${seat.id},data-availability=${seat.availability}">
+        <span class="seat-icon" aria-hidden="true"></span><strong th:text="${seat.seatNo}"></strong><span class="small" th:text="${bookingOpen && seat.availability == 'FREE'} ? '可预约' : ${seat.label}"></span>
+        <form th:if="${bookingOpen && seat.availability == 'FREE'}" data-seat-choice th:attr="data-seat-name=${seat.seatNo}" th:action="@{/student/rooms/{roomId}/seats/{seatId}/reservations(roomId=${room.id},seatId=${seat.id})}" method="post"><input type="hidden" name="date" th:value="${date}"><input type="hidden" name="slot" th:value="${slot}"><button type="submit" class="btn btn-sm btn-outline-primary" th:aria-label="'预约座位' + ${seat.seatNo}">预约</button></form>
+      </li></ul>
+      <noscript><p class="alert alert-info mt-3">当前浏览器未启用脚本。请核对上方日期和时段；座位的“预约”按钮会直接提交预约。</p></noscript>
+    </section>
+    <aside class="seat-confirm"><section class="surface p-4 mb-3" aria-labelledby="seat-confirm-title"><p class="eyebrow">确认你的学习计划</p><h2 id="seat-confirm-title" class="h5">预约信息</h2><dl class="small mt-3"><dt>阅览室</dt><dd th:text="${room.roomName}"></dd><dt>使用日期</dt><dd th:text="${date}"></dd><dt>使用时段</dt><dd th:text="${selectedSlot.label+' '+selectedSlot.range}"></dd><dt>所选座位</dt><dd data-selected-seat>尚未选择</dd></dl><p data-seat-selection-status class="small text-secondary" role="status" aria-live="polite">点击空闲座位的预约按钮。</p><button type="button" class="btn btn-primary w-100" data-seat-submit disabled>确认预约</button><p class="small text-secondary mt-3 mb-0">提交时会重新检查余座与预约冲突，最终以服务端结果为准。</p></section><section class="surface p-4"><div class="panel-heading"><h2>签到提醒</h2></div><p class="small text-secondary mb-0">普通签到截止为时段开始后15分钟；时段内补约须在10分钟内签到。预约成功后前往“我的预约”操作。</p></section></aside>
+  </div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

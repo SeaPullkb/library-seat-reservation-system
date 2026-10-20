@@ -1,0 +1,150 @@
+{
+  "clock": "2030-05-08 (external validation Clock only)",
+  "coreScreens": 13,
+  "screens": [
+    "01-login",
+    "01-login-mobile",
+    "02-register",
+    "02-register-mobile",
+    "03-student-home",
+    "03-student-home-mobile",
+    "04-profile",
+    "04-profile-mobile",
+    "14-profile-mobile",
+    "05-rooms",
+    "05-rooms-mobile",
+    "06-seats",
+    "06-seats-mobile",
+    "15-seats-mobile",
+    "21-seat-selected",
+    "21-seat-selected-mobile",
+    "19-student-pending",
+    "19-student-pending-mobile",
+    "07-my-reservations",
+    "07-my-reservations-mobile",
+    "20-student-using",
+    "20-student-using-mobile",
+    "22-admin-live",
+    "22-admin-live-mobile",
+    "08-admin-home",
+    "08-admin-home-mobile",
+    "09-admin-rooms",
+    "09-admin-rooms-mobile",
+    "23-room-edit",
+    "23-room-edit-mobile",
+    "10-admin-seats",
+    "10-admin-seats-mobile",
+    "24-seat-edit",
+    "24-seat-edit-mobile",
+    "11-admin-reservations",
+    "11-admin-reservations-mobile",
+    "12-statistics",
+    "12-statistics-mobile",
+    "16-statistics-mobile",
+    "13-users",
+    "13-users-mobile",
+    "17-forbidden",
+    "17-forbidden-mobile",
+    "18-user-maintenance",
+    "18-user-maintenance-mobile"
+  ],
+  "dashboard": {
+    "daily": {
+      "date": "2030-05-08",
+      "reservations": 4,
+      "students": 2,
+      "eligible": 3,
+      "checkedIn": 2,
+      "expired": 1,
+      "checkinRate": 66.67
+    },
+    "rooms": [
+      {
+        "id": 1,
+        "name": "第一阅览室",
+        "status": 1,
+        "enabledSeats": 20,
+        "occupiedSeats": 2,
+        "reservationRate": 10
+      },
+      {
+        "id": 2,
+        "name": "验收阅览室（已编辑）",
+        "status": 0,
+        "enabledSeats": 0,
+        "occupiedSeats": 0,
+        "reservationRate": null
+      }
+    ],
+    "trend": [
+      {
+        "date": "2030-05-02",
+        "reservations": 0,
+        "students": 0,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-03",
+        "reservations": 0,
+        "students": 0,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-04",
+        "reservations": 0,
+        "students": 0,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-05",
+        "reservations": 0,
+        "students": 0,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-06",
+        "reservations": 0,
+        "students": 0,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-07",
+        "reservations": 0,
+        "students": 0,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      },
+      {
+        "date": "2030-05-08",
+        "reservations": 4,
+        "students": 2,
+        "eligible": 0,
+        "checkedIn": 0,
+        "expired": 0,
+        "checkinRate": null
+      }
+    ]
+  },
+  "pages": 45,
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "jsErrors": [],
+  "cspViolations": [],
+  "serverErrors": []
+}

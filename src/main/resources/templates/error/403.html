@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('无权访问')}"></head>
+<body><header th:replace="~{fragments/layout :: navigation}"></header><main id="main-content" tabindex="-1" class="container py-5"><section class="surface p-5"><p class="eyebrow">403</p><h1 class="h3">你没有访问此页面的权限</h1><p class="text-secondary">请使用具备相应权限的账号访问。</p><a th:href="@{/}" class="btn btn-primary">返回首页</a></section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body>
+</html>

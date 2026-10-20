@@ -1,0 +1,4 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('请求未完成')}"></head><body><header th:replace="~{fragments/layout :: navigation}"></header>
+<main id="main-content" tabindex="-1" class="container py-5"><section class="surface p-4 p-md-5"><p class="eyebrow" th:text="${status}"></p><h1 class="h3">请求未完成</h1><p class="text-secondary">页面或操作暂不可用，请检查登录状态及操作内容后重试。</p><a th:href="@{/}" class="btn btn-primary">返回首页</a></section></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

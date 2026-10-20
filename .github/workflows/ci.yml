@@ -1,0 +1,73 @@
+name: Java 17, MySQL integration and Windows runtime acceptance
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build and run real MySQL tests
+        run: ./mvnw -B -ntp verify
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: target/surefire-reports/
+  windows-build:
+    name: Windows Java 17 + MySQL 8 runtime
+    needs: verify
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Chromium browser test tools
+        run: |
+          python -m pip install -r scripts/validation/requirements.txt
+          python -m playwright install chromium
+      - name: Parse Windows helper
+        shell: pwsh
+        run: |
+          $tokens=$null; $errors=$null
+          [void][System.Management.Automation.Language.Parser]::ParseFile("$PWD/scripts/dev.ps1",[ref]$tokens,[ref]$errors)
+          if ($errors.Count) { $errors | Format-List; exit 1 }
+      - name: Package with Windows Maven Wrapper (integration tests run in Linux job)
+        shell: pwsh
+        run: .\mvnw.cmd -B -ntp -DskipTests package
+
+      - name: Real Windows native MySQL and browser runtime acceptance
+        shell: pwsh
+        run: ./scripts/validation/windows-runtime.ps1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-runtime-evidence
+          include-hidden-files: true
+          path: |
+            .local/windows-browser-regression/
+            .local/windows-demo-gallery/
+            .local/windows-demo-clock/
+            .local/windows-validation/*.log
+            .local/windows-validation/*.sha256
+            .local/validation/*/application.log
+          # Do not upload .env, copied application jars, MySQL data or demo private bindings.

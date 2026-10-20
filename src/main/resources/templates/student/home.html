@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body><header th:replace="~{fragments/layout :: navigation}"></header>
+<main id="main-content" tabindex="-1" class="container py-5">
+  <div class="page-heading"><div><p class="eyebrow">学生空间 / 学习工作台</p><h1>你好，<span th:text="${account.realName}"></span></h1><p class="text-secondary">选好位置，开始今天的专注时光。</p></div><a class="btn btn-primary" th:href="@{/student/rooms(date=${catalog.date},slot=${catalog.slot.code})}">＋ 快速预约</a></div>
+  <div class="metrics" aria-label="学习空间概览">
+    <section class="surface metric"><span class="metric-label">开放阅览室</span><strong class="metric-value" th:text="${catalog.rooms.size()}" data-metric="rooms"></strong><span class="metric-note">当前对学生开放的空间</span></section>
+    <section class="surface metric"><span class="metric-label">启用座位</span><strong class="metric-value" th:text="${catalog.enabledSeats}" data-metric="enabled"></strong><span class="metric-note">开放阅览室内的启用座位</span></section>
+    <section class="surface metric"><span class="metric-label">所选时段空闲</span><strong class="metric-value" th:text="${catalog.availableSeats}" data-metric="available"></strong><span class="metric-note" th:text="${catalog.date + ' · ' + catalog.slot.label}"></span></section>
+    <section class="surface metric"><span class="metric-label">我的待办预约</span><strong class="metric-value" th:text="${dashboard.active.size()}" data-metric="active"></strong><span class="metric-note">有效待签到与使用中</span></section>
+  </div>
+  <div class="dashboard-grid">
+    <div><div class="panel-heading"><h2>当前 / 下一次预约</h2><a class="small" th:href="@{/student/reservations}">全部记录 →</a></div>
+      <th:block th:if="${dashboard.next != null}"><article th:replace="~{fragments/reservation :: card(${dashboard.next},${now})}"></article></th:block>
+      <section th:if="${dashboard.next == null}" class="surface hero-panel p-4 mb-4"><p class="eyebrow">给学习留一个位置</p><h2 class="h4">还没有待办预约</h2><p class="text-secondary">选择阅览室、日期和时段，即可查看真实空闲座位。</p><a class="btn btn-primary" th:href="@{/student/rooms(date=${catalog.date},slot=${catalog.slot.code})}">去找座位 →</a></section>
+      <section class="surface p-4"><div class="panel-heading"><h2>阅览室速览</h2><a class="small" th:href="@{/student/rooms(date=${catalog.date},slot=${catalog.slot.code})}">查看全部 →</a></div>
+        <form th:action="@{/student}" method="get" class="filter-bar p-0"><div><label for="date" class="form-label">使用日期</label><select id="date" name="date" class="form-select"><option th:each="d : ${catalog.dates}" th:value="${d}" th:text="${d}" th:selected="${d.equals(catalog.date)}"></option></select></div><div><label for="slot" class="form-label">使用时段</label><select id="slot" name="slot" class="form-select"><option th:each="s : ${slots}" th:value="${s.code}" th:text="${s.label+' '+s.range}" th:selected="${s == catalog.slot}"></option></select></div><div class="filter-action"><button class="btn btn-outline-primary" type="submit">更新余座</button></div></form>
+        <p th:unless="${catalog.bookingOpen}" class="alert alert-info">该时段已停止预约，余座仅表示座位占用情况，请切换时段。</p>
+        <p th:if="${catalog.rooms.isEmpty()}" class="empty-state mb-0">暂无开放阅览室，请稍后再来。</p>
+        <a th:each="room,iter : ${catalog.rooms}" th:if="${iter.index < 4}" class="quick-link" th:href="@{/student/rooms/{id}/seats(id=${room.id},date=${catalog.date},slot=${catalog.slot.code})}"><span><span th:text="${room.name}"></span><small class="d-block text-secondary fw-normal" th:text="${room.location}"></small></span><span><strong th:text="${room.availableSeats}"></strong> / <span th:text="${room.enabledSeats}"></span> 空闲 →</span></a>
+      </section>
+    </div>
+    <aside><section class="surface p-4 mb-3"><div class="panel-heading"><h2>常用入口</h2></div><a class="quick-link" th:href="@{/student/rooms}"><span>阅览室与选座</span><span>→</span></a><a class="quick-link" th:href="@{/student/reservations}"><span>我的预约与签到</span><span>→</span></a><a class="quick-link" th:href="@{/student/profile}"><span>个人资料与密码</span><span>→</span></a></section><section class="surface p-4"><div class="panel-heading"><h2>预约与签到须知</h2></div><ul th:replace="~{fragments/reservation :: rules}"></ul></section></aside>
+  </div>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

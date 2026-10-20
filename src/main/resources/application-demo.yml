@@ -1,0 +1,5 @@
+app:
+  demo-date: ${APP_DEMO_DATE:}
+  demo-time: ${APP_DEMO_TIME:09:05}
+  demo-seed:
+    enabled: false

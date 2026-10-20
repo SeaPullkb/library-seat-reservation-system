@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${title})}"></head>
+<body><header th:replace="~{fragments/layout :: navigation}"></header>
+<main id="main-content" tabindex="-1" class="container py-5">
+<a th:href="@{/admin}" class="small">返回管理首页</a>
+
+<section class="surface p-4 p-md-5 mx-auto mt-4 register-panel"><h1 class="h3">新增图书馆管理员</h1><p class="text-secondary">创建后固定为启用的图书馆管理员；角色调整须另行操作。</p>
+<form th:action="@{/admin/users}" method="post" th:object="${adminCreateForm}"><div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger" role="alert"><ul class="mb-0"><li th:each="e : ${#fields.allErrors()}" th:text="${e}"></li></ul></div>
+<div class="mb-3"><label for="username" class="form-label">账号</label><input id="username" th:field="*{username}" class="form-control" required pattern="[A-Za-z0-9_]{4,50}" maxlength="50" autocomplete="off"></div>
+<div class="mb-3"><label for="password" class="form-label">初始密码（12–64字符）</label><input id="password" name="password" type="password" class="form-control" required minlength="12" maxlength="64" autocomplete="new-password"><p class="small text-secondary mt-1">请通过安全方式将账号及初始密码告知管理员。</p></div>
+<div class="mb-3"><label for="realName" class="form-label">姓名</label><input id="realName" th:field="*{realName}" class="form-control" required maxlength="50"></div><div class="mb-4"><label for="phone" class="form-label">手机号</label><input id="phone" th:field="*{phone}" class="form-control" required pattern="1[3-9][0-9]{9}" maxlength="11" inputmode="tel"></div>
+<div class="d-flex gap-3"><button class="btn btn-primary" type="submit">创建管理员</button><a class="btn btn-outline-secondary" th:href="@{/admin/users}">返回用户列表</a></div></form></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
