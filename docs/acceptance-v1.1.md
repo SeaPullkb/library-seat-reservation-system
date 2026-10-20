@@ -37,9 +37,14 @@ python scripts/validation/browser-regression.py --no-build --output .local/brows
 
 完整浏览器脚本需要MySQL管理权限以新建临时库并授予应用用户该库权限；默认使用项目Compose，也支持 `--mysql-client` 指向本机MySQL。完成后只删除自身生成的临时库和对应权限。外部Java时钟夹具编译在`.local`，未打入产品jar，不增加产品HTTP测试接口。
 
-## 尚未验收的交付门槛
+## 主干合并记录
+
+2026-10-20用户明确要求“合到主干”，本次采用原生Git，按 `feat/ui-polish` → `feat/final-delivery` → `main` 顺序保留历史合并。已验证的应用来源为 `0f401bd`，完整开发分支合并提交为 `f1ea916`，主干合并提交为 `462fad4`。两个合并均无冲突，合并后的文件树与已验收开发分支一致；随后仅更新交付状态说明。
+
+GitHub API此前返回 `Forbidden`，因此本次未创建PR；此处记录的是Git合并，不是PR审批。169项测试及浏览器证据沿用已验证应用代码的结果，本次没有重新运行业务测试。
+
+## 尚未验收的项目
 
 - **真实Windows运行结果待确认**。CI已增加Windows原生MySQL 8、Windows Wrapper及真实Chromium完整业务/打包演示检查；本环境是Linux，只完成脚本解析和可移植逻辑验证，没有观察到远端运行结果。原T25继续待勾选。
-- **PR与合并待完成**。计划为 `feat/ui-polish` → `feat/final-delivery` → `main`；Windows及最终验收通过后再合并。当前环境GitHub API凭据不可用，远端PR操作结果须明确记录，不将“已推送分支”写成“已合并”。
 
 原始V1.0验收记录保留于[acceptance.md](acceptance.md)，不以旧145项结果代替本轮验证。

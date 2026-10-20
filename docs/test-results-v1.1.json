@@ -997,5 +997,14 @@
   ],
   "windowsActualRuntime": "pending; no Windows execution observed",
   "remoteActions": "not observed",
-  "pullRequest": "creation attempted; GitHub GraphQL API returned Forbidden"
+  "pullRequest": "creation attempted; GitHub GraphQL API returned Forbidden; no PR created",
+  "deliveryIntegration": {
+    "date": "2026-10-20",
+    "authorization": "user requested merge to main",
+    "method": "native git merge --no-ff; feat/ui-polish -> feat/final-delivery -> main",
+    "validatedSourceCommit": "0f401bd697dc71fdf5ac2aa382a77151c8b7fc26",
+    "finalDeliveryMergeCommit": "f1ea916",
+    "mainMergeCommit": "462fad4",
+    "verification": "both merge trees match the validated source; subsequent changes are documentation only; business tests not rerun"
+  }
 }

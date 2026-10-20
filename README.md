@@ -6,7 +6,7 @@ AI/agent 接手入口：[仓库导航](AGENT_NAVIGATION.md)（文件职责与功
 
 V1.1已完成 UI-00～UI-10：统一视觉、学生和管理员真实业务工作台、日期时段余座、选座确认、待办与历史、后台筛选及独立答辩演示。全量169项测试通过，另有45张完整流程浏览器检查、54张打包演示截图和五时刻生命周期验证。
 
-最终交付记录见 [V1.1验收](docs/acceptance-v1.1.md)，逐项进度见 [改版记录](docs/ui-v1.1.md)。Windows实机运行结果与PR合并尚待完成；分支 `feat/ui-polish` 以 `feat/final-delivery` 为基线，按验收计划通过PR进入完整分支再进入main。
+最终交付记录见 [V1.1验收](docs/acceptance-v1.1.md)，逐项进度见 [改版记录](docs/ui-v1.1.md)。2026-10-20按用户指示将 `feat/ui-polish` 经 `feat/final-delivery` 合入 `main`，保留完整提交历史；因GitHub API不可用，本次通过原生Git合并，未创建PR。Windows实机运行结果仍待确认。
 
 ## 页面截图与交付材料
 
